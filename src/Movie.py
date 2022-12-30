@@ -7,9 +7,13 @@ API_KEY = "29e2619a94b2f9dd0ca5609beac3eeda"
 class Movie:
     def __init__(self, data, type_data, tmdb, lenght, i):
         self.type = type_data
-        self.url = f"https://api.themoviedb.org/3/{tmdb}/{data[type_data]['ids']['tmdb']}?api_key={API_KEY}&language=fr-FR"
+        self.id = data[type_data]['ids']['tmdb']
+        self.url = f"https://api.themoviedb.org/3/{tmdb}/{self.id}?api_key={API_KEY}&language=fr-FR"
         response = requests.get(self.url).json()
-        
+
+        try: self.genres = [genre['name'] for genre in response['genres']]
+        except: self.genres = []
+
         try: self.title = response['name'] if type_data == "show" else response['title']
         except: self.title = data[type_data]['title']
         

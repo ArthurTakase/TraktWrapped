@@ -14,7 +14,6 @@ class Collection:
         if type_data == "game": self.gameCollection()
         else: self.movieCollection(type_data)
 
-
     def gameCollection(self):
         self.data = [Game(game, self.lenght, i) for i, game in enumerate(self.data)]
     

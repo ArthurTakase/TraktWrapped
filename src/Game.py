@@ -12,6 +12,9 @@ class Game:
         self.background_image = data["background_image"]
         self.lenght = lenght
 
+        try: self.genres = [genre['slug'] for genre in data['genres']]
+        except: self.genres = []
+
         try: self.poster = Image.open(f"posters/{self.slug}.png")
         except:
             urllib.request.urlretrieve(self.background_image, f"posters/{self.slug}.png")
@@ -19,22 +22,14 @@ class Game:
 
         print(f"\033[92m({i + 1}/{self.lenght})\033[0m \033[94mLoad Game\033[0m {self.title} ({self.year})")
 
+    def __repr__(self) -> str:
+        return f"{self.id};{self.slug};{self.year}"
+
     def compress(self, posterWidth, posterHeight):
-        #resize poster to posterWidth and posterHeight
-        self.poster.thumbnail((posterWidth, posterHeight))
-
-        print(self.poster.size)
-
-        if self.poster.width < posterWidth:
-            self.poster = self.poster.crop((0, 0, posterWidth, self.poster.height))
-
-        # self.poster = self.poster.resize((posterWidth, posterHeight))
-
-        # middle = (self.poster.width/2, self.poster.height/2)
-        # demiLongeurCrop = (min(self.poster.width, self.poster.height)/2)
-        # imageTemp = self.poster.crop((middle[0] - demiLongeurCrop, middle[1] - demiLongeurCrop, middle[0] + demiLongeurCrop, middle[1] + demiLongeurCrop))
-        # self.poster = imageTemp.resize((posterWidth, posterHeight))
-
+        middle = (self.poster.width/2, self.poster.height/2)
+        demiLongeurCrop = (min(self.poster.width, self.poster.height)/2)
+        imageTemp = self.poster.crop((middle[0] - demiLongeurCrop, middle[1] - demiLongeurCrop, middle[0] + demiLongeurCrop, middle[1] + demiLongeurCrop))
+        self.poster = imageTemp.resize((posterWidth, posterHeight))
         return self.poster
 
 def set_sort_game(_):
