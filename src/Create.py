@@ -43,7 +43,7 @@ class Create:
         date = datetime.now().strftime("%d-%m-%Y_%H-%M-%S")
         data = {}
         for i, content in enumerate(self.data):
-            data[i] = {"title": content.title, "year": content.year, "id": content.id, "genres": content.genres}
+            data[i] = {"title": content.title, "year": content.year, "id": content.id, "genres": content.genres, "country": content.country}
         json.dump(data, open(f"exports/{name}_{date}.json", "w"))
 
     def gif(self, name):

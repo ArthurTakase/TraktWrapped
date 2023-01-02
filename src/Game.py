@@ -11,6 +11,7 @@ class Game:
         self.id = data["id"]
         self.background_image = data["background_image"]
         self.lenght = lenght
+        self.country = []
 
         try: self.genres = [genre['slug'] for genre in data['genres']]
         except: self.genres = []

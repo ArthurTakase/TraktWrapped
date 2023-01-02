@@ -28,16 +28,19 @@ def main(func, type):
 
     data.clean()
 
+def help():
+    print("Usage: python main.py [-h] [-txt] [-poster] [-gif] [-json] [-trakt | -rawg | -graph]")
+    print("-h: display this help")
+    print("-txt: export the collection to a txt file")
+    print("-poster: generate a poster of the collection")
+    print("-gif: generate a GIF of the collection")
+    print("-trakt: set data as TV (Trakt only))")
+    print("-rawg: set data as Game (RAWG only)")
+    print("-graph: create a graph from collection (need a json file from -json)")
+
 if __name__ == "__main__":
-    if "-h" in argv:
-        print("Usage: python main.py [-h] [-txt] [-poster] [-gif] [-json] [-trakt | -rawg | -genre]")
-        print("-h: display this help")
-        print("-txt: export the collection to a txt file")
-        print("-poster: generate a poster of the collection")
-        print("-gif: generate a GIF of the collection")
-        print("-trakt: set data as TV (Trakt only))")
-        print("-rawg: set data as Game (RAWG only)")
-        print("-genre: create a graph from collection (need a json file from -json)")
-    elif "-genre" in argv: Graph()
+    if "-h" in argv: help()
+    elif "-graph" in argv: Graph()
     elif "-rawg" in argv: main(set_sort_game, "rawg")
     elif "-trakt" in argv: main(set_sort_movie, "trakt")
+    else: help()

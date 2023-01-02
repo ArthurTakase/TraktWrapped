@@ -11,6 +11,9 @@ class Movie:
         self.url = f"https://api.themoviedb.org/3/{tmdb}/{self.id}?api_key={API_KEY}&language=fr-FR"
         response = requests.get(self.url).json()
 
+        try: self.country = [country['name'] for country in response['production_countries']]
+        except: self.country = []
+
         try: self.genres = [genre['name'] for genre in response['genres']]
         except: self.genres = []
 
