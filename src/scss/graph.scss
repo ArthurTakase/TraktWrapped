@@ -1,0 +1,31 @@
+.accent {
+    color: red;
+}
+
+.graph {
+    height: 80vh;
+    width: 99vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 5vh;
+    margin-bottom: 10vh;
+    .canvas {
+        h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: calc(100% - 2rem);
+        flex: 1;
+        // border: solid blue;
+    }
+}

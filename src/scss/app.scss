@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+body {
+    padding: 0;
+    margin: 0;
+    display: flex;
+    width: 100%;
+    min-height: 100vh;
+    justify-content: center;
+    align-items: center;
+    background: black;
+    color: white;
+    font-family: 'Poppins', sans-serif;
+    background-color: #020202;
+    overflow-x: hidden;
+    // background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.11' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+.title-zone {
+    padding: 0;
+    margin: 0;
+    border-top: white solid;
+    border-bottom: white solid;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3rem;
+    text-transform: uppercase;
+    margin-top: 5vh;
+    padding-top: .5rem;
+    padding-bottom: .5rem;
+    background: rgba(255, 255, 255, 0.267);
+}
+
+.gallerie {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+}
+
+.len {
+    color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: red;
+    z-index: 2;
+    padding: 1rem;
+}
+
+.infos {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow-x: hidden;
+    position: relative;
+    // border: solid red;
+    .bigTitle {
+        width: 100%;
+        p {
+            // border: solid blue;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            transition-duration: .3s;
+        }
+        p:nth-child(1) {
+            text-transform: uppercase;
+            font-size: 10rem;
+            @media screen and (max-width: 1000px) {
+                font-size: 8rem;
+            }
+            @media screen and (max-width: 800px) {
+                font-size: 6rem;
+            }
+            @media screen and (max-width: 600px) {
+                font-size: 4rem;
+            }
+        }
+        p:nth-child(2) {
+            font-size: 5rem;
+            @media screen and (max-width: 1000px) {
+                font-size: 4rem;
+            }
+            @media screen and (max-width: 800px) {
+                font-size: 3rem;
+            }
+            @media screen and (max-width: 600px) {
+                font-size: 2rem;
+            }
+        }
+    }
+    .query {
+        // border: solid red;
+        // border-top: solid white;
+        // border-bottom: solid white;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        flex-direction: row;
+        position: absolute;
+        bottom: 5rem;
+        flex-wrap: wrap;
+        p {
+            min-width: fit-content;
+            font-size: 1.2rem;
+            border: solid white;
+            padding: .5rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            cursor: pointer;
+            border-radius: .5rem;
+            transition-duration: .3s;
+            &:hover {
+                background: white;
+                color: black;
+            }
+        }
+    }
+}
