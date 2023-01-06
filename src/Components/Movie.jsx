@@ -51,7 +51,11 @@ export default function Movie({ data, type, sort, setGraph }) {
                     {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} alt={comp.title} />}
                     <div className={`data ${comp.poster != undefined ? "" : "title"}`}>
                         <h1>{comp.title}</h1>
-                        <p>{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : ` - ${comp.last_air_date}`}</p>
+                        <div className="tags">
+                            <div className="tag">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
+                            {type == "show" ? <div className="tag">{comp.up_to_date ? "Up to date" : "Not up to date"}</div> : <></> }
+
+                        </div>
                     </div>
                 </article>
             )

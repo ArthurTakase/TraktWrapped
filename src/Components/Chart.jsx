@@ -52,13 +52,12 @@ export default function Graph({ type }) {
           <div className="graph">
               <div className="canvas">
                   <Bar data={d_genre} options={options} />
-                  {/* <h1><span className="accent">{best_genre}</span> semble être votre préférence</h1> */}
               </div>
           </div>
         </div>
         <div className="col-2">
           <div>Vous avez vu <span className="accent">{number}</span> {type_fr}</div>
-          <div>Votre genre fav est <span className="accent">{Object.keys(sortable)[0]}</span></div>
+          <div>Votre genre favori est <span className="accent">{Object.keys(sortable)[0]}</span></div>
         </div>
       </div>
     )
