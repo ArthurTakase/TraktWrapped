@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import axios from "axios"
 import Load from "./Load"
 import "../scss/movie.scss"
-import Graph, { Data_Genre_Movies, Data_Genre_Shows } from "./Chart"
+import Graph, { Data_Genre_Movies, Data_Genre_Shows, All_Movies, All_Shows } from "./Chart"
 
 export default function Movie({ data, type, sort, setGraph }) {
     const [movie, setMovie] = useState(<Load />)
@@ -39,13 +39,13 @@ export default function Movie({ data, type, sort, setGraph }) {
             if (sort.last_air_date != null && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }
             if (sort.available != null && sort.available != comp.available) { setMovie(<></>); return }
             
-            // Data_Year[comp.year] = Data_Year[comp.year] == undefined ? 1 : Data_Year[comp.year] + 1
             comp.genres.forEach(genre => {
                 if (type == "movie") Data_Genre_Movies[genre] = Data_Genre_Movies[genre] == undefined ? 1 : Data_Genre_Movies[genre] + 1
                 else Data_Genre_Shows[genre] = Data_Genre_Shows[genre] == undefined ? 1 : Data_Genre_Shows[genre] + 1
             })
-            setGraph(<Graph data={type == "movie" ? Data_Genre_Movies : Data_Genre_Shows} />)
-            
+            if (type == "movie") { All_Movies.push(comp) } else { All_Shows.push(comp) }
+            setGraph(<Graph type={type} />)
+
             setMovie(
                 <article className="movie">
                     {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} alt={comp.title} />}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import Movie from './Components/Movie'
 import Load from './Components/Load'
 import './scss/app.scss'
-import Graph from './Components/Chart'
+// import Graph, { Data_Genre_Movies, Data_Genre_Shows, Number_Movies, Number_Shows } from "./Components/Chart"
 
 function App() {
     const [movies, setMovies] = useState(<Load />)
@@ -11,6 +11,7 @@ function App() {
     const [graphMovies, setGraphMovies] = useState(<Load />)
     const [graphShows, setGraphShows] = useState(<Load />)
     const [watch, setWatch] = useState("watched")
+
     const header = {
         'Content-Type': 'application/json',
         'trakt-api-version': '2',
@@ -32,36 +33,23 @@ function App() {
         console.log(sort)
         if (sort.watchlist == true) { setWatch("watchlist") }
 
-        axios.get(`https://api.trakt.tv/users/takaaase_/${watch}/movies`, { headers: header })
+        axios.get(`https://api.trakt.tv/users/${username}/${watch}/movies`, { headers: header })
         .then(res => { setMovies(res.data.map(movie => <Movie key={movie.movie.ids.slug} data={movie} type="movie" sort={sort} setGraph={setGraphMovies} />)) })
 
-        axios.get(`https://api.trakt.tv/users/takaaase_/${watch}/shows`, { headers: header })
+        axios.get(`https://api.trakt.tv/users/${username}/${watch}/shows`, { headers: header })
         .then(res => { setShows(res.data.map(show => <Movie key={show.show.ids.slug} data={show} type="show" sort={sort} setGraph={setGraphShows} />)) })
     }, [])
 
     return (<>
-        <div className="infos">
-            <div className="bigTitle">
-                <p>{username}</p>
-                {/* <p>Trakt Review</p> */}
-            </div>
-            <div className="query">
-                {sort.year != null && <p>Year: {sort.year}</p>}
-                {sort.up_to_date != null && <p>Up to date: {sort.up_to_date ? "Yes" : "No"}</p>}
-                {sort.last_air_date != null && <p>Last air date: {sort.last_air_date}</p>}
-                {sort.lang != null && <p>Language: {sort.lang}</p>}
-                {sort.available != null && <p>Available: {sort.available ? "Yes" : "No"}</p>}
-                {sort.watchlist != null && <p>Watchlist: {sort.watchlist ? "Yes" : "No"}</p>}
-                {sort.graph != null && <p>Graph: {sort.graph ? "Yes" : "No"}</p>}
-            </div>
+        <div className="graph-zone">
+            {sort.graph == true ? graphMovies : <></>}
         </div>
-        <h1 className='title-zone'>Films</h1>
-        {sort.graph == true ? graphMovies : <></>}
         <div className="gallerie">
             {movies}
         </div>
-        <h1 className='title-zone'>Séries</h1>
-        {sort.graph == true ? graphShows : <></>}
+        <div className="graph-zone">
+            {sort.graph == true ? graphShows : <></>}
+        </div>
         <div className="gallerie">
             {shows}
         </div>

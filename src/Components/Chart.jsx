@@ -3,14 +3,18 @@ import { CategoryScale, LinearScale, BarElement, Title } from 'chart.js';
 import { Doughnut, Bar } from "react-chartjs-2";
 import '../scss/graph.scss'
 
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 export const Data_Genre_Movies = {}
 export const Data_Genre_Shows = {}
+export const All_Movies = []
+export const All_Shows = []
 
-export default function Graph({ data }) {
+export default function Graph({ type }) {
+    const data = type == "movie" ? Data_Genre_Movies : Data_Genre_Shows
+    const number = type == "movie" ? All_Movies.length : All_Shows.length
+    const type_fr = type == "movie" ? "films" : "séries"
     const sortable = Object.fromEntries( Object.entries(data).sort(([,a],[,b]) => b-a) )
 
     const options = {
@@ -36,40 +40,26 @@ export default function Graph({ data }) {
             hoverOffset: 100,
             borderWidth: 0,
             backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 206, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 206, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 206, 86)',
-                'rgb(75, 192, 192)',
-                'rgb(153, 102, 255)',
-                'rgb(255, 159, 64)',
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 206, 86)'
+                'red'
             ]
         }]
     }
 
-    const best_genre = Object.keys(sortable)[0]
-
     return (
-        <div className="graph">
-            <div className="canvas">
-                <Bar data={d_genre} options={options} />
-                {/* <h1>Data by Genre</h1> */}
-                <h1><span className="accent">{best_genre}</span> semble être votre préférence</h1>
-            </div>
+      <div className="group">
+        <h1 className="title">Statistiques des {type_fr}</h1>
+        <div className="col-1">
+          <div className="graph">
+              <div className="canvas">
+                  <Bar data={d_genre} options={options} />
+                  {/* <h1><span className="accent">{best_genre}</span> semble être votre préférence</h1> */}
+              </div>
+          </div>
         </div>
+        <div className="col-2">
+          <div>Vous avez vu <span className="accent">{number}</span> {type_fr}</div>
+          <div>Votre genre fav est <span className="accent">{Object.keys(sortable)[0]}</span></div>
+        </div>
+      </div>
     )
 }
