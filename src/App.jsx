@@ -8,8 +8,8 @@ import './scss/app.scss'
 function App() {
     const [movies, setMovies] = useState(<Load />)
     const [shows, setShows] = useState(<Load />)
-    const [graphMovies, setGraphMovies] = useState(<Load />)
-    const [graphShows, setGraphShows] = useState(<Load />)
+    const [graphMovies, setGraphMovies] = useState()
+    const [graphShows, setGraphShows] = useState()
     const [watch, setWatch] = useState("watched")
 
     const header = {
@@ -27,11 +27,16 @@ function App() {
         available: urlParams.get('available') == "true" ? true : urlParams.get('available') == "false" ? false : null,
         watchlist: urlParams.get('watchlist') == "true" ? true : urlParams.get('watchlist') == "false" ? false : null,
         graph: urlParams.get('graph') == "true" ? true : urlParams.get('graph') == "false" ? false : null,
+        seen: urlParams.get('seen')
     }
 
     useEffect(() => {
-        console.log(sort)
         if (sort.watchlist == true) { setWatch("watchlist") }
+        if (username == null) {
+            setMovies(<h1>Username not found</h1>)
+            setShows(<h1>Username not found</h1>)
+            return
+        }
 
         axios.get(`https://api.trakt.tv/users/${username}/${watch}/movies`, { headers: header })
         .then(res => { setMovies(res.data.map(movie => <Movie key={movie.movie.ids.slug} data={movie} type="movie" sort={sort} setGraph={setGraphMovies} />)) })
@@ -40,7 +45,8 @@ function App() {
         .then(res => { setShows(res.data.map(show => <Movie key={show.show.ids.slug} data={show} type="show" sort={sort} setGraph={setGraphShows} />)) })
     }, [])
 
-    return (<>
+    return (
+    <div className="main">
         <div className="graph-zone">
             {sort.graph == true ? graphMovies : <></>}
         </div>
@@ -53,7 +59,8 @@ function App() {
         <div className="gallerie">
             {shows}
         </div>
-    </>)
+    </div>
+    )
 }
 
 export default App

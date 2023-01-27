@@ -34,6 +34,7 @@ export default function Movie({ data, type, sort, setGraph }) {
             }
 
             // Disable data according to sort
+            if (sort.seen != null && data.last_watched_at.split("-")[0] != sort.seen) { setMovie(<></>); return }
             if (sort.year != null && sort.year != comp.year) { setMovie(<></>); return }
             if (sort.up_to_date != null && sort.up_to_date != comp.up_to_date) { setMovie(<></>); return }
             if (sort.last_air_date != null && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }

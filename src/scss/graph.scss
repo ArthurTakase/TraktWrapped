@@ -12,6 +12,7 @@
     flex-direction: column;
     padding: 1rem;
     gap: 2rem;
+    width: calc(100% - 2rem);
     .group {
         position: relative;
         border: solid red;
@@ -34,9 +35,9 @@
         }
     }
     .col-1 {
-        // border: solid green;
-        // height: 30rem;
         width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
         div {
             background: #1b1b1b;
             border-radius: 1rem;

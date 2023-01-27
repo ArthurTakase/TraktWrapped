@@ -14,6 +14,20 @@ body {
     overflow-x: hidden;
 }
 
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    // min-width: 0;
+    // max-width: 50rem;
+    height: 100%;
+    padding: 0;
+    margin: 0;
+    // overflow-x: hidden;
+}
+
 .gallerie {
     display: flex;
     width: calc(100% - 2rem);
