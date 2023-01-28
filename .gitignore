@@ -1,4 +1,5 @@
+node_modules/
+dist/
+Local/
 posters/
 exports/
-data/
-__pycache__/

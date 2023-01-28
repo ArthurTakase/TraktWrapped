@@ -1,0 +1,22 @@
+.loadZone {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.load {
+    color: white;
+    animation: rotate infinite 2s linear;
+    font-size: 3rem;
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

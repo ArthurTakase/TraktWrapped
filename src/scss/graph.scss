@@ -1,0 +1,102 @@
+.accent {
+    color: red;
+    padding-left: .4rem;
+    padding-right: .4rem;
+    font-weight: bold;
+}
+
+.graph-zone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 1rem;
+    gap: 2rem;
+    width: calc(100vw - 2rem);
+    .group {
+        position: relative;
+        border: solid red;
+        width: calc(100% - 2rem);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+        border-radius: 1rem;
+        .title {
+            position: absolute;
+            top: -2.5rem;
+            background: black;
+            font-size: 1.6rem;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            color: white;
+        }
+    }
+    .col-1 {
+        width: 100%;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        div {
+            background: #1b1b1b;
+            border-radius: .8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+    .col-2 {
+        // border: solid green;
+        display: flex;
+        justify-content: center;
+        height: 5rem;
+        width: 100%;
+        gap: 1rem;
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            height: fit-content;
+        }
+        div {
+            flex: 1;
+            background: #1b1b1b;
+            border-radius: .8rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            @media screen and (max-width: 768px) {
+                padding-top: .8rem;
+                padding-bottom: .8rem;
+            }
+        }
+    }
+}
+
+.graph {
+    height: 30rem;
+    width: 100%;
+    flex-direction: row;
+    flex-wrap: wrap;
+    // margin-top: 5vh;
+    // margin-bottom: 10vh;
+    @media screen and (max-width: 768px) {
+        height: fit-content;
+    }
+    .canvas {
+        h1 {
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+        padding: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: calc(100% - 2rem);
+        flex: 1;
+        // border: solid blue;
+    }
+}
