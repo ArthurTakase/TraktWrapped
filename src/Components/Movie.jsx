@@ -30,7 +30,7 @@ export default function Movie({ data, type, sort, setGraph }) {
                 comp["last_air_date"] = res.data.last_episode_to_air.air_date.substring(0, 4)
                 comp["title"] += season == 1 || sort.last_air_date == null ? "" : ` (S${season})`
                 comp["up_to_date"] = season == data.seasons.length
-                                    && data.seasons[data.seasons.length - 1].episodes.length > (res.data.last_episode_to_air.episode_number / 2)
+                comp["up_to_date"] = comp["up_to_date"] && data.seasons[data.seasons.length - 1].episodes.length > (res.data.last_episode_to_air.episode_number / 2)
             }
 
             // Disable data according to sort

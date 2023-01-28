@@ -1,66 +1,108 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-import Movie from './Components/Movie'
-import Load from './Components/Load'
+import Wrapped from './Components/Wrapped'
 import './scss/app.scss'
-// import Graph, { Data_Genre_Movies, Data_Genre_Shows, Number_Movies, Number_Shows } from "./Components/Chart"
+import './scss/form.scss'
+import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom';
 
-function App() {
-    const [movies, setMovies] = useState(<Load />)
-    const [shows, setShows] = useState(<Load />)
-    const [graphMovies, setGraphMovies] = useState()
-    const [graphShows, setGraphShows] = useState()
-    const [watch, setWatch] = useState("watched")
+export default function App() {
+    const [searchParams, setSearchParams] = useSearchParams()
+    const menu = useRef(null)
+    const username = useRef(null)
+    const year = useRef(null)
+    const up_to_date = useRef(null)
+    const last_air_date = useRef(null)
+    const lang = useRef(null)
+    const available = useRef(null)
+    const watchlist = useRef(null)
+    const graph = useRef(null)
+    const seen = useRef(null)
 
-    const header = {
-        'Content-Type': 'application/json',
-        'trakt-api-version': '2',
-        'trakt-api-key': 'c5036d6ef235c8d7d1c0ffbc122681ee5506b633f226395458cd568bb88fce92'
+    function toggleMenu() {
+        // menu.current.classList.toggle('active')
+        console.log(menu.current)
     }
-    const urlParams = new URLSearchParams(window.location.search)
-    const username = urlParams.get('username')
-    const sort = {
-        year: urlParams.get('year'),
-        up_to_date: urlParams.get('up_to_date') == "true" ? true : urlParams.get('up_to_date') == "false" ? false : null,
-        last_air_date: urlParams.get('last_air_date'),
-        lang: urlParams.get('lang') == null ? "fr-FR" : urlParams.get('lang'),
-        available: urlParams.get('available') == "true" ? true : urlParams.get('available') == "false" ? false : null,
-        watchlist: urlParams.get('watchlist') == "true" ? true : urlParams.get('watchlist') == "false" ? false : null,
-        graph: urlParams.get('graph') == "true" ? true : urlParams.get('graph') == "false" ? false : null,
-        seen: urlParams.get('seen')
+
+    function submit() {
+        setSearchParams({
+            year: year.current.value,
+            up_to_date: up_to_date.current.value,
+            last_air_date: last_air_date.current.value,
+            lang: lang.current.value,
+            available: available.current.value,
+            watchlist: watchlist.current.value,
+            graph: graph.current.value,
+            seen: seen.current.value,
+            username: username.current.value
+        })
+
+        window.location.reload()
     }
 
     useEffect(() => {
-        if (sort.watchlist == true) { setWatch("watchlist") }
-        if (username == null) {
-            setMovies(<h1>Username not found</h1>)
-            setShows(<h1>Username not found</h1>)
-            return
-        }
+        toggleMenu()
 
-        axios.get(`https://api.trakt.tv/users/${username}/${watch}/movies`, { headers: header })
-        .then(res => { setMovies(res.data.map(movie => <Movie key={movie.movie.ids.slug} data={movie} type="movie" sort={sort} setGraph={setGraphMovies} />)) })
-
-        axios.get(`https://api.trakt.tv/users/${username}/${watch}/shows`, { headers: header })
-        .then(res => { setShows(res.data.map(show => <Movie key={show.show.ids.slug} data={show} type="show" sort={sort} setGraph={setGraphShows} />)) })
+        year.current.value = searchParams.get('year')
+        up_to_date.current.value = searchParams.get('up_to_date')
+        last_air_date.current.value = searchParams.get('last_air_date')
+        lang.current.value = searchParams.get('lang')
+        available.current.value = searchParams.get('available')
+        watchlist.current.value = searchParams.get('watchlist')
+        graph.current.value = searchParams.get('graph')
+        seen.current.value = searchParams.get('seen')
+        username.current.value = searchParams.get('username')
     }, [])
 
     return (
     <div className="main">
-        <div className="graph-zone">
-            {sort.graph == true ? graphMovies : <></>}
+        <div className="graph-zone menu-zone" ref={menu}>
+            <div className="group">
+                <h1 className="title">Recherche</h1>
+                <div className="col-1">
+                    <div className='menu'>
+                        <div className='inputgroup'>
+                            <label htmlFor="username">Username</label>
+                            <input type="text" placeholder="Trakt username" ref={username} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="year">Year</label>
+                            <input type="text" placeholder="yyyy" ref={year} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="up_to_date">Up to date</label>
+                            <input type="text" placeholder="bool" ref={up_to_date} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="last_air_date">Last air date</label>
+                            <input type="text" placeholder="yyyy" ref={last_air_date} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="lang">Language</label>
+                            <input type="text" placeholder="fr-FR" ref={lang} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="available">Available</label>
+                            <input type="text" placeholder="bool" ref={available} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="watchlist">Watchlist</label>
+                            <input type="text" placeholder="bool" ref={watchlist} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="graph">Graph</label>
+                            <input type="text" placeholder="bool" ref={graph} />
+                        </div>
+                        <div className='inputgroup'>
+                            <label htmlFor="seen">Seen</label>
+                            <input type="text" placeholder="yyyy" ref={seen} />
+                        </div>
+                    </div>
+                    <div className='submit'>
+                        <button onClick={submit}>Valider</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div className="gallerie">
-            {movies}
-        </div>
-        <div className="graph-zone">
-            {sort.graph == true ? graphShows : <></>}
-        </div>
-        <div className="gallerie">
-            {shows}
-        </div>
+        <Wrapped />
     </div>
     )
 }
-
-export default App

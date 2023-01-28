@@ -12,7 +12,7 @@
     flex-direction: column;
     padding: 1rem;
     gap: 2rem;
-    width: calc(100% - 2rem);
+    width: calc(100vw - 2rem);
     .group {
         position: relative;
         border: solid red;
@@ -40,7 +40,7 @@
         padding-right: 1rem;
         div {
             background: #1b1b1b;
-            border-radius: 1rem;
+            border-radius: .8rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -53,13 +53,21 @@
         height: 5rem;
         width: 100%;
         gap: 1rem;
+        @media screen and (max-width: 768px) {
+            flex-direction: column;
+            height: fit-content;
+        }
         div {
             flex: 1;
             background: #1b1b1b;
-            border-radius: 1rem;
+            border-radius: .8rem;
             display: flex;
             justify-content: center;
             align-items: center;
+            @media screen and (max-width: 768px) {
+                padding-top: .8rem;
+                padding-bottom: .8rem;
+            }
         }
     }
 }
@@ -71,6 +79,9 @@
     flex-wrap: wrap;
     // margin-top: 5vh;
     // margin-bottom: 10vh;
+    @media screen and (max-width: 768px) {
+        height: fit-content;
+    }
     .canvas {
         h1 {
             margin: 0;

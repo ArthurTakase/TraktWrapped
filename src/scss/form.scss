@@ -1,0 +1,63 @@
+.menu-zone {
+    margin-top: 1rem;
+}
+
+.menu {
+    flex-wrap: wrap;
+    padding: 1rem;
+    border-radius: .8rem;
+    transition: top 0.5s ease-in-out;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    .inputgroup {
+        width: 48%;
+        display: flex;
+        input {
+            width: 100%;
+            background: none;
+            color: white;
+            border: none;
+            font-size: 1rem;
+            border: solid rgba(255, 0, 0, 0.171);
+            padding: .5rem;
+            border-radius: .8rem;
+            &::placeholder {
+                color: rgba(255, 0, 0, 0.5);
+            }
+        }
+        label {
+            width: 10rem;
+        }
+        @media screen and (max-width: 768px) {
+            width: 100%;
+        }
+    }
+    &:hover {
+        cursor: pointer;
+        top: 0;
+    }
+    .title {
+        border: solid green;
+    }
+    .search {
+        border: solid blue;
+    }
+}
+
+.submit {
+    button {
+        width: 100%;
+        background: red;
+        color: white;
+        border: none;
+        font-size: 1rem;
+        border-radius: .8rem;
+        height: 2rem;
+        box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+        transition: 0.2s ease-in-out;
+        &:hover {
+            background: darken(red, 10%);
+        }
+    }
+}
