@@ -56,7 +56,7 @@ export default function Graph({ type }) {
           </div>
         </div>
         <div className="col-2">
-          <div>Vous avez vu <span className="accent">{number}</span> {type_fr}</div>
+          <div><span className="accent">{number}</span> {type_fr}</div>
           <div>Votre genre favori est <span className="accent">{Object.keys(sortable)[0]}</span></div>
         </div>
       </div>
