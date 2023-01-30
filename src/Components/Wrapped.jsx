@@ -5,11 +5,10 @@ import Load from './Load'
 import '../scss/app.scss'
 
 export default function Wrapped() {
-    const [movies, setMovies] = useState(<Load />)
+    const [movies, setMovies] = useState(<div className="infos">Use search to create a new request</div>)
     const [shows, setShows] = useState(<Load />)
     const [graphMovies, setGraphMovies] = useState()
     const [graphShows, setGraphShows] = useState()
-    const [watch, setWatch] = useState("watched")
 
     const header = {
         'Content-Type': 'application/json',
@@ -19,44 +18,65 @@ export default function Wrapped() {
     const urlParams = new URLSearchParams(window.location.search)
     const username = urlParams.get('username')
     const sort = {
-        year: urlParams.get('year') == "" ? null : urlParams.get('year'),
-        up_to_date: urlParams.get('up_to_date') == "true" ? true : urlParams.get('up_to_date') == "false" ? false : null,
-        last_air_date: urlParams.get('last_air_date') == "" ? null : urlParams.get('last_air_date'),
-        lang: urlParams.get('lang') == null ? "fr-FR" : urlParams.get('lang'),
-        available: urlParams.get('available') == "true" ? true : urlParams.get('available') == "false" ? false : null,
-        watchlist: urlParams.get('watchlist') == "true" ? true : urlParams.get('watchlist') == "false" ? false : null,
-        graph: urlParams.get('graph') == "true" ? true : urlParams.get('graph') == "false" ? false : null,
-        seen: urlParams.get('seen') == "" ? null : urlParams.get('seen')
+        year: urlParams.get('year'),
+        lang: urlParams.get('lang'),
+        seen: urlParams.get('seen'),
+        last_air_date: urlParams.get('last_air_date'),
+        available: urlParams.get('available') == "true" ? true : false,
+        watchlist: urlParams.get('watchlist') == "true" ? true : false,
+        up_to_date: urlParams.get('up_to_date') == "true" ? true : false,
+        graph: urlParams.get('graph') == "true" ? true : false
     }
 
-    console.log(sort)
-
     useEffect(() => {
-        if (sort.watchlist == true) { setWatch("watchlist") }
-        if (username == null) {
-            setMovies(<></>)
+        if (username == null || username == "") {
+            // setMovies(<></>)
             setShows(<></>)
             return
         }
 
-        axios.get(`https://api.trakt.tv/users/${username}/${watch}/movies`, { headers: header })
-        .then(res => { setMovies(res.data.map(movie => <Movie key={movie.movie.ids.slug} data={movie} type="movie" sort={sort} setGraph={setGraphMovies} />)) })
+        axios.get(`https://api.trakt.tv/users/${username}/ratings/movies/`, { headers: header })
+        .then(res => {
+            const ratings_movies = {}
+            res.data.map(movie => ratings_movies[movie.movie.ids.tmdb] = movie.rating)
 
-        axios.get(`https://api.trakt.tv/users/${username}/${watch}/shows`, { headers: header })
-        .then(res => { setShows(res.data.map(show => <Movie key={show.show.ids.slug} data={show} type="show" sort={sort} setGraph={setGraphShows} />)) })
+            axios.get(`https://api.trakt.tv/users/${username}/${sort.watchlist == true ? 'watchlist' : 'watched'}/movies`, { headers: header })
+            .then(res => { setMovies(res.data.map(movie => <Movie key={movie.movie.ids.slug} data={movie} type="movie" sort={sort} setGraph={setGraphMovies} ratings={ratings_movies} />)) })
+        })
+
+        axios.get(`https://api.trakt.tv/users/${username}/ratings/shows/`, { headers: header })
+        .then(res => {
+            const ratings_shows = {}
+            res.data.map(show => ratings_shows[show.show.ids.tmdb] = show.rating)
+
+            console.log(ratings_shows)
+
+            axios.get(`https://api.trakt.tv/users/${username}/${sort.watchlist == true ? 'watchlist' : 'watched'}/shows`, { headers: header })
+            .then(res => { setShows(res.data.map(show => <Movie key={show.show.ids.slug} data={show} type="show" sort={sort} setGraph={setGraphShows} ratings={ratings_shows} />)) })
+        })
+
+
     }, [])
 
     return (
     <div className="main">
-        <div className="graph-zone">
-            {sort.graph == true ? graphMovies : <></>}
-        </div>
+        {
+            sort.graph == true ?
+            <div className="graph-zone">
+                {graphMovies}
+            </div>
+            : <></>
+        }
         <div className="gallerie">
             {movies}
         </div>
-        <div className="graph-zone">
-            {sort.graph == true ? graphShows : <></>}
-        </div>
+        {
+            sort.graph == true ?
+            <div className="graph-zone">
+                {graphShows}
+            </div>
+            : <></>
+        }
         <div className="gallerie">
             {shows}
         </div>

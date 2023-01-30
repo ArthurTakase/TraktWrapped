@@ -4,7 +4,7 @@ import Load from "./Load"
 import "../scss/movie.scss"
 import Graph, { Data_Genre_Movies, Data_Genre_Shows, All_Movies, All_Shows } from "./Chart"
 
-export default function Movie({ data, type, sort, setGraph }) {
+export default function Movie({ data, type, sort, setGraph, ratings }) {
     const [movie, setMovie] = useState(<Load />)
     const tmdb = type == "movie" ? 'movie' : 'tv'
     const url = `https://api.themoviedb.org/3/${tmdb}/${data[type].ids.tmdb}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`
@@ -34,11 +34,11 @@ export default function Movie({ data, type, sort, setGraph }) {
             }
 
             // Disable data according to sort
-            if (sort.seen != null && data.last_watched_at.split("-")[0] != sort.seen) { setMovie(<></>); return }
-            if (sort.year != null && sort.year != comp.year) { setMovie(<></>); return }
-            if (sort.up_to_date != null && sort.up_to_date != comp.up_to_date) { setMovie(<></>); return }
-            if (sort.last_air_date != null && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }
-            if (sort.available != null && sort.available != comp.available) { setMovie(<></>); return }
+            if (sort.seen && data.last_watched_at.split("-")[0] != sort.seen) { setMovie(<></>); return }
+            if (sort.year && sort.year != comp.year) { setMovie(<></>); return }
+            if (sort.up_to_date && sort.up_to_date != comp.up_to_date) { setMovie(<></>); return }
+            if (sort.last_air_date && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }
+            if (sort.available && sort.available != comp.available) { setMovie(<></>); return }
             
             comp.genres.forEach(genre => {
                 if (type == "movie") Data_Genre_Movies[genre] = Data_Genre_Movies[genre] == undefined ? 1 : Data_Genre_Movies[genre] + 1
@@ -49,6 +49,7 @@ export default function Movie({ data, type, sort, setGraph }) {
 
             setMovie(
                 <article className="movie">
+                    {ratings[data[type].ids.tmdb] != undefined ? <div className="rating">{ratings[data[type].ids.tmdb]}</div> : <></>}
                     {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} alt={comp.title} />}
                     <div className={`data ${comp.poster != undefined ? "" : "title"}`}>
                         <h1>{comp.title}</h1>
