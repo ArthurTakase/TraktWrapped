@@ -81,6 +81,7 @@ export default function App() {
             <button onClick={() => {main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
             <button onClick={() => {main.current.classList.toggle('no-title')}}><i className='bx bx-text' ></i></button>
             <button onClick={() => {main.current.classList.toggle('no-score')}}><i className='bx bxs-graduation' ></i></button>
+            <button onClick={() => {main.current.classList.toggle('big-picture')}}><i className='bx bx-expand-alt' ></i></button>
             <button onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
         </div>
         <div className="graph-zone menu-zone" ref={menu}>

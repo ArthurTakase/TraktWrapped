@@ -121,3 +121,14 @@
 .no-title .movie .data {
     display: none;
 }
+
+.big-picture .movie {
+    height: 18rem;
+    min-width: 12rem;
+    max-width: 12rem;
+    @media screen and (max-width: 768px) {
+        height: 10rem;
+        min-width: 6rem;
+        max-width: 6rem;
+    }
+}
