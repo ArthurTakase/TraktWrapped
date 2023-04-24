@@ -113,3 +113,11 @@
         box-shadow: none;
     }
 }
+
+.no-score .movie .rating {
+    display: none;
+}
+
+.no-title .movie .data {
+    display: none;
+}

@@ -4,7 +4,7 @@ body {
     margin: 0;
     display: flex;
     width: 100%;
-    min-height: 100vh;
+    min-height: calc(100vh - 4rem);
     justify-content: center;
     align-items: center;
     background: black;
@@ -12,6 +12,8 @@ body {
     font-family: "Poppins", sans-serif;
     background-color: #020202;
     overflow-x: hidden;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
 }
 
 .main {
