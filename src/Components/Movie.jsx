@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import axios from "axios"
 import Load from "./Load"
 import "../scss/movie.scss"
@@ -9,6 +9,7 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
     const tmdb = type == "movie" ? 'movie' : 'tv'
     const url = `https://api.themoviedb.org/3/${tmdb}/${data[type].ids.tmdb}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`
     const comp = {}
+    const card = useRef(null)
 
     useEffect(() => {
         axios.get(url)
@@ -48,15 +49,17 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
             setGraph(<Graph type={type} />)
 
             setMovie(
-                <article className="movie">
+                <article className="movie" ref={card}>
                     {ratings[data[type].ids.tmdb] != undefined ? <div className="rating">{ratings[data[type].ids.tmdb]}</div> : <></>}
                     {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} alt={comp.title} />}
                     <div className={`data ${comp.poster != undefined ? "" : "title"}`}>
                         <h1>{comp.title}</h1>
                         <div className="tags">
-                            <div className="tag">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
-                            {type == "show" ? <div className="tag">{comp.up_to_date ? "Up to date" : "Not up to date"}</div> : <></> }
-
+                            <div className="tag" title="Release date">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
+                            {type == "show" ? <div className="tag" title="Status">{comp.up_to_date ? "Up to date" : "Not up to date"}</div> : <></> }
+                            <div className="tag" title="Hide show/movie" onClick={() => {
+                                card.current.style.display = "none"
+                            }}><i className='bx bx-trash' ></i></div>
                         </div>
                     </div>
                 </article>
