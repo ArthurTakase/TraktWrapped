@@ -18,6 +18,8 @@ export default function App() {
     const graph = useRef(null)
     const seen = useRef(null)
     const collapse = useRef(null)
+    const hideMovies = useRef(null)
+    const hideShows = useRef(null)
 
     function toggleMenu(from) {
         const urlParams = new URLSearchParams(window.location.search)
@@ -47,7 +49,9 @@ export default function App() {
             up_to_date: up_to_date.current.checked,
             watchlist: watchlist.current.checked,
             graph: graph.current.checked,
-            collapse: collapse.current.checked
+            collapse: collapse.current.checked,
+            hideMovies: hideMovies.current.checked,
+            hideShows: hideShows.current.checked,
         })
 
         window.location.reload()
@@ -66,6 +70,8 @@ export default function App() {
         watchlist.current.checked = searchParams.get('watchlist') == 'true'
         graph.current.checked = searchParams.get('graph') == 'true'
         collapse.current.checked = searchParams.get('collapse') == 'true'
+        hideMovies.current.checked = searchParams.get('hideMovies') == 'true'
+        hideShows.current.checked = searchParams.get('hideShows') == 'true'
     }, [])
 
     return (
@@ -102,6 +108,8 @@ export default function App() {
                             <Checkbox label="Watchlist" r={watchlist} id="watchlist" onChange={() => {}} />
                             <Checkbox label="Graph" r={graph} id="graph" onChange={() => {}} />
                             <Checkbox label="Collaspe" r={collapse} id="collapse" onChange={() => {}} />
+                            <Checkbox label="Hide Movies" r={hideMovies} id="hideMovies" onChange={() => {}} />
+                            <Checkbox label="Hide Shows" r={hideShows} id="hideShows" onChange={() => {}} />
                         </div>
                     </div>
                     <div className='submit'>

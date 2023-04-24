@@ -18,6 +18,8 @@ export default function Wrapped() {
     const urlParams = new URLSearchParams(window.location.search)
     const username = urlParams.get('username')
     const collapse = urlParams.get('collapse') == "true" ? true : false
+    const hideMovies = urlParams.get('hideMovies') == "true" ? true : false
+    const hideShows = urlParams.get('hideShows') == "true" ? true : false
     const sort = {
         year: urlParams.get('year'),
         lang: urlParams.get('lang'),
@@ -64,24 +66,24 @@ export default function Wrapped() {
         {
             sort.graph == true ?
             <div className="graph-zone">
-                {graphMovies}
+                {hideMovies ? <></> : graphMovies}
             </div>
             : <></>
         }
         <div className="gallerie">
-            {movies}
-            {collapse ? shows : <></>}
+            {hideMovies ? <></>  : movies}
+            {collapse ? (hideShows ? <></> : shows) : <></>}
         </div>
         {
             sort.graph == true ?
             <div className="graph-zone">
-                {graphShows}
+                {hideShows ? <></> : graphShows}
             </div>
             : <></>
         }
         {
             collapse ? <></> : <div className="gallerie">
-                {shows}
+                {hideShows ? <></> : shows}
             </div>
         }
     </div>
