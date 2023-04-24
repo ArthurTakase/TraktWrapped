@@ -16,11 +16,16 @@
         min-width: 8rem;
         max-width: 17rem;
     }
+    &.favorite {
+        border: solid red 2px;
+        box-shadow: red 0rem 0rem 0.6rem;
+        box-sizing: border-box;
+    }
     .rating {
         // border: solid blue;
         position: absolute;
         top: 0;
-        right: 1rem;
+        left: 1rem;
         background: red;
         padding: 0.2rem;
         padding-left: 0.4rem;
@@ -91,7 +96,20 @@
                 padding-left: 0.2rem;
                 padding-right: 0.2rem;
                 background: unset;
+                &.icon {
+                    border: none;
+                    font-size: 1.1rem;
+                }
             }
         }
+    }
+}
+
+.fav .movie {
+    display: none;
+    &.favorite {
+        display: flex;
+        border: none;
+        box-shadow: none;
     }
 }

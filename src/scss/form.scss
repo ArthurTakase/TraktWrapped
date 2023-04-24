@@ -36,13 +36,12 @@
     }
 }
 
-#search_btn {
+.top_btn {
     border: none;
-    background: red;
+    background: rgba(255, 0, 0, 0.444);
     position: fixed;
     color: white;
     top: -0.6rem;
-    right: 0;
     margin-right: 0.5rem;
     font-size: 1.5rem;
     padding: 0.3rem;
@@ -51,12 +50,20 @@
     border-bottom-left-radius: 1rem;
     border-bottom-right-radius: 1rem;
     z-index: 200;
-    opacity: 0.5;
+    backdrop-filter: blur(10px);
     &:hover {
         cursor: pointer;
         top: 0;
-        opacity: 1;
+        background: red;
     }
+}
+
+#search_btn {
+    right: 0;
+}
+
+#fav_btn {
+    right: 2.5rem;
 }
 
 .menu {

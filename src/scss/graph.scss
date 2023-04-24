@@ -1,8 +1,12 @@
 .accent {
     color: red;
-    padding-left: .4rem;
-    padding-right: .4rem;
+    padding-left: 0.4rem;
+    padding-right: 0.4rem;
     font-weight: bold;
+}
+
+.fav .graph-zone {
+    display: none;
 }
 
 .graph-zone {
@@ -41,7 +45,7 @@
         padding-right: 1rem;
         div {
             background: #1b1b1b;
-            border-radius: .8rem;
+            border-radius: 0.8rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -61,13 +65,13 @@
         div {
             flex: 1;
             background: #1b1b1b;
-            border-radius: .8rem;
+            border-radius: 0.8rem;
             display: flex;
             justify-content: center;
             align-items: center;
             @media screen and (max-width: 768px) {
-                padding-top: .8rem;
-                padding-bottom: .8rem;
+                padding-top: 0.8rem;
+                padding-bottom: 0.8rem;
             }
         }
     }

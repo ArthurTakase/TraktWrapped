@@ -57,9 +57,13 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
                         <div className="tags">
                             <div className="tag" title="Release date">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
                             {type == "show" ? <div className="tag" title="Status">{comp.up_to_date ? "Up to date" : "Not up to date"}</div> : <></> }
-                            <div className="tag" title="Hide show/movie" onClick={() => {
+                            <div className="tag icon" title="Hide show/movie" onClick={() => {
                                 card.current.style.display = "none"
                             }}><i className='bx bx-trash' ></i></div>
+                            <div className="tag icon" title="Add/remove favorite" onClick={() => {
+                                if (card.current.classList.contains("favorite")) card.current.classList.remove("favorite")
+                                else card.current.classList.add("favorite")
+                            }}><i className='bx bx-heart'></i></div>
                         </div>
                     </div>
                 </article>

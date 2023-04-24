@@ -7,6 +7,7 @@ import Checkbox from './Components/Checkbox';
 
 export default function App() {
     const [searchParams, setSearchParams] = useSearchParams()
+    const main = useRef(null)
     const menu = useRef(null)
     const username = useRef(null)
     const year = useRef(null)
@@ -57,6 +58,10 @@ export default function App() {
         window.location.reload()
     }
 
+    function fav() {
+        main.current.classList.toggle('fav')
+    }
+
     useEffect(() => {
         toggleMenu()
         
@@ -75,8 +80,9 @@ export default function App() {
     }, [])
 
     return (
-    <div className="main">
-        <button id="search_btn" onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
+    <div className="main" ref={main}>
+        <button id="search_btn" className="top_btn" onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
+        <button id="fav_btn" className="top_btn" onClick={() => {fav()}}><i className='bx bx-heart'></i></button>
         <div className="graph-zone menu-zone" ref={menu}>
             <div className="group">
                 {/* <h1 className="title">Recherche</h1> */}
