@@ -17,6 +17,7 @@ export default function Wrapped() {
     }
     const urlParams = new URLSearchParams(window.location.search)
     const username = urlParams.get('username')
+    const collapse = urlParams.get('collapse') == "true" ? true : false
     const sort = {
         year: urlParams.get('year'),
         lang: urlParams.get('lang'),
@@ -25,7 +26,7 @@ export default function Wrapped() {
         available: urlParams.get('available') == "true" ? true : false,
         watchlist: urlParams.get('watchlist') == "true" ? true : false,
         up_to_date: urlParams.get('up_to_date') == "true" ? true : false,
-        graph: urlParams.get('graph') == "true" ? true : false
+        graph: urlParams.get('graph') == "true" ? true : false,
     }
 
     useEffect(() => {
@@ -69,6 +70,7 @@ export default function Wrapped() {
         }
         <div className="gallerie">
             {movies}
+            {collapse ? shows : <></>}
         </div>
         {
             sort.graph == true ?
@@ -77,9 +79,11 @@ export default function Wrapped() {
             </div>
             : <></>
         }
-        <div className="gallerie">
-            {shows}
-        </div>
+        {
+            collapse ? <></> : <div className="gallerie">
+                {shows}
+            </div>
+        }
     </div>
     )
 }

@@ -17,6 +17,7 @@ export default function App() {
     const watchlist = useRef(null)
     const graph = useRef(null)
     const seen = useRef(null)
+    const collapse = useRef(null)
 
     function toggleMenu(from) {
         const urlParams = new URLSearchParams(window.location.search)
@@ -45,7 +46,8 @@ export default function App() {
             available: available.current.checked,
             up_to_date: up_to_date.current.checked,
             watchlist: watchlist.current.checked,
-            graph: graph.current.checked
+            graph: graph.current.checked,
+            collapse: collapse.current.checked
         })
 
         window.location.reload()
@@ -63,6 +65,7 @@ export default function App() {
         up_to_date.current.checked = searchParams.get('up_to_date') == 'true'
         watchlist.current.checked = searchParams.get('watchlist') == 'true'
         graph.current.checked = searchParams.get('graph') == 'true'
+        collapse.current.checked = searchParams.get('collapse') == 'true'
     }, [])
 
     return (
@@ -98,6 +101,7 @@ export default function App() {
                             <Checkbox label="Up to date" r={up_to_date} id="up_to_date" onChange={() => {}} />
                             <Checkbox label="Watchlist" r={watchlist} id="watchlist" onChange={() => {}} />
                             <Checkbox label="Graph" r={graph} id="graph" onChange={() => {}} />
+                            <Checkbox label="Collaspe" r={collapse} id="collapse" onChange={() => {}} />
                         </div>
                     </div>
                     <div className='submit'>
