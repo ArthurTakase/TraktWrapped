@@ -41,7 +41,7 @@ export default function App() {
     function submit() {
         setSearchParams({
             username: username.current.value,
-            lang: lang.current.value,
+            lang: lang.current.value || 'fr-FR',
             year: year.current.value,
             seen: seen.current.value,
             last_air_date: last_air_date.current.value,
