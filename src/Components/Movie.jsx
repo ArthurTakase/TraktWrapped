@@ -14,11 +14,14 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
     useEffect(() => {
         axios.get(url)
         .then(res => {
+            if (sort.seen && data.last_watched_at.split("-")[0] != sort.seen) { setMovie(<></>); return }
             // General data
             comp["title"] = type == "movie" ? res.data.title : res.data.name
             comp["date"] = type == "movie" ? res.data.release_date : res.data.first_air_date
             comp["year"] = type == "movie" ? res.data.release_date.split("-")[0] : res.data.first_air_date.split("-")[0]
+            if (sort.year && sort.year != comp.year) { setMovie(<></>); return }
             comp["available"] = new Date(comp.date) < new Date()
+            if (sort.available && sort.available != comp.available) { setMovie(<></>); return }
             if (comp.year == "") comp.year = "N.C."
             comp["poster"] = res.data.poster_path
             comp["up_to_date"] = true
@@ -28,18 +31,19 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
             // Data from shows
             if (type == "show") {
                 const season = res.data.last_episode_to_air.season_number
+                const season_seen = data.seasons.at(-1).number
                 comp["last_air_date"] = res.data.last_episode_to_air.air_date.substring(0, 4)
-                comp["title"] += season == 1 || sort.last_air_date == null ? "" : ` (S${season})`
-                comp["up_to_date"] = season == data.seasons.length
-                comp["up_to_date"] = comp["up_to_date"] && data.seasons[data.seasons.length - 1].episodes.length > (res.data.last_episode_to_air.episode_number / 2)
+                if (sort.last_air_date && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }
+                comp["title"] += season == 1 || sort.last_air_date == null ? "" : ` (S${season_seen})`
+                comp["is_last_season"] = season == season_seen
+                comp["total_seen"] = data.seasons.at(-1).episodes.length
+                comp["total_episodes"] = comp.is_last_season ? res.data.last_episode_to_air.episode_number : 0
+                for (let i = 0; i < res.data.seasons.length; i++)
+                    if (res.data.seasons[i].season_number == season_seen)
+                        comp["total_episodes"] = comp["total_episodes"] === 0 ? res.data.seasons[i].episode_count : comp["total_episodes"]
+                comp["up_to_date"] = comp.is_last_season && comp.total_seen >= comp.total_episodes
+                if (sort.up_to_date && sort.up_to_date != comp.up_to_date) { setMovie(<></>); return }
             }
-
-            // Disable data according to sort
-            if (sort.seen && data.last_watched_at.split("-")[0] != sort.seen) { setMovie(<></>); return }
-            if (sort.year && sort.year != comp.year) { setMovie(<></>); return }
-            if (sort.up_to_date && sort.up_to_date != comp.up_to_date) { setMovie(<></>); return }
-            if (sort.last_air_date && sort.last_air_date != comp.last_air_date) { setMovie(<></>); return }
-            if (sort.available && sort.available != comp.available) { setMovie(<></>); return }
             
             comp.genres.forEach(genre => {
                 if (type == "movie") Data_Genre_Movies[genre] = Data_Genre_Movies[genre] == undefined ? 1 : Data_Genre_Movies[genre] + 1
@@ -56,7 +60,7 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
                         <h1>{comp.title}</h1>
                         <div className="tags">
                             <div className="tag" title="Release date">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
-                            {type == "show" ? <div className="tag" title="Status">{comp.up_to_date ? "Up to date" : "Not up to date"}</div> : <></> }
+                            {type == "show" ? <div className="tag" title="Status">{comp.up_to_date ? "Up to date" : `Not up to date (${comp["total_seen"]}/${comp["total_episodes"]})`}</div> : <></> }
                             <div className="tag icon" title="Hide show/movie" onClick={() => {
                                 card.current.style.display = "none"
                             }}><i className='bx bx-trash' ></i></div>
@@ -70,7 +74,9 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
             )
 
         })
-        .catch(err => { setMovie(<></>) })
+        .catch(err => {
+            console.log(err)
+            setMovie(<></>) })
     }, [])
 
     return (<>{movie}</>)
