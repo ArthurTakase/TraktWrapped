@@ -37,6 +37,10 @@
             padding-left: 1rem;
             padding-right: 1rem;
             color: white;
+            @media screen and (max-width: 768px) {
+                font-size: 1.3rem;
+                top: -2rem;
+            }
         }
     }
     .col-1 {
@@ -78,6 +82,7 @@
 }
 
 .graph {
+    overflow: hidden;
     height: 30rem;
     width: 100%;
     flex-direction: row;

@@ -31,7 +31,6 @@ export default function App() {
             return
         }
         if (from == 'search_btn') {
-            console.log("coucou")
             var has = menu.current.classList.contains('active')
             if (has) { menu.current.classList.remove('active') }
             else { menu.current.classList.add('active') }
@@ -78,51 +77,47 @@ export default function App() {
     return (
     <div className="main" ref={main}>
         <div className="top_btns">
-            <button onClick={() => {main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
-            <button onClick={() => {main.current.classList.toggle('no-title')}}><i className='bx bx-text' ></i></button>
-            <button onClick={() => {main.current.classList.toggle('no-score')}}><i className='bx bxs-graduation' ></i></button>
-            <button onClick={() => {main.current.classList.toggle('big-picture')}}><i className='bx bx-expand-alt' ></i></button>
-            <button onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
+            <button title="Afficher/masquer les favoris" onClick={() => {main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
+            <button title="Afficher/masquer les titres" onClick={() => {main.current.classList.toggle('no-title')}}><i className='bx bx-text' ></i></button>
+            <button title="Afficher/masquer les notes" onClick={() => {main.current.classList.toggle('no-score')}}><i className='bx bxs-graduation' ></i></button>
+            <button title="Agrandir/réduire les affiches" onClick={() => {main.current.classList.toggle('big-picture')}}><i className='bx bx-expand-alt' ></i></button>
+            <button title="Nouvelle recherche" onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
         </div>
-        <div className="graph-zone menu-zone" ref={menu}>
-            <div className="group">
-                {/* <h1 className="title">Recherche</h1> */}
-                <div className="col-1">
-                    <div className='menu'>
-                        <div className='inputgroup'>
-                            <label htmlFor="username">Username</label>
-                            <input type="text" placeholder="Trakt username" ref={username} />
-                        </div>
-                        <div className='inputgroup'>
-                            <label htmlFor="lang">Language</label>
-                            <input type="text" placeholder="fr-FR" ref={lang} />
-                        </div>
-                        <div className='inputgroup'>
-                            <label htmlFor="year">Year</label>
-                            <input type="text" placeholder="yyyy" ref={year} />
-                        </div>
-                        <div className='inputgroup'>
-                            <label htmlFor="seen">Seen</label>
-                            <input type="text" placeholder="yyyy" ref={seen} />
-                        </div>
-                        <div className='inputgroup'>
-                            <label htmlFor="last_air_date">Last air date</label>
-                            <input type="text" placeholder="yyyy" ref={last_air_date} />
-                        </div>
-                        <div className='checkZone'>
-                            <Checkbox label="Available" r={available} id="available" onChange={() => {}} />
-                            <Checkbox label="Up to date" r={up_to_date} id="up_to_date" onChange={() => {}} />
-                            <Checkbox label="Watchlist" r={watchlist} id="watchlist" onChange={() => {}} />
-                            <Checkbox label="Graph" r={graph} id="graph" onChange={() => {}} />
-                            <Checkbox label="Collaspe" r={collapse} id="collapse" onChange={() => {}} />
-                            <Checkbox label="Hide Movies" r={hideMovies} id="hideMovies" onChange={() => {}} />
-                            <Checkbox label="Hide Shows" r={hideShows} id="hideShows" onChange={() => {}} />
-                        </div>
-                    </div>
-                    <div className='submit'>
-                        <button onClick={submit}>Valider</button>
-                    </div>
+        <div className="menu-zone" ref={menu}>
+            <div className='menu'>
+                <div className='inputgroup'>
+                    <label htmlFor="username">Username</label>
+                    <input type="text" placeholder="Trakt username" ref={username} />
                 </div>
+                <div className='inputgroup'>
+                    <label htmlFor="lang">Language</label>
+                    <input type="text" placeholder="fr-FR" ref={lang} />
+                </div>
+                <div className='inputgroup'>
+                    <label htmlFor="year">Year</label>
+                    <input type="text" placeholder="yyyy" ref={year} />
+                </div>
+                <div className='inputgroup'>
+                    <label htmlFor="seen">Seen</label>
+                    <input type="text" placeholder="yyyy" ref={seen} />
+                </div>
+                <div className='inputgroup'>
+                    <label htmlFor="last_air_date">Last air date</label>
+                    <input type="text" placeholder="yyyy" ref={last_air_date} />
+                </div>
+                <div className='checkZone'>
+                    <Checkbox label="Available" r={available} id="available" onChange={() => {}} />
+                    <Checkbox label="Up to date" r={up_to_date} id="up_to_date" onChange={() => {}} />
+                    <Checkbox label="Watchlist" r={watchlist} id="watchlist" onChange={() => {}} />
+                    <Checkbox label="Graph" r={graph} id="graph" onChange={() => {}} />
+                    <Checkbox label="Collaspe" r={collapse} id="collapse" onChange={() => {}} />
+                    <Checkbox label="Hide Movies" r={hideMovies} id="hideMovies" onChange={() => {}} />
+                    <Checkbox label="Hide Shows" r={hideShows} id="hideShows" onChange={() => {}} />
+                </div>
+            </div>
+            <div className='submit'>
+                <button onClick={submit}>Valider</button>
+                <button onClick={() => {toggleMenu("search_btn")}}>Annuler</button>
             </div>
         </div>
         <Wrapped />
