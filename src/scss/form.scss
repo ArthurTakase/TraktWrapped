@@ -20,7 +20,7 @@
         right: 0;
     }
     &:not(.active) {
-        right: -20rem;
+        right: -30rem;
         opacity: 0;
     }
 }
@@ -49,11 +49,10 @@
     top: 0;
     z-index: 2;
     button {
-        max-width: 10rem;
         border: solid red;
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(0.5rem);
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         flex: 1;
         height: 2.5rem;
         font-size: 1.3rem;
@@ -62,7 +61,7 @@
         transition: 0.2s;
         &:hover {
             background: red;
-            scale: 1.1;
+            scale: 1.05;
         }
     }
 }
@@ -72,7 +71,7 @@
     display: flex;
     justify-content: center;
     flex-direction: column;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     .inputgroup {
         display: grid;
         grid-template-columns: 100px 1fr;
@@ -86,7 +85,7 @@
             font-size: 1rem;
             border: solid rgba(255, 0, 0, 0.171);
             padding: 0.5rem;
-            border-radius: 0.8rem;
+            border-radius: 0.5rem;
             width: calc(100% - 1rem);
             &::placeholder {
                 color: rgba(255, 0, 0, 0.5);
@@ -103,26 +102,24 @@
 
 .submit {
     display: flex;
-    justify-content: center;
     gap: 0.5rem;
-    background: black !important;
     button {
-        width: 100%;
+        flex: 1;
         background: red;
         color: white;
         border: none;
         font-size: 1rem;
-        border-radius: 0.8rem;
+        border-radius: 0.5rem;
         height: 2rem;
         box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.5);
         cursor: pointer;
         transition: 0.2s ease-in-out;
         &:hover {
-            background: darken(red, 10%);
+            scale: 1.05;
         }
     }
     button:last-child {
-        background: black;
+        background: unset;
         border: solid red;
     }
 }

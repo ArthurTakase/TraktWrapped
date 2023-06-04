@@ -28,7 +28,7 @@
         flex-direction: column;
         gap: 1rem;
         padding: 1rem;
-        border-radius: 1rem;
+        border-radius: 0.5rem;
         .title {
             position: absolute;
             top: -2.5rem;
@@ -49,14 +49,13 @@
         padding-right: 1rem;
         div {
             background: #1b1b1b;
-            border-radius: 0.8rem;
+            border-radius: 0.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
         }
     }
     .col-2 {
-        // border: solid green;
         display: flex;
         justify-content: center;
         height: 5rem;
@@ -69,7 +68,7 @@
         div {
             flex: 1;
             background: #1b1b1b;
-            border-radius: 0.8rem;
+            border-radius: 0.5rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -87,8 +86,6 @@
     width: 100%;
     flex-direction: row;
     flex-wrap: wrap;
-    // margin-top: 5vh;
-    // margin-bottom: 10vh;
     @media screen and (max-width: 768px) {
         height: fit-content;
     }
@@ -107,6 +104,5 @@
         width: 100%;
         height: calc(100% - 2rem);
         flex: 1;
-        // border: solid blue;
     }
 }

@@ -1,6 +1,7 @@
 import Wrapped from './Components/Wrapped'
 import './scss/app.scss'
 import './scss/form.scss'
+import './scss/random.scss'
 import { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import Checkbox from './Components/Checkbox';
@@ -73,15 +74,42 @@ export default function App() {
         hideMovies.current.checked = searchParams.get('hideMovies') == 'true'
         hideShows.current.checked = searchParams.get('hideShows') == 'true'
     }, [])
+    
+    function isDisplayed(el) { return el.offsetParent !== null }
+    
+    function showRandomElement() {
+        const elements = document.querySelectorAll('article')
+        const displayedElements = Array.from(elements).filter(isDisplayed)
+        const random = Math.floor(Math.random() * displayedElements.length)
+        const randomElement = displayedElements[random]
+        const picture = randomElement.querySelector('img').src
+        const year = randomElement.querySelector('.tags').firstChild.innerHTML
+        const title = randomElement.querySelector('h1').innerHTML
+
+        document.querySelector('#random-picture').src = picture
+        document.querySelector('#random-year').innerHTML = year
+        document.querySelector('#random-title').innerHTML = title
+
+        document.querySelector('#random').classList.add('active')
+    }
 
     return (
     <div className="main" ref={main}>
         <div className="top_btns">
+            <button title="Séléctionner un élément au hasard" onClick={showRandomElement}><i className='bx bx-shuffle' ></i></button>
             <button title="Afficher/masquer les favoris" onClick={() => {main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
             <button title="Afficher/masquer les titres" onClick={() => {main.current.classList.toggle('no-title')}}><i className='bx bx-text' ></i></button>
             <button title="Afficher/masquer les notes" onClick={() => {main.current.classList.toggle('no-score')}}><i className='bx bxs-graduation' ></i></button>
             <button title="Agrandir/réduire les affiches" onClick={() => {main.current.classList.toggle('big-picture')}}><i className='bx bx-expand-alt' ></i></button>
             <button title="Nouvelle recherche" onClick={() => {toggleMenu("search_btn")}}><i className='bx bx-search-alt-2'></i></button>
+        </div>
+        <div id="random">
+            <button id="random-close" onClick={() => {
+                document.querySelector('#random').classList.toggle('active')
+            }}><i className='bx bx-x' ></i></button>
+            <img src="" alt="" id="random-picture" />
+            <div id="random-title"></div>
+            <div id="random-year" className="tag"></div>
         </div>
         <div className="menu-zone" ref={menu}>
             <div className='menu'>
