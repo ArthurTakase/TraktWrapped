@@ -80,6 +80,9 @@ export default function App() {
     function showRandomElement() {
         const elements = document.querySelectorAll('article')
         const displayedElements = Array.from(elements).filter(isDisplayed)
+
+        if (displayedElements.length == 0) { return }
+
         const random = Math.floor(Math.random() * displayedElements.length)
         const randomElement = displayedElements[random]
         const picture = randomElement.querySelector('img').src
