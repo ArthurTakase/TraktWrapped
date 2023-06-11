@@ -75,8 +75,7 @@ export default function Movie({ data, type, sort, setGraph, ratings }) {
 
         })
         .catch(err => {
-            console.log("Une erreur est survenue lors de la récupération des données de l'API :")
-            console.log(err)
+            // console.log("Une erreur est survenue lors de la récupération des données de l'API")
             setMovie(<></>) })
     }, [])
 

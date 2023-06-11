@@ -4,7 +4,7 @@ import Movie from './Movie'
 import Load from './Load'
 import '../scss/app.scss'
 
-export default function Wrapped() {
+export default function Grid() {
     const [movies, setMovies] = useState(<div className="infos">Use search to create a new request</div>)
     const [shows, setShows] = useState(<Load />)
     const [graphMovies, setGraphMovies] = useState()

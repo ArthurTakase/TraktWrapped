@@ -25,6 +25,31 @@
     }
 }
 
+.submenu-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 1rem;
+    height: 2rem;
+    position: relative;
+    &::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        width: 30%;
+        height: 2px;
+        background: red;
+    }
+    &::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        width: 30%;
+        height: 2px;
+        background: red;
+    }
+}
+
 .checkZone {
     display: flex;
     flex-direction: column;
@@ -103,6 +128,8 @@
 .submit {
     display: flex;
     gap: 0.5rem;
+    padding-bottom: 1rem;
+    padding-top: 0.5rem;
     button {
         flex: 1;
         background: red;
@@ -118,7 +145,7 @@
             scale: 1.05;
         }
     }
-    button:last-child {
+    button:nth-child(2) {
         background: unset;
         border: solid red;
     }
