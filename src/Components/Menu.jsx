@@ -5,21 +5,25 @@ import { allRef } from "../App"
 export default function Menu({ setSearchParams }) {
 
     function submit() {
-        setSearchParams({
-            username: allRef.username.current.value,
-            lang: allRef.lang.current.value || 'fr-FR',
-            year: allRef.year.current.value,
-            seen: allRef.seen.current.value,
-            last_air_date: allRef.last_air_date.current.value,
-            available: allRef.available.current.checked,
-            up_to_date: allRef.up_to_date.current.checked,
-            watchlist: allRef.watchlist.current.checked,
-            graph: allRef.graph.current.checked,
-            collapse: allRef.collapse.current.checked,
-            hideMovies: allRef.hideMovies.current.checked,
-            hideShows: allRef.hideShows.current.checked,
+        const params = {}
+
+        params.username = allRef.username.current.value
+        params.lang = allRef.lang.current.value || 'fr-FR'
+        params.year = allRef.year.current.value
+        params.seen = allRef.seen.current.value
+        params.last_air_date = allRef.last_air_date.current.value
+        params.available = allRef.available.current.checked
+        params.up_to_date = allRef.up_to_date.current.checked
+        params.watchlist = allRef.watchlist.current.checked
+        params.hideMovies = allRef.hideMovies.current.checked
+        params.hideShows = allRef.hideShows.current.checked
+
+        // remove empty params or false params
+        Object.keys(params).forEach(key => {
+            if (params[key] == '' || params[key] == false) delete params[key]
         })
 
+        setSearchParams(params)
         window.location.reload()
     }
 
@@ -27,23 +31,7 @@ export default function Menu({ setSearchParams }) {
         <div className="menu-zone" ref={allRef.menu}>
             <div className='menu'>
                 <div className='submenu-title'>
-                    Wrapped
-                </div>
-                <div className='inputgroup'>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" placeholder="Trakt username" ref={allRef.username} />
-                </div>
-                <div className='inputgroup'>
-                    <label htmlFor="year">Year</label>
-                    <input type="text" placeholder="yyyy" ref={allRef.year} />
-                </div>
-            </div>
-            <div className='submit'>
-                <button onClick={submit}>Valider</button>
-            </div>
-            <div className='menu'>
-                <div className='submenu-title'>
-                    Grid
+                    New Request
                 </div>
                 <div className='inputgroup'>
                     <label htmlFor="username">Username</label>
@@ -66,17 +54,15 @@ export default function Menu({ setSearchParams }) {
                     <input type="text" placeholder="yyyy" ref={allRef.last_air_date} />
                 </div>
                 <div className='checkZone'>
-                    <Checkbox label="Available" r={allRef.available} id="available" onChange={() => {}} />
-                    <Checkbox label="Up to date" r={allRef.up_to_date} id="up_to_date" onChange={() => {}} />
-                    <Checkbox label="Watchlist" r={allRef.watchlist} id="watchlist" onChange={() => {}} />
-                    <Checkbox label="Graph" r={allRef.graph} id="graph" onChange={() => {}} />
-                    <Checkbox label="Collaspe" r={allRef.collapse} id="collapse" onChange={() => {}} />
-                    <Checkbox label="Hide Movies" r={allRef.hideMovies} id="hideMovies" onChange={() => {}} />
-                    <Checkbox label="Hide Shows" r={allRef.hideShows} id="hideShows" onChange={() => {}} />
+                    <Checkbox label="Only Available Content" r={allRef.available} id="available" onChange={() => {}} />
+                    <Checkbox label="Only Up to date Content" r={allRef.up_to_date} id="up_to_date" onChange={() => {}} />
+                    <Checkbox label="From Watchlist" r={allRef.watchlist} id="watchlist" onChange={() => {}} />
+                    <Checkbox label="Hide Movies Results" r={allRef.hideMovies} id="hideMovies" onChange={() => {}} />
+                    <Checkbox label="Hide Shows Results" r={allRef.hideShows} id="hideShows" onChange={() => {}} />
                 </div>
             </div>
             <div className='submit'>
-                <button onClick={submit}>Valider</button>
+                <button onClick={submit}>Submit</button>
                 <button onClick={toggleMenu}>Annuler</button>
             </div>
         </div>

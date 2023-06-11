@@ -4,6 +4,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    .infos {
+        padding-top: 1rem;
+    }
 }
 
 .load {

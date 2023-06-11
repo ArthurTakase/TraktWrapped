@@ -21,9 +21,7 @@ export default function App() {
     allRef.lang = useRef(null)
     allRef.available = useRef(null)
     allRef.watchlist = useRef(null)
-    allRef.graph = useRef(null)
     allRef.seen = useRef(null)
-    allRef.collapse = useRef(null)
     allRef.hideMovies = useRef(null)
     allRef.hideShows = useRef(null)
     allRef.random = useRef(null)
@@ -40,8 +38,6 @@ export default function App() {
         allRef.available.current.checked = searchParams.get('available') == 'true'
         allRef.up_to_date.current.checked = searchParams.get('up_to_date') == 'true'
         allRef.watchlist.current.checked = searchParams.get('watchlist') == 'true'
-        allRef.graph.current.checked = searchParams.get('graph') == 'true'
-        allRef.collapse.current.checked = searchParams.get('collapse') == 'true'
         allRef.hideMovies.current.checked = searchParams.get('hideMovies') == 'true'
         allRef.hideShows.current.checked = searchParams.get('hideShows') == 'true'
 

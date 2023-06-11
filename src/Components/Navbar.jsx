@@ -10,6 +10,8 @@ export default function Navbar() {
         <div className="top_btns">
             <button title="Séléctionner un élément au hasard" onClick={showRandomElement}><i className='bx bx-shuffle' ></i></button>
             <button title="Afficher/masquer les favoris" onClick={() => {allRef.main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
+            {/* <button title="Lancer le Wrapped" onClick={() => {
+            }}><i className='bx bxs-calendar'></i></button> */}
             <button title="Afficher/masquer les titres" onClick={() => {allRef.main.current.classList.toggle('no-title')}}><i className='bx bx-text' ></i></button>
             <button title="Afficher/masquer les notes" onClick={() => {allRef.main.current.classList.toggle('no-score')}}><i className='bx bxs-graduation' ></i></button>
             <button title="Agrandir/réduire les affiches" onClick={() => {allRef.main.current.classList.toggle('big-picture')}}><i className='bx bx-expand-alt' ></i></button>
