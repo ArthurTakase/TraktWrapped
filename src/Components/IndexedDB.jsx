@@ -102,6 +102,25 @@ export class Database {
             }
         })
     }
+
+    async clearDB() {
+        if (db == null) return
+        const transaction = db.transaction(objectStore, "readwrite")
+        const store = transaction.objectStore(objectStore)
+        store.clear()
+
+        return new Promise((resolve, reject) => {
+            transaction.oncomplete = function () {
+                resolve()
+            }
+
+            transaction.onerror = function (event) {
+                console.error("An error occurred with IndexedDB")
+                console.error(event)
+                reject(event)
+            }
+        })
+    }
 }
 
 export const TraktDB = new Database()

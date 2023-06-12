@@ -1,6 +1,7 @@
 import Checkbox from './Checkbox';
 import { toggleMenu } from './Navbar';
 import { allRef } from "../App"
+import { TraktDB } from './IndexedDB'
 
 export default function Menu({ setSearchParams }) {
 
@@ -62,8 +63,11 @@ export default function Menu({ setSearchParams }) {
                 </div>
             </div>
             <div className='submit'>
-                <button onClick={submit}>Submit</button>
-                <button onClick={toggleMenu}>Annuler</button>
+                <button onClick={submit}><i className='bx bx-check'></i>Submit</button>
+            </div>
+            <div className='submit'>
+                <button className="border" onClick={async () => await TraktDB.clearDB()}><i className='bx bx-trash-alt'></i>Clear Cache</button>
+                <button className="border" onClick={toggleMenu}><i className='bx bx-x'></i>Close Menu</button>
             </div>
         </div>
     )

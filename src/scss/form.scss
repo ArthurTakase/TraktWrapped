@@ -139,13 +139,20 @@
         border-radius: 0.5rem;
         height: 2rem;
         box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        gap: 0.3rem;
+        align-items: center;
         cursor: pointer;
         transition: 0.2s ease-in-out;
         &:hover {
             scale: 1.05;
         }
+        i {
+            scale: 1.2;
+        }
     }
-    button:nth-child(2) {
+    button.border {
         background: unset;
         border: solid red;
     }
