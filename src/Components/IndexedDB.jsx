@@ -30,6 +30,7 @@ export class Database {
     }
 
     async addToDB(id, data) {
+        if (this.db == null) await this.createDatabase()
         const transaction = this.db.transaction(this.objectStore, "readwrite")
         const store = transaction.objectStore(this.objectStore)
         store.put({ id, data })
@@ -88,4 +89,3 @@ export class Database {
 }
 
 export const TraktDB = new Database("TraktWrappedDatabase", "movies")
-await TraktDB.createDatabase()
