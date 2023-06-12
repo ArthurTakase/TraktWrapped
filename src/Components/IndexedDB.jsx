@@ -12,7 +12,6 @@ export class Database {
         }
     
         request.onupgradeneeded = function() {
-            console.log(objectStore)
             const db = request.result
             db.createObjectStore(objectStore, { keyPath: "id" })
         }
@@ -62,6 +61,26 @@ export class Database {
                             return
                         }
                 resolve(null)
+            }
+        })
+    }
+
+    async getAllFromDB() {
+        if (db == null) await this.createDatabase()
+        const transaction = db.transaction(objectStore, "readonly")
+        const store = transaction.objectStore(objectStore)
+
+        const request = store.getAll()
+
+        return new Promise((resolve, reject) => {
+            request.onerror = function (event) {
+                console.error("An error occurred with IndexedDB")
+                reject(event)
+            }
+            
+            request.onsuccess = function () {
+                const movies = request.result?.reduce((acc, movie) => ({ ...acc, [movie.id]: movie.data }), {}) || {}
+                resolve(movies)
             }
         })
     }
