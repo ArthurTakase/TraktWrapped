@@ -1,39 +1,45 @@
-const dbName = "TraktWrappedDatabase"
-const objectStore = "movies"
-let db = null
-
 export class Database {
-    async createDatabase() {
-        const request = indexedDB.open(dbName, 1)
+    constructor(dbName, objectStore) {
+        this.db = null
+        this.dbName = dbName
+        this.objectStore = objectStore
+    }
 
-        request.onerror = function(event) {
-            console.error("An error occurred with IndexedDB")
-            console.error(event)
-        }
+    async createDatabase() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this.dbName, 1)
     
-        request.onupgradeneeded = function() {
-            const db = request.result
-            db.createObjectStore(objectStore, { keyPath: "id" })
-        }
-    
-        request.onsuccess = function() {
-            db = request.result
-            const transaction = db.transaction(objectStore, "readwrite")
-            transaction.objectStore(objectStore)
-        }
+            request.onerror = function(event) {
+                console.error("An error occurred with IndexedDB")
+                console.error(event)
+                reject(event)
+            }
+        
+            request.onupgradeneeded = () => {
+                this.db = request.result
+                this.db.createObjectStore(this.objectStore, { keyPath: "id" })
+            }
+        
+            request.onsuccess = () => {
+                this.db = request.result
+                const transaction = this.db.transaction(this.objectStore, "readwrite")
+                transaction.objectStore(this.objectStore)
+                resolve()
+            }
+        })
     }
 
     async addToDB(id, data) {
-        const transaction = db.transaction(objectStore, "readwrite")
-        const store = transaction.objectStore(objectStore)
+        const transaction = this.db.transaction(this.objectStore, "readwrite")
+        const store = transaction.objectStore(this.objectStore)
         store.put({ id, data })
 
         return new Promise((resolve, reject) => {
-            transaction.oncomplete = function () {
+            transaction.oncomplete = () => {
                 resolve()
             }
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.error("An error occurred with IndexedDB")
                 console.error(event)
                 reject(event)
@@ -42,18 +48,18 @@ export class Database {
     }
 
     async getFromDB(id) {
-        const transaction = db.transaction(objectStore, "readonly")
-        const store = transaction.objectStore(objectStore)
+        const transaction = this.db.transaction(this.objectStore, "readonly")
+        const store = transaction.objectStore(this.objectStore)
 
         const request = store.getAll()
 
         return new Promise((resolve, reject) => {
-            request.onerror = function (event) {
+            request.onerror = (event) => {
                 console.error("An error occurred with IndexedDB")
                 reject(event)
             }
 
-            request.onsuccess = function () {
+            request.onsuccess = () => {
                 if (request.result && request.result.length > 0)
                     for (const movie of request.result)
                         if (movie.id == id) {
@@ -66,19 +72,19 @@ export class Database {
     }
 
     async getAllFromDB() {
-        if (db == null) await this.createDatabase()
-        const transaction = db.transaction(objectStore, "readonly")
-        const store = transaction.objectStore(objectStore)
+        if (this.db == null) await this.createDatabase()
+        const transaction = this.db.transaction(this.objectStore, "readonly")
+        const store = transaction.objectStore(this.objectStore)
 
         const request = store.getAll()
 
         return new Promise((resolve, reject) => {
-            request.onerror = function (event) {
+            request.onerror = (event) => {
                 console.error("An error occurred with IndexedDB")
                 reject(event)
             }
             
-            request.onsuccess = function () {
+            request.onsuccess = () => {
                 const movies = request.result?.reduce((acc, movie) => ({ ...acc, [movie.id]: movie.data }), {}) || {}
                 resolve(movies)
             }
@@ -86,16 +92,16 @@ export class Database {
     }
 
     async deleteFromDB(id) {
-        const transaction = db.transaction(objectStore, "readwrite")
-        const store = transaction.objectStore(objectStore)
+        const transaction = this.db.transaction(this.objectStore, "readwrite")
+        const store = transaction.objectStore(this.objectStore)
         store.delete(id)
 
         return new Promise((resolve, reject) => {
-            transaction.oncomplete = function () {
+            transaction.oncomplete = () => {
                 resolve()
             }
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.error("An error occurred with IndexedDB")
                 console.error(event)
                 reject(event)
@@ -104,17 +110,17 @@ export class Database {
     }
 
     async clearDB() {
-        if (db == null) return
-        const transaction = db.transaction(objectStore, "readwrite")
-        const store = transaction.objectStore(objectStore)
+        if (this.db == null) return
+        const transaction = this.db.transaction(this.objectStore, "readwrite")
+        const store = transaction.objectStore(this.objectStore)
         store.clear()
 
         return new Promise((resolve, reject) => {
-            transaction.oncomplete = function () {
+            transaction.oncomplete = () => {
                 resolve()
             }
 
-            transaction.onerror = function (event) {
+            transaction.onerror = (event) => {
                 console.error("An error occurred with IndexedDB")
                 console.error(event)
                 reject(event)
@@ -123,5 +129,5 @@ export class Database {
     }
 }
 
-export const TraktDB = new Database()
+export const TraktDB = new Database("TraktWrappedDatabase", "movies")
 await TraktDB.createDatabase()
