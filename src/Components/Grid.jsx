@@ -1,5 +1,6 @@
 import Content from './Content'
 import Load from './Load'
+import { TraktDB } from './IndexedDB'
 import '../scss/app.scss'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
@@ -22,9 +23,20 @@ async function getMovieData(username, type, sort, headers, setLoadInfos) {
     setLoadInfos(<Load><div className="infos">(3/6) Loading movies datas from tmdb</div></Load>)
     const moviesDatas = {}
     for (const movie in movies) {
+        const response = await TraktDB.getFromDB(movie)
+        if (response) {
+            moviesDatas[movie] = response
+            setLoadInfos(<Load>
+                <div className="infos">(3/6) Loading movies datas from tmdb</div>
+                <div>{moviesDatas[movie].title}</div>
+            </Load>)
+            continue
+        }
+
         await axios.get(`https://api.themoviedb.org/3/movie/${movie}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`)
-        .then(res => {
+        .then(async res => {
             moviesDatas[movie] = res.data
+            await TraktDB.addToDB(movie, res.data)
             setLoadInfos(<Load>
                 <div className="infos">(3/6) Loading movies datas from tmdb</div>
                 <div>{res.data.title}</div>
