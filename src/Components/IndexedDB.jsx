@@ -47,30 +47,6 @@ export class Database {
         })
     }
 
-    async getFromDB(id) {
-        const transaction = this.db.transaction(this.objectStore, "readonly")
-        const store = transaction.objectStore(this.objectStore)
-
-        const request = store.getAll()
-
-        return new Promise((resolve, reject) => {
-            request.onerror = (event) => {
-                console.error("An error occurred with IndexedDB")
-                reject(event)
-            }
-
-            request.onsuccess = () => {
-                if (request.result && request.result.length > 0)
-                    for (const movie of request.result)
-                        if (movie.id == id) {
-                            resolve(movie.data)
-                            return
-                        }
-                resolve(null)
-            }
-        })
-    }
-
     async getAllFromDB() {
         if (this.db == null) await this.createDatabase()
         const transaction = this.db.transaction(this.objectStore, "readonly")
@@ -87,24 +63,6 @@ export class Database {
             request.onsuccess = () => {
                 const movies = request.result?.reduce((acc, movie) => ({ ...acc, [movie.id]: movie.data }), {}) || {}
                 resolve(movies)
-            }
-        })
-    }
-
-    async deleteFromDB(id) {
-        const transaction = this.db.transaction(this.objectStore, "readwrite")
-        const store = transaction.objectStore(this.objectStore)
-        store.delete(id)
-
-        return new Promise((resolve, reject) => {
-            transaction.oncomplete = () => {
-                resolve()
-            }
-
-            transaction.onerror = (event) => {
-                console.error("An error occurred with IndexedDB")
-                console.error(event)
-                reject(event)
             }
         })
     }
