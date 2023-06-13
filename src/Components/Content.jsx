@@ -1,5 +1,6 @@
 import "../scss/movie.scss"
 import {  useRef } from "react"
+import { WrappedData } from "./Wrapped"
 
 function getShowData(comp, res, type, data, sort) {
     if (type != "show") return comp
@@ -32,7 +33,11 @@ function getGeneralData(comp, res, type, data, sort) {
     if (sort.seen && data.last_watched_at.split("-")[0] != sort.seen) return null
     comp.title = type == "movie" ? res.title : res.name
     comp.date = type == "movie" ? res.release_date : res.first_air_date
-    comp.year = type == "movie" ? res.release_date.split("-")[0] : res.first_air_date.split("-")[0]
+    comp.year = (type == "movie" ? res.release_date : res.first_air_date).split("-")[0];
+    if (res.releases) {
+        const releaseCountry = res?.releases.countries.find(country => country.iso_3166_1 === sort.region);
+        if (releaseCountry) comp.year = releaseCountry.release_date.split("-")[0];
+    }
     if (sort.year && sort.year != comp.year) return null
     comp.available = new Date(comp.date) < new Date()
     if (sort.available && sort.available != comp.available) return null
@@ -45,13 +50,63 @@ function getGeneralData(comp, res, type, data, sort) {
     return comp
 }
 
-function exportData(comp, type) {
-    // Récupérer ici les différentes données pour le Wrapped
+function exportData(comp, type, data, res, rating, sort) {
+    comp.genres.forEach(genre => {
+        WrappedData.genres[genre] = WrappedData.genres[genre] == undefined ? 1 : WrappedData.genres[genre] + 1
+    })
 
-    // comp.genres.forEach(genre => {
-    //     if (type == "movie") Data_Genre_Movies[genre] = Data_Genre_Movies[genre] == undefined ? 1 : Data_Genre_Movies[genre] + 1
-    //     else Data_Genre_Shows[genre] = Data_Genre_Shows[genre] == undefined ? 1 : Data_Genre_Shows[genre] + 1
-    // })
+    // ? Récupérer les acteurs (res.cast)
+    // ? Récupérer les actrices (res.cast)
+    // ? Récupérer les réalisateurs (res.crew)
+    // ? Mettre tous les 10/10 dans une liste, ils seront tous affichés à la fin
+    // ? Faire la même chose uniquement avec les sorties de l'année
+
+    function borneMovie(wrapped, res, data, rate, first_date, last_date) {
+        if (!sort.seen) return
+        if (wrapped.data === null || new Date(first_date) > new Date(last_date)) {
+            wrapped.data = {...res, personal_score: rate}
+            wrapped.date = data.last_watched_at
+        }
+    }
+
+    if (type == "movie") {
+        // ! Problème avec le first_movie (me sort babylon alors que c'est Causeway)
+        borneMovie(WrappedData.first_movie, res, data, rating, WrappedData.first_movie.date, data.last_watched_at)
+        borneMovie(WrappedData.last_movie, res, data, rating, data.last_watched_at, WrappedData.last_movie.date)
+        WrappedData.total_movies += 1
+        WrappedData.total_time_movies += res.runtime
+    } else {
+        if (WrappedData.first_show.data === null) WrappedData.first_show.date = new Date()
+        const all_episodes = data.seasons.map(season => season.episodes).flat()
+
+        all_episodes.forEach(episode => {
+            const date = episode.last_watched_at
+
+            // Episodes Data
+            // ? Ajouter une condition pour le sort.seen
+            if (new Date(date) > new Date(sort.seen)) {
+                WrappedData.total_episodes += 1
+                WrappedData.total_time_shows += res?.last_episode_to_air?.runtime || 0
+            }
+
+            // First Show
+            // ? Ajouter une condition pour le sort.seen
+            if (new Date(date) < new Date(WrappedData.first_show.date) && new Date(date) > new Date(sort.seen)) {
+                WrappedData.first_show.data = {...res, personal_score: rating}
+                WrappedData.first_show.date = date
+            }
+        })
+
+        // Last Show
+        if (WrappedData.last_show.data === null ||
+            new Date(WrappedData.last_show.date) < new Date(data.last_watched_at))
+        {
+            WrappedData.last_show.data = {...res, personal_score: rating}
+            WrappedData.last_show.date = data.last_watched_at
+        }
+        // total shows
+        WrappedData.total_shows += 1
+    }
 }
 
 export default function Content({ data, type, sort, rating, res }) {
@@ -66,10 +121,12 @@ export default function Content({ data, type, sort, rating, res }) {
     comp = getShowData(comp, res, type, data, sort)
     if (comp == null) return <></>
 
+    exportData(comp, type, data, res, rating, sort)
+
     return (
         <article className="movie" ref={card}>
             {rating != undefined ? <div className="rating">{rating}</div> : <></>}
-            {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} alt={comp.title} />}
+            {comp.poster == undefined ? <></> : <img src={`https://image.tmdb.org/t/p/w500${comp.poster}`} loading="lazy" alt={comp.title} />}
             <div className={`data ${comp.poster != undefined ? "" : "title"}`}>
                 <h1>{comp.title}</h1>
                 <div className="tags">
