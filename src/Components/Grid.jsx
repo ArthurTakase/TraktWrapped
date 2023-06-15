@@ -4,7 +4,6 @@ import { TraktDB } from './IndexedDB'
 import '../scss/app.scss'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
-import { ClearData } from "./Wrapped"
 
 async function getMovieData(username, type, sort, headers, setLoadInfos, cachedData) {
     setLoadInfos(<Load info="(2/7) Loading movies ratings" />)
@@ -92,8 +91,6 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
         'trakt-api-version': '2',
         'trakt-api-key': 'c5036d6ef235c8d7d1c0ffbc122681ee5506b633f226395458cd568bb88fce92'
     }
-
-    ClearData()
 
     setLoadInfos(<Load info="(1/7) Loading cached data" />)
     const cachedData = await TraktDB.getAllFromDB()

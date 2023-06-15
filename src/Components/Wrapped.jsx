@@ -17,18 +17,11 @@ export const WrappedData = {
     "total_time_shows" : 0,
 }
 
-export function ClearData() {
+// TODO : remove this function
+function ClearData() {
     WrappedData.genres = {}
     WrappedData.actrors = {}
     WrappedData.actresses = {}
-    WrappedData.movies_by_score.undefined = []
-    for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
-    WrappedData.shows_by_score.undefined = []
-    for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
-    WrappedData.movies_by_score_this_year.undefined = []
-    for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
-    WrappedData.shows_by_score_this_year.undefined = []
-    for (let i = 0; i <= 10; i++) WrappedData.shows_by_score_this_year[i.toString()] = []
     WrappedData.first_movie.data = null
     WrappedData.first_movie.date = null
     WrappedData.last_movie.data = null
@@ -43,6 +36,16 @@ export function ClearData() {
     WrappedData.total_time_movies = 0
     WrappedData.total_time_shows = 0
 }
+
+WrappedData.movies_by_score.undefined = []
+WrappedData.shows_by_score.undefined = []
+WrappedData.movies_by_score_this_year.undefined = []
+WrappedData.shows_by_score_this_year.undefined = []
+for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.shows_by_score_this_year[i.toString()] = []
+ClearData() // TODO : remove this line
 
 export function printData() {
     // console.table(WrappedData.genres)
