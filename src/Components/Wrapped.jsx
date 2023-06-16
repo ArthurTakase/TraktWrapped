@@ -2,7 +2,10 @@ export const WrappedData = {
     "genres" : {},
     "actors" : {},
     "actresses" : {},
-    "directors" : {},
+    "movies_by_score" : {},
+    "shows_by_score" : {},
+    "movies_by_score_this_year" : {},
+    "shows_by_score_this_year" : {},
     "first_movie" : { "data": null, "date": null },
     "last_movie" : {  "data": null, "date": null },
     "first_show" : { "data": null, "date": null },
@@ -14,11 +17,11 @@ export const WrappedData = {
     "total_time_shows" : 0,
 }
 
-export function ClearData() {
+// TODO : remove this function
+function ClearData() {
     WrappedData.genres = {}
     WrappedData.actrors = {}
     WrappedData.actresses = {}
-    WrappedData.directors = {}
     WrappedData.first_movie.data = null
     WrappedData.first_movie.date = null
     WrappedData.last_movie.data = null
@@ -34,11 +37,24 @@ export function ClearData() {
     WrappedData.total_time_shows = 0
 }
 
+WrappedData.movies_by_score.undefined = []
+WrappedData.shows_by_score.undefined = []
+WrappedData.movies_by_score_this_year.undefined = []
+WrappedData.shows_by_score_this_year.undefined = []
+for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
+for (let i = 0; i <= 10; i++) WrappedData.shows_by_score_this_year[i.toString()] = []
+ClearData() // TODO : remove this line
+
 export function printData() {
-    console.table(WrappedData.genres)
+    // console.table(WrappedData.genres)
     // console.table(WrappedData.actors)
     // console.table(WrappedData.actresses)
-    // console.table(WrappedData.directors)
+    console.table(WrappedData.movies_by_score)
+    console.table(WrappedData.shows_by_score)
+    console.table(WrappedData.movies_by_score_this_year)
+    console.table(WrappedData.shows_by_score_this_year)
     console.log(`First movie: ${WrappedData.first_movie.data?.title} (${WrappedData.first_movie.data?.last_updated_at_trakt.split('T')[0]})`)
     console.log(`Last movie: ${WrappedData.last_movie.data?.title} (${WrappedData.last_movie.data?.last_updated_at_trakt.split('T')[0]})`)
     console.log(`First show: ${WrappedData.first_show.data?.name} (${WrappedData.first_show.data?.last_updated_at_trakt.split('T')[0]})`)

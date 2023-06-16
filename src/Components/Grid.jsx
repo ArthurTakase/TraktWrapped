@@ -104,11 +104,11 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
     setLoadInfos(<></>)
 
     await setMovies(sort.hideMovies ? <></> : Object.entries(movies).map(([id, data]) =>
-        <Content key={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={ratingsMovies[id]} />
+        <Content key={id} id={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={ratingsMovies[id]} />
     ))
 
     await setShows(sort.hideShows ? <></> : Object.entries(shows).map(([id, data]) =>
-        <Content key={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={ratingsShows[id]} />
+        <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={ratingsShows[id]} />
     ))
 }
 
