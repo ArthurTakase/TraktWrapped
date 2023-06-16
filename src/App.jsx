@@ -2,12 +2,13 @@ import Grid from './Components/Grid'
 import Menu from './Components/Menu'
 import RandomElement from './Components/RandomElement'
 import Navbar, { toggleMenu } from './Components/Navbar'
-import { TraktDB } from './Components/IndexedDB'
 import './scss/app.scss'
 import './scss/form.scss'
 import './scss/random.scss'
+import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
+import Wrapped from './Components/Wrapped'
 
 export const allRef = {}
 
