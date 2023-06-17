@@ -55,6 +55,14 @@
         height: 10px;
         border-radius: 6px;
         cursor: pointer;
+        @media (max-width: 450px) {
+            width: 40%;
+            margin-right: 0.5rem;
+            margin-left: 0.5rem;
+            height: 20px;
+            border-radius: 15px;
+            margin-bottom: 0.5rem;
+        }
     }
 }
 
