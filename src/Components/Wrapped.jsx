@@ -246,7 +246,7 @@ export default function Wrapped() {
         () => transition('And this year? 📆'),
         () => by_score(WrappedData.movies_by_score_this_year, 'Your favorite movies released this year ❤️'),
         () => by_score(WrappedData.shows_by_score_this_year, 'Your favorite shows released this year ❤️'),
-        () => transition('Finally, you journey end with...'),
+        () => transition('Finally, your journey ends with...'),
         () => borne_content(WrappedData.last_movie, 'Your last movie'),
         () => borne_content(WrappedData.last_show, 'Your last show'),
         () => transition(<>See you in space cowboy! <span className='jigle'>🫡</span></>)
