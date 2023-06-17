@@ -65,51 +65,58 @@ export default function Wrapped() {
         const keys = Object.keys(cachedData)
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
-        return randomElement?.backdrop_path
+        return randomElement.backdrop_path ?? randomBackdrop()
     }
 
     function noData(title) {
         return (
-            <div className='fullpage-error'>
+            <div className='fullpage-error fullpage'>
                 <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
                 <p className="title">{title}</p>
-                <i class='bx bx-bug'></i>
+                <i className='bx bx-bug'></i>
                 <p>Hum, this is awkward, there is no data for this category yet.</p>
             </div>)
+    }
+
+    function transition(middleText) {
+        return (
+            <div className="fullpage-transition fullpage">
+                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <p>{middleText}</p>
+            </div>
+        )
     }
     
     function people(from, title) {
         const arr = Object.entries(from).sort((a, b) => a[1].count - b[1].count)
 
         return (
-            <div className="fullpage-people">
+            <div className="fullpage-people fullpage">
                 <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
                 <p className="title">{title}</p>
-                <div className="fullpage-people">
-                    <div className="peoples">
-                    {
-                    Array.from({length: 5}, (_, i) => i).map((i) => {
-                        return (
-                            <div className='people' key={i}>
-                                <img src={`https://image.tmdb.org/t/p/original${arr.at(-1 - i)[1].data.profile_path}`} />
-                            </div>
-                        )
-                    })
-                    }
-                    </div>
+                <div className="peoples">
+                {
+                Array.from({length: 5}, (_, i) => i).map((i) => {
+                    return (
+                        <div className='people' key={i}>
+                            <img src={`https://image.tmdb.org/t/p/original${arr.at(-1 - i)[1].data.profile_path}`} />
+                        </div>
+                    )
+                })
+                }
+                </div>
 
-                    <div className='peoples-data'>
+                <div className='peoples-data'>
                     {
                     Array.from({length: 5}, (_, i) => i).map((i) => {
                         return (
                             <div className='people-data' key={i}>
                                 <p>{arr.at(-1 - i)[1].data.name}</p>
-                                <p>{arr.at(-1 - i)[1].count} contents</p>
+                                <p>{arr.at(-1 - i)[1].count} time(s)</p>
                             </div>
                         )
                     })
                     }
-                    </div>
                 </div>
             </div>
         )
@@ -118,7 +125,7 @@ export default function Wrapped() {
     function borne_content(from, title) {
         if (from.data === null) return noData(title)
         return (
-            <div className="fullpage-movie">
+            <div className="fullpage-movie fullpage">
                 <img src={`https://image.tmdb.org/t/p/original${from.data?.backdrop_path}`} className="backdrop" />
                 <p className="title">{title}</p>
                 <div className="fullmovie-content">
@@ -131,46 +138,122 @@ export default function Wrapped() {
     }
 
     function genres() {
-        return <>Genres</>
+        const sorted = Object.entries(WrappedData.genres).sort((a, b) => a[1] - b[1])
+
+        return (
+            <div className="fullpage-genres fullpage">
+                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <p className="title">Your favorite genres</p>
+                <div className="circle"></div>
+                <div className="genres">
+                {
+                Array.from({length: 5}, (_, i) => i).map((i) => {
+                    return (
+                        <div className='genre' key={i}>
+                            <p>{sorted.at(-1 - i)[0]}</p>
+                            <p>{sorted.at(-1 - i)[1]}</p>
+                        </div>
+                    )
+                })
+                }
+                </div>
+            </div>
+        )
     }
 
     function stats() {
-        return <>Stats</>
+        return(
+            <div className="fullpage-stats fullpage">
+                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <p className="title">Your stats 🧮</p>
+                <div className="allStats">
+                {
+                    WrappedData.total_movies ?
+                    <div className="stats">
+                        <div className="subtitle">Movies</div>
+                        <div className="stat">🎞 {WrappedData.total_movies} movies</div>
+                        <div className="stat">⏰ {WrappedData.total_time_movies} min / ~{Math.round(WrappedData.total_time_movies / 60)} h</div>
+                    </div>
+                    : <></>
+                }
+                {
+                    WrappedData.total_shows ?
+                    <div className="stats">
+                        <div className="subtitle">Shows</div>
+                        <div className="stat">📺 {WrappedData.total_shows} shows</div>
+                        <div className="stat">📼 {WrappedData.total_episodes} episodes</div>
+                        <div className="stat">🕰 {WrappedData.total_time_shows} min / ~{Math.round(WrappedData.total_time_shows / 60)} h</div>
+                    </div>
+                    : <></>
+                }
+                {
+                    WrappedData.total_shows && WrappedData.total_movies ?
+                    <div className="stats">
+                        <div className="subtitle">Total</div>
+                        <div className="stat">⏱ {WrappedData.total_time_movies + WrappedData.total_time_shows} min / ~{Math.round((WrappedData.total_time_movies + WrappedData.total_time_shows) / 60)} h</div>
+                    </div>
+                    : <></>
+                }
+                </div>
+            </div>
+        )
     }
 
-    function movies_by_score() {
-        return <>Movies by score</>
-    }
+    function by_score(from , title) {
+        if (from['10'].length === 0) return noData(title)
+        const first_backdrop = cachedData[from['10'][0]].backdrop_path
 
-    function shows_by_score() {
-        return <>Shows by score</>
-    }
-
-    function movies_by_score_this_year() {
-        return <>Movies by score this year</>
-    }
-
-    function shows_by_score_this_year() {
-        return <>Shows by score this year</>
+        return (
+            <div className="fullpage-score fullpage">
+                <img src={`https://image.tmdb.org/t/p/original${first_backdrop}`} className="backdrop" />
+                <p className="title">{title}</p>
+                <div className="scores">
+                {
+                from['10'].map((i) => {
+                    if (cachedData[i] === undefined) return <div key={i}></div>
+                    return (
+                        <div className='score' key={i}>
+                            <img src={`https://image.tmdb.org/t/p/original${cachedData[i].poster_path}`} />
+                            <p>{cachedData[i].title ?? cachedData[i].name}</p>
+                        </div>
+                    
+                    )
+                })
+                }
+                </div>
+            </div>
+        )
     }
 
     const pages = [
+        () => transition('Welcome to your Trakt Wrapped! 👋'),
+        () => transition('Let\'s start with the basics.'),
+        () => transition('You started your journey with...'),
         () => borne_content(WrappedData.first_movie, 'Your first movie'),
         () => borne_content(WrappedData.first_show, 'Your first show'),
-        () => people(WrappedData.actors, 'Your favorite actors'),
-        () => people(WrappedData.actresses, 'Your favorite actresses'),
-        // genres,
-        // stats,
-        // movies_by_score,
-        // shows_by_score,
-        // movies_by_score_this_year,
-        // shows_by_score_this_year,
+        () => transition('But shows and movies are nothing without...'),
+        () => people(WrappedData.actors, 'Your favorite actors 👨‍🦱'),
+        () => people(WrappedData.actresses, 'Your favorite actresses 👩‍🦰'),
+        () => transition('Your adventure in the genre-verse...'),
+        () => transition(`You explored ${Object.keys(WrappedData.genres).length} different genres!`),
+        genres,
+        () => transition('And now, the moment you\'ve been waiting for...'),
+        () => transition('Stats! 🧮'),
+        stats,
+        () => transition('What about your favorite movies and shows!'),
+        () => by_score(WrappedData.movies_by_score, 'Your favorite movies 💯'),
+        () => by_score(WrappedData.shows_by_score, 'Your favorite shows 💯'),
+        () => transition('But what about this year?'),
+        () => by_score(WrappedData.movies_by_score_this_year, 'Your favorite movies released this year ❤️'),
+        () => by_score(WrappedData.shows_by_score_this_year, 'Your favorite shows released this year ❤️'),
+        () => transition('And you finished your journey with...'),
         () => borne_content(WrappedData.last_movie, 'Your last movie'),
         () => borne_content(WrappedData.last_show, 'Your last show'),
+        () => transition('See you in space cowboy! 🫡')
     ]
 
     return (
-        <div className="wrapped-container">
+        <div className="wrapped-container active">
             <div className="body">
                 {pages[data]()}
                 <div className="footer">

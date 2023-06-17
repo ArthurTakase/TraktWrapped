@@ -64,13 +64,20 @@
     top: 10px;
     font-size: 1.2rem;
     text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    text-align: center;
+    padding: 0;
+    margin: 0.5rem !important;
 }
 
-.fullpage-movie {
+.fullpage {
     height: 100%;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.fullpage-movie {
     .fullmovie-content {
         position: absolute;
         text-align: center;
@@ -80,6 +87,7 @@
         img {
             width: 70%;
             border-radius: 6px;
+            box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.3);
         }
         h1 {
             margin: 1rem 0 0 0;
@@ -93,13 +101,6 @@
 }
 
 .fullpage-people {
-    height: 100%;
-    position: relative;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     .peoples {
         width: 85%;
         display: flex;
@@ -156,11 +157,6 @@
 }
 
 .fullpage-error {
-    display: flex;
-    height: 100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
     p:last-child {
         position: absolute;
         margin: 0 2rem 0 2rem;
@@ -172,5 +168,129 @@
         font-size: 4rem;
         text-shadow: 0 0 5px rgba(0, 0, 0, 1);
         translate: 0 -70px;
+    }
+}
+
+.fullpage-transition {
+    p {
+        font-size: 1.5rem;
+        position: absolute;
+        margin: 0 2rem 0 2rem;
+        text-align: center;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    }
+}
+
+.fullpage-genres {
+    .circle {
+        position: absolute;
+        left: -120%;
+        width: 500px;
+        height: 500px;
+        border-radius: 100%;
+        box-shadow: 0 0 5rem 1rem inset rgb(0, 0, 0);
+        border: dashed rgba(245, 56, 56, 0.7) 0.5rem;
+    }
+    .genres {
+        width: 50%;
+        margin-left: 90px;
+        height: fit-content;
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        gap: 50px;
+    }
+    .genre {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        p {
+            padding: 0;
+            margin: 0;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+            font-size: 1.2rem;
+            &:last-child {
+                color: rgb(151, 151, 151);
+                font-size: 1rem;
+                text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+            }
+        }
+        &::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(245, 56, 56, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 50%;
+            translate: -25px;
+        }
+        &:nth-child(1),
+        &:nth-child(5) {
+            translate: -30px;
+        }
+        &:nth-child(3) {
+            translate: 10px;
+        }
+    }
+}
+
+.fullpage-score {
+    .scores {
+        position: absolute;
+        max-height: 80%;
+        width: calc(100% - 2rem);
+        overflow-y: scroll;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 0 1rem 0 1rem;
+    }
+    .score {
+        background: rgba(255, 255, 255, 0.144);
+        backdrop-filter: blur(10px);
+        overflow: hidden;
+        box-shadow: 0 1rem 0.5rem rgba(0, 0, 0, 0.2);
+        border-radius: 6px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 70px;
+        height: 70px;
+        img {
+            height: 100%;
+        }
+        p {
+            margin-right: 0.5rem;
+        }
+    }
+}
+
+.fullpage-stats {
+    .allStats {
+        position: absolute;
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+    .stats {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        gap: 0.5rem;
+        .subtitle {
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+        }
+        .stat {
+            background: rgba(255, 255, 255, 0.144);
+            backdrop-filter: blur(10px);
+            border-radius: 6px;
+            padding: 0.5rem 0 0.5rem 0;
+            width: 100%;
+        }
     }
 }
