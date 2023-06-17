@@ -2,10 +2,10 @@ import Grid from './Components/Grid'
 import Menu from './Components/Menu'
 import RandomElement from './Components/RandomElement'
 import Navbar, { toggleMenu } from './Components/Navbar'
-import { TraktDB } from './Components/IndexedDB'
 import './scss/app.scss'
 import './scss/form.scss'
 import './scss/random.scss'
+import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
 
@@ -29,6 +29,7 @@ export default function App() {
     allRef.randomTitle = useRef(null)
     allRef.randomYear = useRef(null)
     allRef.randomPoster = useRef(null)
+    allRef.region = useRef(null)
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')
@@ -41,6 +42,7 @@ export default function App() {
         allRef.watchlist.current.checked = searchParams.get('watchlist') == 'true'
         allRef.hideMovies.current.checked = searchParams.get('hideMovies') == 'true'
         allRef.hideShows.current.checked = searchParams.get('hideShows') == 'true'
+        allRef.region.current.value = searchParams.get('region')
 
         if (allRef.username.current.value == '') toggleMenu()
     }, [])

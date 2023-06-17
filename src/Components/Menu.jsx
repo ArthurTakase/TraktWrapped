@@ -18,6 +18,7 @@ export default function Menu({ setSearchParams }) {
         params.watchlist = allRef.watchlist.current.checked
         params.hideMovies = allRef.hideMovies.current.checked
         params.hideShows = allRef.hideShows.current.checked
+        params.region = allRef.region.current.value || 'FR'
 
         // remove empty params or false params
         Object.keys(params).forEach(key => {
@@ -43,11 +44,15 @@ export default function Menu({ setSearchParams }) {
                     <input type="text" placeholder="fr-FR" ref={allRef.lang} />
                 </div>
                 <div className='inputgroup'>
-                    <label htmlFor="year">Year</label>
+                    <label htmlFor="region">Region</label>
+                    <input type="text" placeholder="FR" ref={allRef.region} />
+                </div>
+                <div className='inputgroup'>
+                    <label htmlFor="year">Released in</label>
                     <input type="text" placeholder="yyyy" ref={allRef.year} />
                 </div>
                 <div className='inputgroup'>
-                    <label htmlFor="seen">Seen</label>
+                    <label htmlFor="seen">Viewed in</label>
                     <input type="text" placeholder="yyyy" ref={allRef.seen} />
                 </div>
                 <div className='inputgroup'>
