@@ -226,30 +226,30 @@ export default function Wrapped() {
     }
 
     const pages = [
-        () => transition('Welcome to your Trakt Wrapped! 👋'),
-        () => transition('Let\'s start with the basics.'),
-        () => transition('You started your journey with...'),
+        () => transition(<>Welcome to your Trakt Wrapped! <span className='jigle'>👋</span></>),
+        () => transition(<>Let's start with the <span className='stabilo red'>basics.</span></>),
+        () => transition(<>You started your <span className='jigle red'>journey</span> with...</>),
         () => borne_content(WrappedData.first_movie, 'Your first movie'),
         () => borne_content(WrappedData.first_show, 'Your first show'),
         () => transition('But shows and movies are nothing without...'),
         () => people(WrappedData.actors, 'Your favorite actors 👨‍🦱'),
         () => people(WrappedData.actresses, 'Your favorite actresses 👩‍🦰'),
         () => transition('Your adventure in the genre-verse...'),
-        () => transition(`You explored ${Object.keys(WrappedData.genres).length} different genres!`),
+        () => transition(<>You explored <span className='glow red'>{Object.keys(WrappedData.genres).length}</span> different genres!</>),
         genres,
         () => transition('And now, the moment you\'ve been waiting for...'),
-        () => transition('Stats! 🧮'),
+        () => transition(<span className='jigle'>Stats! 🧮</span>),
         stats,
-        () => transition('What about your favorite movies and shows!'),
+        () => transition(<>What about your <span className='stabilo red'>favorite</span> movies and shows! 🤔</>),
         () => by_score(WrappedData.movies_by_score, 'Your favorite movies 💯'),
         () => by_score(WrappedData.shows_by_score, 'Your favorite shows 💯'),
-        () => transition('But what about this year?'),
+        () => transition('And this year? 📆'),
         () => by_score(WrappedData.movies_by_score_this_year, 'Your favorite movies released this year ❤️'),
         () => by_score(WrappedData.shows_by_score_this_year, 'Your favorite shows released this year ❤️'),
-        () => transition('And you finished your journey with...'),
+        () => transition('Finally, you journey end with...'),
         () => borne_content(WrappedData.last_movie, 'Your last movie'),
         () => borne_content(WrappedData.last_show, 'Your last show'),
-        () => transition('See you in space cowboy! 🫡')
+        () => transition(<>See you in space cowboy! <span className='jigle'>🫡</span></>)
     ]
 
     return (

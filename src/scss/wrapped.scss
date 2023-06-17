@@ -12,6 +12,7 @@
     align-items: center;
     &.active {
         display: flex;
+        animation: fade-bottom 0.5s ease-in-out;
     }
     .close {
         position: absolute;
@@ -57,6 +58,84 @@
     position: absolute;
     height: 100%;
     filter: blur(10px) brightness(0.5);
+    animation: backdrop 10s infinite ease-in-out;
+    @keyframes backdrop {
+        0% {
+            transform: translateX(-20px);
+        }
+        50% {
+            transform: translateX(20px);
+        }
+        100% {
+            transform: translateX(-20px);
+        }
+    }
+}
+
+.red {
+    color: rgb(245, 56, 56);
+}
+
+.stabilo {
+    padding: 0 10px 0 10px;
+    animation: stabilo 3.5s infinite ease-in-out;
+    @keyframes stabilo {
+        0% {
+            box-shadow: inset 0rem 0 0px rgba(175, 175, 175, 0.4);
+        }
+        50% {
+            box-shadow: inset 15rem 0 0px rgba(175, 175, 175, 0.4);
+        }
+        80% {
+            box-shadow: inset 0rem 0 0px rgba(175, 175, 175, 0.4);
+        }
+        100% {
+            box-shadow: inset 0rem 0 0px rgba(175, 175, 175, 0.4);
+        }
+    }
+}
+
+.jigle {
+    display: inline-block;
+    animation: jigle 1s infinite ease-in-out;
+    @keyframes jigle {
+        0%,
+        7% {
+            transform: rotateZ(0);
+        }
+        15% {
+            transform: rotateZ(-5deg);
+        }
+        20% {
+            transform: rotateZ(5deg);
+        }
+        25% {
+            transform: rotateZ(-5deg);
+        }
+        30% {
+            transform: rotateZ(2deg);
+        }
+        35% {
+            transform: rotateZ(-1deg);
+        }
+        40%,
+        100% {
+            transform: rotateZ(0);
+        }
+    }
+}
+
+.glow {
+    display: inline-block;
+    animation: glow 2s infinite;
+    @keyframes glow {
+        0% {
+            text-shadow: 0 0 0px rgb(255, 255, 255);
+        }
+        100% {
+            text-shadow: 0 0 50px rgb(255, 255, 255);
+        }
+    }
 }
 
 .title {
@@ -77,6 +156,28 @@
     align-items: center;
 }
 
+@keyframes fade-bottom {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes fade-right {
+    0% {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0px);
+    }
+}
+
 .fullpage-movie {
     .fullmovie-content {
         position: absolute;
@@ -88,6 +189,11 @@
             width: 70%;
             border-radius: 6px;
             box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.3);
+            transition: scale 0.3s ease-in-out;
+            &:hover {
+                scale: 1.05;
+            }
+            animation: fade-bottom 0.5s ease-in-out;
         }
         h1 {
             margin: 1rem 0 0 0;
@@ -119,6 +225,12 @@
             object-fit: cover;
             height: 100%;
             width: 100%;
+            cursor: pointer;
+            transition: scale 0.3s ease-in-out;
+            &:hover {
+                scale: 1.05;
+            }
+            animation: fade-right 0.5s ease-in-out;
         }
         &:nth-child(2n) {
             rotate: 10deg;
@@ -145,6 +257,7 @@
         bottom: 5rem;
         width: 80%;
         gap: 0.5rem;
+        animation: fade-bottom 0.5s ease-in-out;
     }
     .people-data {
         display: flex;
@@ -190,6 +303,15 @@
         border-radius: 100%;
         box-shadow: 0 0 5rem 1rem inset rgb(0, 0, 0);
         border: dashed rgba(245, 56, 56, 0.7) 0.5rem;
+        animation: circle 20s infinite;
+        @keyframes circle {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
     }
     .genres {
         width: 50%;
@@ -204,6 +326,12 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        transition: scale 0.2s ease-in-out;
+        cursor: pointer;
+        &:hover {
+            scale: 1.1;
+        }
+        animation: fade-right 0.5s ease-in-out;
         p {
             padding: 0;
             margin: 0;
@@ -257,11 +385,16 @@
         gap: 10px;
         min-height: 70px;
         height: 70px;
+        animation: fade-bottom 0.5s ease-in-out;
         img {
             height: 100%;
         }
         p {
             margin-right: 0.5rem;
+        }
+        transition: scale 0.2s ease-in-out;
+        &:hover {
+            scale: 1.05;
         }
     }
 }
@@ -291,6 +424,11 @@
             border-radius: 6px;
             padding: 0.5rem 0 0.5rem 0;
             width: 100%;
+            transition: scale 0.2s ease-in-out;
+            &:hover {
+                scale: 1.05;
+            }
+            animation: fade-bottom 0.5s ease-in-out;
         }
     }
 }
