@@ -131,7 +131,7 @@ export default function Wrapped() {
                 <div className="fullmovie-content">
                     <img src={`https://image.tmdb.org/t/p/w500${from.data?.poster_path}`} />
                     <h1>{from.data?.title ?? from?.data.name}</h1>
-                    <p>{from.date.split('T')[0]}</p>
+                    <p>{from?.date?.split('T')[0]}</p>
                 </div>
             </div>
         )

@@ -30,7 +30,7 @@ function getShowData(comp, res, type, data, sort) {
 }
 
 function getGeneralData(comp, res, type, data, sort) {
-    if (sort.seen && data?.last_watched_at.split("-")[0] != sort.seen) return null
+    if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) return null
     comp.title = type == "movie" ? res.title : res.name
     comp.date = type == "movie" ? res.release_date : res.first_air_date
     comp.year = (type == "movie" ? res.release_date : res.first_air_date).split("-")[0];
@@ -85,7 +85,7 @@ function exportData(comp, type, data, res, rating, sort, id) {
         WrappedData.total_time_movies += res.runtime
     } else {
         if (WrappedData.first_show.data === null) WrappedData.first_show.date = new Date()
-        const all_episodes = data.seasons.flatMap(season => season.episodes)
+        const all_episodes = data?.seasons?.flatMap(season => season.episodes) || []
 
         all_episodes.forEach(episode => {
             const date = episode.last_watched_at
