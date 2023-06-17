@@ -52,6 +52,7 @@ ClearData() // TODO : remove this line
 
 export default function Wrapped() {
     const [data, setData] = useState(0)
+    const keys = Object.keys(cachedData)
 
     function next() {
         if (data < pages.length - 1) setData(data + 1)
@@ -62,7 +63,6 @@ export default function Wrapped() {
     }
 
     function randomBackdrop() {
-        const keys = Object.keys(cachedData)
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
         return randomElement?.backdrop_path ?? randomBackdrop()

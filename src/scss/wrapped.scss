@@ -70,16 +70,16 @@
     position: absolute;
     height: 100%;
     filter: blur(10px) brightness(0.5);
-    animation: backdrop 10s infinite ease-in-out;
+    animation: backdrop 5s infinite;
     @keyframes backdrop {
         0% {
-            transform: translateX(-20px);
+            transform: translateX(-10px);
         }
         50% {
-            transform: translateX(20px);
+            transform: translateX(10px);
         }
         100% {
-            transform: translateX(-20px);
+            transform: translateX(-10px);
         }
     }
 }
