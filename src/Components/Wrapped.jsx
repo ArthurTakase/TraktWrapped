@@ -65,7 +65,7 @@ export default function Wrapped() {
         const keys = Object.keys(cachedData)
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
-        return randomElement.backdrop_path ?? randomBackdrop()
+        return randomElement?.backdrop_path ?? randomBackdrop()
     }
 
     function noData(title) {
