@@ -16,8 +16,10 @@ export default function Navbar() {
             <button title="Séléctionner un élément au hasard" onClick={showRandomElement}><i className='bx bx-shuffle' ></i></button>
             <button title="Afficher/masquer les favoris" onClick={() => {allRef.main.current.classList.toggle('fav')}}><i className='bx bx-heart'></i></button>
             <button title="Lancer le Wrapped" onClick={() => {
-                if (WrappedData.first_movie.data == null) return
-                setWrapped(<Wrapped />)
+                if (WrappedData.first_movie.data == null && WrappedData.first_show.data == null) return
+                const wrapped = document.querySelector('.wrapped-container')
+                if (wrapped) wrapped.classList.toggle('active')
+                else setWrapped(<Wrapped />)
             }}><i className='bx bx-party'></i></button>
             <button title="Changer l'affichage" onClick={() => {
                 allRef.main.current.classList.toggle('no-title')

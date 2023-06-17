@@ -30,7 +30,7 @@ function getShowData(comp, res, type, data, sort) {
 }
 
 function getGeneralData(comp, res, type, data, sort) {
-    if (sort.seen && data.last_watched_at.split("-")[0] != sort.seen) return null
+    if (sort.seen && data?.last_watched_at.split("-")[0] != sort.seen) return null
     comp.title = type == "movie" ? res.title : res.name
     comp.date = type == "movie" ? res.release_date : res.first_air_date
     comp.year = (type == "movie" ? res.release_date : res.first_air_date).split("-")[0];
@@ -72,7 +72,6 @@ function exportData(comp, type, data, res, rating, sort, id) {
     })
 
     function borneMovie(wrapped, first_date, last_date) {
-        if (!sort.seen) return
         if (wrapped.data === null || new Date(first_date) > new Date(last_date)) {
             wrapped.data = {...res, personal_score: rating}
             wrapped.date = data.last_watched_at
@@ -80,8 +79,8 @@ function exportData(comp, type, data, res, rating, sort, id) {
     }
 
     if (type == "movie") {
-        borneMovie(WrappedData.first_movie, WrappedData.first_movie.date, data.last_watched_at)
-        borneMovie(WrappedData.last_movie, data.last_watched_at, WrappedData.last_movie.date)
+        borneMovie(WrappedData.first_movie, WrappedData.first_movie.date, data?.last_watched_at)
+        borneMovie(WrappedData.last_movie, data?.last_watched_at, WrappedData.last_movie.date)
         WrappedData.total_movies += 1
         WrappedData.total_time_movies += res.runtime
     } else {
@@ -92,21 +91,21 @@ function exportData(comp, type, data, res, rating, sort, id) {
             const date = episode.last_watched_at
 
             // Episodes Data
-            if (sort.seen ? new Date(date) > new Date(sort.seen) : true) {
+            if (new Date(date) > new Date(sort.seen)) {
                 WrappedData.total_episodes += 1
                 WrappedData.total_time_shows += res?.last_episode_to_air?.runtime || 0
             }
 
             // First Show
-            if (sort.seen ? new Date(date) < new Date(WrappedData.first_show.date) && new Date(date) > new Date(sort.seen) : false) {
+            if (new Date(date) < new Date(WrappedData.first_show.date) && new Date(date) > new Date(sort.seen)) {
                 WrappedData.first_show.data = {...res, personal_score: rating}
                 WrappedData.first_show.date = date
             }
         })
 
         // Last Show
-        if (sort.seen ? WrappedData.last_show.data === null ||
-            new Date(WrappedData.last_show.date) < new Date(data.last_watched_at) : false)
+        if (WrappedData.last_show.data === null ||
+            new Date(WrappedData.last_show.date) < new Date(data.last_watched_at))
         {
             WrappedData.last_show.data = {...res, personal_score: rating}
             WrappedData.last_show.date = data.last_watched_at

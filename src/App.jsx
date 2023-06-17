@@ -8,7 +8,6 @@ import './scss/random.scss'
 import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
-import Wrapped from './Components/Wrapped'
 
 export const allRef = {}
 

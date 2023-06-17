@@ -6,6 +6,8 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { ClearData } from "./Wrapped"
 
+export let cachedData = {}
+
 async function getMovieData(username, type, sort, headers, setLoadInfos, cachedData) {
     setLoadInfos(<Load info="(2/7) Loading movies ratings" />)
     const response = await axios.get(`https://api.trakt.tv/users/${username}/ratings/movies/`, { headers })
@@ -96,7 +98,7 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
     ClearData()
 
     setLoadInfos(<Load info="(1/7) Loading cached data" />)
-    const cachedData = await TraktDB.getAllFromDB()
+    cachedData = await TraktDB.getAllFromDB()
 
     const { ratingsMovies, movies, moviesDatas } = sort.hideMovies ? {} : await getMovieData(username, type, sort, headers, setLoadInfos, cachedData)
     const { ratingsShows, shows, showsDatas } = sort.hideShows ? {} : await getShowData(username, type, sort, headers, setLoadInfos, cachedData)

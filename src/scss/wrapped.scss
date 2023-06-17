@@ -7,9 +7,12 @@
     backdrop-filter: blur(5px);
     width: 100%;
     height: 100%;
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: center;
+    &.active {
+        display: flex;
+    }
     .close {
         position: absolute;
         top: 10px;
@@ -50,21 +53,24 @@
     }
 }
 
+.backdrop {
+    position: absolute;
+    height: 100%;
+    filter: blur(10px) brightness(0.5);
+}
+
+.title {
+    position: absolute;
+    top: 10px;
+    font-size: 1.2rem;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+}
+
 .fullpage-movie {
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    .backdrop {
-        height: 100%;
-        filter: blur(10px);
-    }
-    .title {
-        position: absolute;
-        top: 10px;
-        font-size: 1.2rem;
-        text-shadow: 0 0 5px rgba(0, 0, 0, 1);
-    }
     .fullmovie-content {
         position: absolute;
         text-align: center;
@@ -83,5 +89,88 @@
             margin: 0;
             text-shadow: 0 0 5px rgba(0, 0, 0, 1);
         }
+    }
+}
+
+.fullpage-people {
+    height: 100%;
+    position: relative;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .peoples {
+        width: 85%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 10rem;
+    }
+    .people {
+        height: 80px;
+        width: 80px;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.5);
+        img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+        &:nth-child(2n) {
+            rotate: 10deg;
+        }
+        &:nth-child(2n + 1) {
+            rotate: -10deg;
+        }
+        &:first-child {
+            position: absolute;
+            height: 250px;
+            width: 200px;
+            rotate: 0deg;
+            left: 1.5rem;
+        }
+    }
+    .peoples-data {
+        background: rgba(255, 255, 255, 0.151);
+        backdrop-filter: blur(10px);
+        padding: 0.5rem 1rem 0.5rem 1rem;
+        border-radius: 6px;
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        bottom: 5rem;
+        width: 80%;
+        gap: 0.5rem;
+    }
+    .people-data {
+        display: flex;
+        justify-content: space-between;
+        p {
+            margin: 0;
+            padding: 0;
+        }
+    }
+}
+
+.fullpage-error {
+    display: flex;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    p:last-child {
+        position: absolute;
+        margin: 0 2rem 0 2rem;
+        text-align: center;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+    }
+    i {
+        position: absolute;
+        font-size: 4rem;
+        text-shadow: 0 0 5px rgba(0, 0, 0, 1);
+        translate: 0 -70px;
     }
 }
