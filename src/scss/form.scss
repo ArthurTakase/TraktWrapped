@@ -2,7 +2,7 @@
     position: fixed;
     transition: 0.5s;
     z-index: 3;
-    background: rgba(0, 0, 0, 0.651);
+    background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(0.5rem);
     padding-top: 1rem;
     overflow-y: scroll;
@@ -13,7 +13,7 @@
     top: 0;
     opacity: 1;
     @media screen and (max-width: 500px) {
-        background: rgba(0, 0, 0, 0.918);
+        background: rgba(0, 0, 0, 0.9);
         width: calc(100vw - 2rem);
     }
     &.active {
@@ -78,15 +78,18 @@
         background: rgba(0, 0, 0, 0.5);
         backdrop-filter: blur(0.5rem);
         border-radius: 0.5rem;
-        flex: 1;
         height: 2.5rem;
         font-size: 1.3rem;
+        width: 5rem;
         color: white;
         cursor: pointer;
         transition: 0.2s;
+        box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
         &:hover {
             background: red;
-            scale: 1.05;
+        }
+        @media (max-width: 500px) {
+            flex: 1;
         }
     }
 }
