@@ -8,7 +8,7 @@ import { ClearData } from "./Wrapped"
 
 export let cachedData = {}
 
-async function getMovieData(username, type, sort, headers, setLoadInfos, cachedData) {
+async function getMovieData(username, type, sort, headers, setLoadInfos, cachedData, date) {
     setLoadInfos(<Load info="(2/7) Loading movies ratings" />)
     const response = await axios.get(`https://api.trakt.tv/users/${username}/ratings/movies/`, { headers })
     const ratingsMovies = response.data.reduce((acc, movie) => {
@@ -19,10 +19,10 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
     setLoadInfos(<Load info="(3/7) Loading movies data from trakt" />)
     const responseInfos = await axios.get(`https://api.trakt.tv/users/${username}/${type}/movies`, { headers })
     const movies = responseInfos.data.reduce((acc, movie) => {
+        if (new Date(movie.last_watched_at) < new Date(date)) return acc
         acc[movie.movie.ids.tmdb] = movie
         return acc
     }, {})
-
     setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" />)
     const moviesDatas = {}
     for (const movie in movies) {
@@ -32,11 +32,9 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
         }
 
         try {
-            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/movie/${movie}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=releases`)
-            const responseCast = await axios.get(`https://api.themoviedb.org/3/movie/${movie}/credits?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`)
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/movie/${movie}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=releases,credits`)
             const data = {
                 ...responseTMDB.data,
-                ...responseCast.data,
                 last_updated_at_trakt: movies[movie].last_updated_at
             }
             moviesDatas[movie] = data
@@ -48,7 +46,7 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
     return { ratingsMovies, movies, moviesDatas }
 }
 
-async function getShowData(username, type, sort, headers, setLoadInfos, cachedData) {
+async function getShowData(username, type, sort, headers, setLoadInfos, cachedData, date) {
     setLoadInfos(<Load info="(5/7) Loading shows ratings" />)
     const responseRating = await axios.get(`https://api.trakt.tv/users/${username}/ratings/shows/`, { headers })
     const ratingsShows = responseRating.data.reduce((acc, show) => {
@@ -59,6 +57,7 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
     setLoadInfos(<Load info="(6/7) Loading shows data from trakt" />)
     const responseInfos = await axios.get(`https://api.trakt.tv/users/${username}/${type}/shows`, { headers })
     const shows = responseInfos.data.reduce((acc, show) => {
+        if (new Date(show.last_watched_at) < new Date(date)) return acc
         acc[show.show.ids.tmdb] = show
         return acc
     }, {})
@@ -72,11 +71,9 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
         }
 
         try {
-            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${show}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`)
-            const responseCast = await axios.get(`https://api.themoviedb.org/3/tv/${show}/credits?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}`)
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${show}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=credits`)
             const data = {
                 ...responseTMDB.data,
-                ...responseCast.data,
                 last_updated_at_trakt: shows[show].last_updated_at
             }
             showsDatas[show] = data
@@ -89,6 +86,7 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
 }
 
 async function getData(setLoadInfos, username, type, sort, setMovies, setShows) {
+    const date = sort.seen ? new Date(sort.seen).toISOString() : "2000-06-01T00%3A00%3A00.000Z"
     const headers = {
         'Content-Type': 'application/json',
         'trakt-api-version': '2',
@@ -100,8 +98,8 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
     setLoadInfos(<Load info="(1/7) Loading cached data" />)
     cachedData = await TraktDB.getAllFromDB()
 
-    const { ratingsMovies, movies, moviesDatas } = sort.hideMovies ? {} : await getMovieData(username, type, sort, headers, setLoadInfos, cachedData)
-    const { ratingsShows, shows, showsDatas } = sort.hideShows ? {} : await getShowData(username, type, sort, headers, setLoadInfos, cachedData)
+    const { ratingsMovies, movies, moviesDatas } = sort.hideMovies ? {} : await getMovieData(username, type, sort, headers, setLoadInfos, cachedData, date)
+    const { ratingsShows, shows, showsDatas } = sort.hideShows ? {} : await getShowData(username, type, sort, headers, setLoadInfos, cachedData, date)
 
     setLoadInfos(<></>)
 
