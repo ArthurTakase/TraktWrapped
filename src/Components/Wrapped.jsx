@@ -1,10 +1,14 @@
 import { useState } from 'react'
 import { cachedData } from './Grid'
+import earth from '../assets/earth.png'
+import space from '../assets/space.jpg'
 
 export const WrappedData = {
     "genres" : {},
     "actors" : {},
     "actresses" : {},
+    "directors" : {},
+    "countries" : {},
     "movies_by_score" : {},
     "shows_by_score" : {},
     "movies_by_score_this_year" : {},
@@ -20,11 +24,12 @@ export const WrappedData = {
     "total_time_shows" : 0,
 }
 
-// TODO : remove this function
 export function ClearData() {
     WrappedData.genres = {}
     WrappedData.actrors = {}
     WrappedData.actresses = {}
+    WrappedData.directors = {}
+    WrappedData.countries = {}
     WrappedData.first_movie.data = null
     WrappedData.first_movie.date = null
     WrappedData.last_movie.data = null
@@ -38,17 +43,17 @@ export function ClearData() {
     WrappedData.total_episodes = 0
     WrappedData.total_time_movies = 0
     WrappedData.total_time_shows = 0
+    WrappedData.movies_by_score.undefined = []
+    WrappedData.shows_by_score.undefined = []
+    WrappedData.movies_by_score_this_year.undefined = []
+    WrappedData.shows_by_score_this_year.undefined = []
+    for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
+    for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
+    for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
+    for (let i = 0; i <= 10; i++) WrappedData.shows_by_score_this_year[i.toString()] = []
 }
 
-WrappedData.movies_by_score.undefined = []
-WrappedData.shows_by_score.undefined = []
-WrappedData.movies_by_score_this_year.undefined = []
-WrappedData.shows_by_score_this_year.undefined = []
-for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
-for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
-for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
-for (let i = 0; i <= 10; i++) WrappedData.shows_by_score_this_year[i.toString()] = []
-ClearData() // TODO : remove this line
+ClearData()
 
 export default function Wrapped() {
     const [data, setData] = useState(0)
@@ -65,7 +70,7 @@ export default function Wrapped() {
     function randomBackdrop() {
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
-        return randomElement?.backdrop_path ?? randomBackdrop()
+        return randomElement?.backdrop_path ?? '/p3NtYk9lW1O1gidnfDaIB2NtpNc.jpg'
     }
 
     function noData(title) {
@@ -86,12 +91,37 @@ export default function Wrapped() {
             </div>
         )
     }
+
+    function countries() {
+        const arr = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count)
+        return (
+            <div className="fullpage-countries fullpage">
+                <img src={space} className="backdrop" />
+                <img src={earth} className="earth" />
+                <p className="title">Countries 🚀</p>
+                <div className="countries">
+                {
+                Array.from({length: 5}, (_, i) => i).map((i) => {
+                    const country = arr.at(-1 - i)[1]
+                    return (
+                        <div className='country' key={i}>
+                            <img src={`https://flagcdn.com/48x36/${country.data.iso_3166_1.toLowerCase()}.png`} />
+                            <p>{country.data.name}</p>
+                            <p>{country.count}</p>
+                        </div>
+                    )
+                })
+                }
+                </div>
+            </div>
+        )
+    }
     
-    function people(from, title) {
+    function people(from, title, className) {
         const arr = Object.entries(from).sort((a, b) => a[1].count - b[1].count)
 
         return (
-            <div className="fullpage-people fullpage">
+            <div className={`fullpage-people fullpage ${className}`}>
                 <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
                 <p className="title">{title}</p>
                 <div className="peoples">
@@ -200,7 +230,7 @@ export default function Wrapped() {
     }
 
     function by_score(from , title) {
-        if (from['10'].length === 0) return noData(title)
+        if (from['10']?.length === 0) return noData(title)
         const first_backdrop = cachedData[from['10'][0]].backdrop_path
 
         return (
@@ -209,7 +239,7 @@ export default function Wrapped() {
                 <p className="title">{title}</p>
                 <div className="scores">
                 {
-                from['10'].map((i) => {
+                from['10']?.map((i) => {
                     if (cachedData[i] === undefined) return <div key={i}></div>
                     return (
                         <div className='score' key={i}>
@@ -233,8 +263,12 @@ export default function Wrapped() {
         () => borne_content(WrappedData.first_show, 'Your first show'),
         () => transition('But shows and movies are nothing without...'),
         () => people(WrappedData.actors, 'Your favorite actors 👨‍🦱'),
-        () => people(WrappedData.actresses, 'Your favorite actresses 👩‍🦰'),
-        () => transition('Your adventure in the genre-verse...'),
+        () => people(WrappedData.actresses, 'Your favorite actresses 👩‍🦰', 'actresses'),
+        () => transition('And of course...'),
+        () => people(WrappedData.directors, 'Your favorite directors 👨‍🎬', 'director'),
+        () => transition(<>You traveled to <span className='stabilo red'>many places</span> around the world</>),
+        countries,
+        () => transition('Your adventure in the the genre-verse...'),
         () => transition(<>You explored <span className='glow red'>{Object.keys(WrappedData.genres).length}</span> different genres!</>),
         genres,
         () => transition('And now, the moment you\'ve been waiting for...'),
@@ -259,6 +293,16 @@ export default function Wrapped() {
                 <div className="footer">
                     <button className="before" onClick={prev}></button>
                     <button className="after" onClick={next}></button>
+                    <div className='bookmarks'>
+                        {
+                            pages.map((_, i) => {
+                                return (
+                                    <div className={`bookmark ${i === data ? 'active' : ''}`} key={i} onClick={() => { setData(i) }}></div>
+                                )
+                            }
+                            )
+                        }
+                    </div>
                 </div>
             </div>
             <button className='close' onClick={
