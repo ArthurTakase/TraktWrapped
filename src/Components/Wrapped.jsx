@@ -70,7 +70,7 @@ export default function Wrapped() {
     function randomBackdrop() {
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
-        return randomElement?.backdrop_path ?? '/p3NtYk9lW1O1gidnfDaIB2NtpNc.jpg'
+        return randomElement?.backdrop_path ?? randomBackdrop()
     }
 
     function noData(title) {
@@ -93,7 +93,7 @@ export default function Wrapped() {
     }
 
     function countries() {
-        const arr = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count)
+        const arr = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
         return (
             <div className="fullpage-countries fullpage">
                 <img src={space} className="backdrop" />
@@ -102,7 +102,8 @@ export default function Wrapped() {
                 <div className="countries">
                 {
                 Array.from({length: 5}, (_, i) => i).map((i) => {
-                    const country = arr.at(-1 - i)[1]
+                    if (!arr[i]) return <></>
+                    const country = arr[i][1]
                     return (
                         <div className='country' key={i}>
                             <img src={`https://flagcdn.com/48x36/${country.data.iso_3166_1.toLowerCase()}.png`} />
@@ -118,7 +119,8 @@ export default function Wrapped() {
     }
     
     function people(from, title, className) {
-        const arr = Object.entries(from).sort((a, b) => a[1].count - b[1].count)
+        if (Object.keys(from).length === 0) return noData(title)
+        const arr = Object.entries(from).sort((a, b) => a[1].count - b[1].count).reverse()
 
         return (
             <div className={`fullpage-people fullpage ${className}`}>
@@ -127,9 +129,10 @@ export default function Wrapped() {
                 <div className="peoples">
                 {
                 Array.from({length: 5}, (_, i) => i).map((i) => {
+                    if (!arr[i]) return <></>
                     return (
                         <div className='people' key={i}>
-                            <img src={`https://image.tmdb.org/t/p/original${arr.at(-1 - i)[1].data.profile_path}`} />
+                            <img src={`https://image.tmdb.org/t/p/original${arr.at(i)[1]?.data?.profile_path}`} />
                         </div>
                     )
                 })
@@ -139,10 +142,11 @@ export default function Wrapped() {
                 <div className='peoples-data'>
                     {
                     Array.from({length: 5}, (_, i) => i).map((i) => {
+                        if (!arr[i]) return <></>
                         return (
                             <div className='people-data' key={i}>
-                                <p>{arr.at(-1 - i)[1].data.name}</p>
-                                <p>{arr.at(-1 - i)[1].count} time(s)</p>
+                                <p>{arr[i][1].data.name}</p>
+                                <p>{arr[i][1].count} time(s)</p>
                             </div>
                         )
                     })
@@ -168,7 +172,7 @@ export default function Wrapped() {
     }
 
     function genres() {
-        const sorted = Object.entries(WrappedData.genres).sort((a, b) => a[1] - b[1])
+        const sorted = Object.entries(WrappedData.genres).sort((a, b) => a[1] - b[1]).reverse()
 
         return (
             <div className="fullpage-genres fullpage">
@@ -178,10 +182,11 @@ export default function Wrapped() {
                 <div className="genres">
                 {
                 Array.from({length: 5}, (_, i) => i).map((i) => {
+                    if (!sorted[i]) return <></>
                     return (
                         <div className='genre' key={i}>
-                            <p>{sorted.at(-1 - i)[0]}</p>
-                            <p>{sorted.at(-1 - i)[1]}</p>
+                            <p>{sorted[i][0]}</p>
+                            <p>{sorted[i][1]}</p>
                         </div>
                     )
                 })
@@ -231,7 +236,7 @@ export default function Wrapped() {
 
     function by_score(from , title) {
         if (from['10']?.length === 0) return noData(title)
-        const first_backdrop = cachedData[from['10'][0]].backdrop_path
+        const first_backdrop = cachedData[from['10'][0]]?.backdrop_path ?? randomBackdrop()
 
         return (
             <div className="fullpage-score fullpage">
@@ -240,7 +245,7 @@ export default function Wrapped() {
                 <div className="scores">
                 {
                 from['10']?.map((i) => {
-                    if (cachedData[i] === undefined) return <div key={i}></div>
+                    if (cachedData[i] === undefined) return <></>
                     return (
                         <div className='score' key={i}>
                             <img src={`https://image.tmdb.org/t/p/original${cachedData[i].poster_path}`} />

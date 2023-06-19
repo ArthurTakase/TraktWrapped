@@ -42,6 +42,7 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
                 last_updated_at_trakt: movies[movie].last_updated_at
             }
             moviesDatas[movie] = data
+            cachedData[movie] = data
             await TraktDB.addToDB(movie, data)
             setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" moreInfo={responseTMDB.data.title} />)
         } catch (e) { console.log(`Erreur dans le chargement de ${movies[movie].movie.title}`) }
@@ -74,6 +75,7 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
     for (const show in shows) {
         if (cachedData[show] && cachedData[show].last_updated_at_trakt === shows[show].last_updated_at) { 
             showsDatas[show] = cachedData[show]
+            cachedData[show] = showsDatas[show]
             continue
         }
 
@@ -143,7 +145,7 @@ export default function Grid() {
     const type = sort.watchlist == true ? 'watchlist' : 'watched'
 
     useEffect(() => {
-        if (username == null || username === "") { return}
+        if (username == null || username === "") return
         getData(setLoadInfos, username, type, sort, setMovies, setShows)
     }, []);
 
