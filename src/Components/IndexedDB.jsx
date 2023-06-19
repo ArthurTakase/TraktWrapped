@@ -70,12 +70,14 @@ export class Database {
 
     async clearDB() {
         if (this.db == null) return
+        console.log("Clearing IndexedDB")
         const transaction = this.db.transaction(this.objectStore, "readwrite")
         const store = transaction.objectStore(this.objectStore)
         store.clear()
 
         return new Promise((resolve, reject) => {
             transaction.oncomplete = () => {
+                console.log("IndexedDB cleared")
                 resolve()
             }
 

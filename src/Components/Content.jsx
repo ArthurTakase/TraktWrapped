@@ -65,7 +65,7 @@ function exportData(comp, type, data, res, rating, sort, id) {
         }
     } catch (e) { console.log(rating) }
 
-    res.cast.forEach(actor => {
+    res.credits.cast.forEach(actor => {
         const database = actor.gender == 1 ? WrappedData.actresses : WrappedData.actors
         if (database[actor.id] == undefined) database[actor.id] = { count: 1, data: actor }
         else database[actor.id].count += 1
