@@ -71,6 +71,17 @@ function exportData(comp, type, data, res, rating, sort, id) {
         else database[actor.id].count += 1
     })
 
+    res.credits.crew.forEach(crew => {
+        if (crew.job != "Director") return
+        if (WrappedData.directors[crew.id] == undefined) WrappedData.directors[crew.id] = { count: 1, data: crew }
+        else WrappedData.directors[crew.id].count += 1
+    })
+
+    res.production_countries.forEach(country => {
+        if (WrappedData.countries[country.iso_3166_1] == undefined) WrappedData.countries[country.iso_3166_1] = { count: 1, data: country }
+        else WrappedData.countries[country.iso_3166_1].count += 1
+    })
+
     function borneMovie(wrapped, first_date, last_date) {
         if (wrapped.data === null || new Date(first_date) > new Date(last_date)) {
             wrapped.data = {...res, personal_score: rating}
