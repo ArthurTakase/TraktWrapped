@@ -277,6 +277,15 @@
         p {
             margin: 0;
             padding: 0;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        &.infos {
+            justify-content: center;
+            text-align: center;
+            font-size: .5rem;
+            color: rgba(206, 206, 206, 0.831);
         }
     }
     &.actresses {
