@@ -118,9 +118,9 @@ export default function Wrapped() {
         )
     }
     
-    function people(from, title, className) {
+    function people(from, title, className, category) {
         if (Object.keys(from).length === 0) return noData(title)
-        const arr = Object.entries(from).sort((a, b) => a[1].count - b[1].count).reverse()
+        const arr = Object.entries(from).sort((a, b) => a[1][category] - b[1][category]).reverse()
 
         return (
             <div className={`fullpage-people fullpage ${className}`}>
@@ -146,10 +146,20 @@ export default function Wrapped() {
                         return (
                             <div className='people-data' key={i}>
                                 <p>{arr[i][1].data.name}</p>
-                                <p>{arr[i][1].count} time(s)</p>
+                                {category === 'count'
+                                    ? <p>{arr[i][1][category]} time(s)</p>
+                                    : <p>score: {arr[i][1][category]}</p>
+                                }
                             </div>
                         )
                     })
+                    }
+                    {
+                        category !== 'count'
+                        ? <div className='people-data infos'>
+                            score = average rating * (number of rating / number of not rating)
+                        </div>
+                        : <></>
                     }
                 </div>
             </div>
@@ -267,10 +277,10 @@ export default function Wrapped() {
         () => borne_content(WrappedData.first_movie, 'Your first movie'),
         () => borne_content(WrappedData.first_show, 'Your first show'),
         () => transition('But shows and movies are nothing without...'),
-        () => people(WrappedData.actors, 'Your favorite actors 👨‍🦱'),
-        () => people(WrappedData.actresses, 'Your favorite actresses 👩‍🦰', 'actresses'),
+        () => people(WrappedData.actors, 'Your most watched actors 👨‍🦱', '', 'count'),
+        () => people(WrappedData.actresses, 'Your most watched actresses 👩‍🦰', 'actresses', 'count'),
         () => transition('And of course...'),
-        () => people(WrappedData.directors, 'Your favorite directors 👨‍🎬', 'director'),
+        () => people(WrappedData.directors, 'Your favorite directors 👨‍🎬', 'director', 'grade'),
         () => transition(<>You traveled to <span className='stabilo red'>many places</span> around the world</>),
         countries,
         () => transition('Your adventure in the the genre-verse...'),

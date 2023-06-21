@@ -73,8 +73,24 @@ function exportData(comp, type, data, res, rating, sort, id) {
 
     res.credits.crew.forEach(crew => {
         if (crew.job != "Director") return
-        if (WrappedData.directors[crew.id] == undefined) WrappedData.directors[crew.id] = { count: 1, data: crew }
-        else WrappedData.directors[crew.id].count += 1
+        if (WrappedData.directors[crew.id] == undefined)
+            WrappedData.directors[crew.id] = {
+                count: 1,
+                data: crew,
+                score: rating || 0,
+                total_rating: rating ? 1 : 0,
+                average_rating: rating || 0,
+                grade: rating || 0 * (rating ? 1 : 0) / 1,
+            }
+        else {
+            const director = WrappedData.directors[crew.id]
+            director.count += 1
+            director.score += rating || 0
+            director.total_rating += rating ? 1 : 0
+            director.average_rating = director.total_rating == 0 ? 0 : director.score / director.total_rating
+            const not_rating = director.count - director.total_rating || 1
+            director.grade = director.average_rating * (director.total_rating / not_rating)
+        }
     })
 
     res.production_countries.forEach(country => {
