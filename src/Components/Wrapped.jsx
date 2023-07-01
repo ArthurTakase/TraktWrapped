@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { cachedData } from './Grid'
 import earth from '../assets/earth.png'
 import space from '../assets/space.jpg'
+import notFound from '../assets/notFound.jpg'
 
 export const WrappedData = {
     "genres" : {},
@@ -70,13 +71,13 @@ export default function Wrapped() {
     function randomBackdrop() {
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
-        return randomElement?.backdrop_path ?? randomBackdrop()
+        return randomElement?.backdrop_path ? `https://image.tmdb.org/t/p/original${randomElement?.backdrop_path}` : randomBackdrop()
     }
 
     function noData(title) {
         return (
             <div className='fullpage-error fullpage'>
-                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <img src={randomBackdrop()} className="backdrop" />
                 <p className="title">{title}</p>
                 <i className='bx bx-bug'></i>
                 <p>Hum, this is awkward, there is no data for this category yet.</p>
@@ -86,7 +87,7 @@ export default function Wrapped() {
     function transition(middleText) {
         return (
             <div className="fullpage-transition fullpage">
-                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <img src={randomBackdrop()} className="backdrop" />
                 <p>{middleText}</p>
             </div>
         )
@@ -124,7 +125,7 @@ export default function Wrapped() {
 
         return (
             <div className={`fullpage-people fullpage ${className}`}>
-                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <img src={randomBackdrop()} className="backdrop" />
                 <p className="title">{title}</p>
                 <div className="peoples">
                 {
@@ -132,7 +133,7 @@ export default function Wrapped() {
                     if (!arr[i]) return <></>
                     return (
                         <div className='people' key={i}>
-                            <img src={`https://image.tmdb.org/t/p/original${arr.at(i)[1]?.data?.profile_path}`} />
+                            <img src={arr.at(i)[1]?.data?.profile_path ? `https://image.tmdb.org/t/p/original${arr.at(i)[1]?.data?.profile_path}` : notFound} />
                         </div>
                     )
                 })
@@ -170,10 +171,10 @@ export default function Wrapped() {
         if (from.data === null) return noData(title)
         return (
             <div className="fullpage-movie fullpage">
-                <img src={`https://image.tmdb.org/t/p/original${from.data?.backdrop_path}`} className="backdrop" />
+                <img src={from.data?.backdrop_path ? `https://image.tmdb.org/t/p/original${from.data?.backdrop_path}` : notFound} className="backdrop" />
                 <p className="title">{title}</p>
                 <div className="fullmovie-content">
-                    <img src={`https://image.tmdb.org/t/p/w500${from.data?.poster_path}`} />
+                    <img src={from.data?.poster_path ? `https://image.tmdb.org/t/p/w500${from.data?.poster_path}` : notFound} />
                     <h1>{from.data?.title ?? from?.data.name}</h1>
                     <p>{from?.date?.split('T')[0]}</p>
                 </div>
@@ -186,7 +187,7 @@ export default function Wrapped() {
 
         return (
             <div className="fullpage-genres fullpage">
-                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <img src={randomBackdrop()} className="backdrop" />
                 <p className="title">Your favorite genres</p>
                 <div className="circle"></div>
                 <div className="genres">
@@ -209,7 +210,7 @@ export default function Wrapped() {
     function stats() {
         return(
             <div className="fullpage-stats fullpage">
-                <img src={`https://image.tmdb.org/t/p/original${randomBackdrop()}`} className="backdrop" />
+                <img src={randomBackdrop()} className="backdrop" />
                 <p className="title">Your stats 🧮</p>
                 <div className="allStats">
                 {
@@ -258,8 +259,10 @@ export default function Wrapped() {
                     if (cachedData[i] === undefined) return <></>
                     return (
                         <div className='score' key={i}>
-                            <img src={`https://image.tmdb.org/t/p/original${cachedData[i].poster_path}`} />
-                            <p>{cachedData[i].title ?? cachedData[i].name}</p>
+                            <div className='imgZone'>
+                                <img src={cachedData[i]?.poster_path ? `https://image.tmdb.org/t/p/original${cachedData[i]?.poster_path}` : notFound} />
+                            </div>
+                            <p>{cachedData[i].title ?? cachedData[i].name ?? cachedData[i].show?.title ?? cachedData[i].movie?.title}</p>
                         </div>
                     
                     )

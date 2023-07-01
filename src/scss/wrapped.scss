@@ -284,7 +284,7 @@
         &.infos {
             justify-content: center;
             text-align: center;
-            font-size: .5rem;
+            font-size: 0.5rem;
             color: rgba(206, 206, 206, 0.831);
         }
     }
@@ -428,8 +428,18 @@
         min-height: 70px;
         height: 70px;
         animation: fade-bottom 0.5s ease-in-out;
-        img {
+        .imgZone {
+            width: 50px;
             height: 100%;
+            object-fit: contain;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            img {
+                width: auto;
+                height: 100%;
+            }
         }
         p {
             margin-right: 0.5rem;

@@ -1,6 +1,7 @@
 import "../scss/movie.scss"
 import {  useRef } from "react"
 import { WrappedData } from "./Wrapped"
+import notFound from '../assets/notFound.jpg'
 
 function getShowData(comp, res, type, data, sort) {
     if (type != "show") return comp
@@ -140,6 +141,58 @@ function exportData(comp, type, data, res, rating, sort, id) {
         // total shows
         WrappedData.total_shows += 1
     }
+}
+
+
+export function LoremContent({ data, rating, type, sort, id }) {
+    const card = useRef(null)
+    const comp = {}
+
+    comp.title = data[type].title
+    comp.year = data[type].year
+    comp.play = data.plays
+    comp.watched_at = data.last_watched_at.split('-')[0]
+    comp.last_air_date = data[type].year
+    comp.available = new Date(comp.date) < new Date()
+    comp.genres = []
+
+    const res = {
+        credits: {
+            cast: [],
+            crew: [],
+        },
+        production_countries: [],
+        runtime: 0,
+    }
+
+    if (sort.seen && comp.watched_at != sort.seen) return <></>
+    if (sort.year && sort.year != comp.year) return <></>
+    if (sort.last_air_date && sort.last_air_date != comp.last_air_date) return <></>
+    if (sort.available && sort.available != comp.available) return <></>
+
+    exportData(comp, type, data, res, rating, sort, id)
+
+    return (
+        <article className="movie" ref={card}>
+            {rating != undefined ? <div className="rating">{rating}</div> : <></>}
+            <img src={notFound} loading="lazy" alt={comp.title} />
+            <div className={`data`}>
+                <h1>{comp.title}</h1>
+                <div className="tags">
+                    <div className="tag" title="Release date">{comp.year}</div>
+                    <div className="tag" title="Status">{comp.play} play(s)</div>
+                    <div className="tag" title="Status">Not in TMDB</div>
+                    <div className="tag icon" title="Hide show/movie" onClick={() => {
+                        card.current.style.display = "none"
+                    }}><i className='bx bx-trash' ></i></div>
+                    <div className="tag icon" title="Add/remove favorite" onClick={() => {
+                        if (card.current.classList.contains("favorite")) card.current.classList.remove("favorite")
+                        else card.current.classList.add("favorite")
+                    }}><i className='bx bx-heart'></i></div>
+                </div>
+            </div>
+        </article>
+    )
 }
 
 export default function Content({ data, type, sort, rating, res, id }) {
