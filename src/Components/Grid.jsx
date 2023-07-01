@@ -1,4 +1,4 @@
-import Content from './Content'
+import Content, { LoremContent } from './Content'
 import Load from './Load'
 import { TraktDB } from './IndexedDB'
 import '../scss/app.scss'
@@ -12,7 +12,7 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
     setLoadInfos(<Load info="(2/7) Loading movies ratings" />)
     const response = await axios.get(`https://api.trakt.tv/users/${username}/ratings/movies/`, { headers })
     const ratingsMovies = response.data.reduce((acc, movie) => {
-        acc[movie.movie.ids.tmdb] = movie.rating
+        acc[movie.movie.ids.trakt] = movie.rating
         return acc
     }, {})
 
@@ -23,12 +23,16 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
     const movies = responseInfos.data.reduce((acc, movie) => {
         if (new Date(movie.last_watched_at) < date_start) return acc
         if (new Date(movie.last_watched_at) > date_end) return acc
-        acc[movie.movie.ids.tmdb] = movie
+        acc[movie.movie.ids.trakt] = {
+            tmdb: movie.movie.ids.tmdb,
+            ...movie,
+        }
         return acc
     }, {})
 
     setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" />)
     const moviesDatas = {}
+    const loremMoviesDatas = {}
     for (const movie in movies) {
         if (cachedData[movie] && cachedData[movie].last_updated_at_trakt === movies[movie].last_updated_at) {
             moviesDatas[movie] = cachedData[movie]
@@ -36,7 +40,8 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
         }
 
         try {
-            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/movie/${movie}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=releases,credits`)
+            const tmdbID = movies[movie].tmdb
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/movie/${tmdbID}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=releases,credits`)
             const data = {
                 ...responseTMDB.data,
                 last_updated_at_trakt: movies[movie].last_updated_at
@@ -45,17 +50,20 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
             cachedData[movie] = data
             await TraktDB.addToDB(movie, data)
             setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" moreInfo={responseTMDB.data.title} />)
-        } catch (e) { console.log(`Erreur dans le chargement de ${movies[movie].movie.title}`) }
+        } catch (e) {
+            loremMoviesDatas[movie] = movies[movie]
+            cachedData[movie] = movies[movie]
+        }
     }
 
-    return { ratingsMovies, movies, moviesDatas }
+    return { ratingsMovies, movies, moviesDatas, loremMoviesDatas  }
 }
 
 async function getShowData(username, type, sort, headers, setLoadInfos, cachedData, start, end) {
     setLoadInfos(<Load info="(5/7) Loading shows ratings" />)
     const responseRating = await axios.get(`https://api.trakt.tv/users/${username}/ratings/shows/`, { headers })
     const ratingsShows = responseRating.data.reduce((acc, show) => {
-        acc[show.show.ids.tmdb] = show.rating
+        acc[show.show.ids.trakt] = show.rating
         return acc
     }, {})
 
@@ -66,13 +74,18 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
     const shows = responseInfos.data.reduce((acc, show) => {
         if (new Date(show.last_watched_at) < date_start) return acc
         if (new Date(show.last_watched_at) > date_end) return acc
-        acc[show.show.ids.tmdb] = show
+        acc[show.show.ids.trakt] = {
+            tmdb: show.show.ids.tmdb,
+            ...show,
+        }
         return acc
     }, {})
 
     setLoadInfos(<Load info="(7/7) Loading shows datas from tmdb" />)
     const showsDatas = {}
+    const loremShowsDatas = {}
     for (const show in shows) {
+        const tmdbID = shows[show].tmdb
         if (cachedData[show] && cachedData[show].last_updated_at_trakt === shows[show].last_updated_at) { 
             showsDatas[show] = cachedData[show]
             cachedData[show] = showsDatas[show]
@@ -80,21 +93,25 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
         }
 
         try {
-            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${show}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=credits`)
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${tmdbID}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=credits`)
             const data = {
                 ...responseTMDB.data,
                 last_updated_at_trakt: shows[show].last_updated_at
             }
             showsDatas[show] = data
+            cachedData[show] = data
             await TraktDB.addToDB(show, data)
             setLoadInfos(<Load info="(7/7) Loading shows datas from tmdb" moreInfo={responseTMDB.data.name} />)
-        } catch (error) { console.log(`Erreur dans le chargement de ${shows[show].show.title}`) }
+        } catch (e) {
+            loremShowsDatas[show] = shows[show]
+            cachedData[show] = shows[show]
+        }
     }
 
-    return { ratingsShows, shows, showsDatas }
+    return { ratingsShows, shows, showsDatas, loremShowsDatas }
 }
 
-async function getData(setLoadInfos, username, type, sort, setMovies, setShows) {
+async function getData(setLoadInfos, username, type, sort, setMovies, setShows, setLoremMovies, setLoremShows) {
     const date_start = sort.seen ? new Date(sort.seen).toISOString() : "2000-06-01T00%3A00%3A00.000Z"
     const date_end = sort.seen ? new Date(`${parseInt(sort.seen) + 1}`).toISOString() : new Date().toISOString()
     const headers = {
@@ -108,8 +125,8 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
     setLoadInfos(<Load info="(1/7) Loading cached data" />)
     cachedData = await TraktDB.getAllFromDB()
 
-    const { ratingsMovies, movies, moviesDatas } = sort.hideMovies ? {} : await getMovieData(username, type, sort, headers, setLoadInfos, cachedData, date_start, date_end)
-    const { ratingsShows, shows, showsDatas } = sort.hideShows ? {} : await getShowData(username, type, sort, headers, setLoadInfos, cachedData, date_start, date_end)
+    const { ratingsMovies, movies, moviesDatas, loremMoviesDatas } = sort.hideMovies ? {} : await getMovieData(username, type, sort, headers, setLoadInfos, cachedData, date_start, date_end)
+    const { ratingsShows, shows, showsDatas, loremShowsDatas } = sort.hideShows ? {} : await getShowData(username, type, sort, headers, setLoadInfos, cachedData, date_start, date_end)
 
     setLoadInfos(<></>)
 
@@ -117,14 +134,24 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows) 
         <Content key={id} id={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={ratingsMovies[id]} />
     ))
 
+    await setLoremMovies(sort.hideMovies ? <></> : Object.entries(loremMoviesDatas).map(([id, data]) =>
+        <LoremContent key={id} id={id} data={data} type="movie" sort={sort} rating={ratingsMovies[id]} />
+    ))
+
     await setShows(sort.hideShows ? <></> : Object.entries(shows).map(([id, data]) =>
         <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={ratingsShows[id]} />
+    ))
+    
+    await setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) =>
+        <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={ratingsShows[id]} />
     ))
 }
 
 export default function Grid() {
     const [movies, setMovies] = useState()
     const [shows, setShows] = useState()
+    const [loremMovies, setLoremMovies] = useState()
+    const [loremShows, setLoremShows] = useState()
     const [loadInfos, setLoadInfos] = useState()
     const urlParams = new URLSearchParams(window.location.search)
     const username = urlParams.get('username')
@@ -146,7 +173,7 @@ export default function Grid() {
 
     useEffect(() => {
         if (username == null || username === "") return
-        getData(setLoadInfos, username, type, sort, setMovies, setShows)
+        getData(setLoadInfos, username, type, sort, setMovies, setShows, setLoremMovies, setLoremShows)
     }, []);
 
     return (
@@ -154,7 +181,9 @@ export default function Grid() {
             {loadInfos}
             <div className="gallerie">
                 {!hideMovies && movies}
+                {!hideMovies && loremMovies}
                 {!hideShows && shows}
+                {!hideShows && loremShows}
             </div>
         </div>
     )
