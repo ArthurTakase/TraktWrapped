@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { cachedData } from './Grid'
 import earth from '../assets/earth.png'
 import space from '../assets/space.jpg'
 import notFound from '../assets/notFound.jpg'
+import { allRef } from '../App'
 
 export const WrappedData = {
     "genres" : {},
@@ -60,21 +61,16 @@ export default function Wrapped() {
     const [data, setData] = useState(0)
     const keys = Object.keys(cachedData)
 
-    function next() {
-        if (data < pages.length - 1) setData(data + 1)
-    }
-
-    function prev() {
-        if (data > 0) setData(data - 1)
-    }
-
-    function randomBackdrop() {
+    const next = () => { if (data < pages.length - 1) setData(data + 1) }
+    const prev = () => { if (data > 0) setData(data - 1) }
+    
+    const randomBackdrop = () => {
         const index = Math.floor(Math.random() * keys.length)
         const randomElement = cachedData[keys[index]]
         return randomElement?.backdrop_path ? `https://image.tmdb.org/t/p/original${randomElement?.backdrop_path}` : randomBackdrop()
     }
 
-    function noData(title) {
+    const noData = (title) => {
         return (
             <div className='fullpage-error fullpage'>
                 <img src={randomBackdrop()} className="backdrop" />
@@ -84,7 +80,7 @@ export default function Wrapped() {
             </div>)
     }
 
-    function transition(middleText) {
+    const transition = (middleText) => {
         return (
             <div className="fullpage-transition fullpage">
                 <img src={randomBackdrop()} className="backdrop" />
@@ -93,7 +89,7 @@ export default function Wrapped() {
         )
     }
 
-    function countries() {
+    const countries = () => {
         const arr = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
         return (
             <div className="fullpage-countries fullpage">
@@ -119,7 +115,7 @@ export default function Wrapped() {
         )
     }
     
-    function people(from, title, className, category) {
+    const people = (from, title, className, category) => {
         if (Object.keys(from).length === 0) return noData(title)
         const arr = Object.entries(from).sort((a, b) => a[1][category] - b[1][category]).reverse()
 
@@ -167,7 +163,7 @@ export default function Wrapped() {
         )
     }
 
-    function borne_content(from, title) {
+    const borne_content = (from, title) => {
         if (from.data === null) return noData(title)
         return (
             <div className="fullpage-movie fullpage">
@@ -182,7 +178,7 @@ export default function Wrapped() {
         )
     }
 
-    function genres() {
+    const genres = () => {
         const sorted = Object.entries(WrappedData.genres).sort((a, b) => a[1] - b[1]).reverse()
 
         return (
@@ -207,7 +203,11 @@ export default function Wrapped() {
         )
     }
 
-    function stats() {
+    const stats = () => {
+        const formatNumber = (number) => { return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") }
+        const formatToHours = (number) => { return formatNumber(Math.round(number / 60)) }
+
+        const total = WrappedData.total_time_movies + WrappedData.total_time_shows
         return(
             <div className="fullpage-stats fullpage">
                 <img src={randomBackdrop()} className="backdrop" />
@@ -217,8 +217,8 @@ export default function Wrapped() {
                     WrappedData.total_movies ?
                     <div className="stats">
                         <div className="subtitle">Movies</div>
-                        <div className="stat">🎞 {WrappedData.total_movies} movies</div>
-                        <div className="stat">⏰ {WrappedData.total_time_movies} min / ~{Math.round(WrappedData.total_time_movies / 60)} h</div>
+                        <div className="stat">🎞 {formatNumber(WrappedData.total_movies)} movies</div>
+                        <div className="stat">⏰ {formatNumber(WrappedData.total_time_movies)} min or {formatToHours(WrappedData.total_time_movies)} hours</div>
                     </div>
                     : <></>
                 }
@@ -226,9 +226,9 @@ export default function Wrapped() {
                     WrappedData.total_shows ?
                     <div className="stats">
                         <div className="subtitle">Shows</div>
-                        <div className="stat">📺 {WrappedData.total_shows} shows</div>
-                        <div className="stat">📼 {WrappedData.total_episodes} episodes</div>
-                        <div className="stat">🕰 {WrappedData.total_time_shows} min / ~{Math.round(WrappedData.total_time_shows / 60)} h</div>
+                        <div className="stat">📺 {formatNumber(WrappedData.total_shows)} shows</div>
+                        <div className="stat">📼 {formatNumber(WrappedData.total_episodes)} episodes</div>
+                        <div className="stat">🕰 {formatNumber(WrappedData.total_time_shows)} min or {formatToHours(WrappedData.total_time_shows)} hours</div>
                     </div>
                     : <></>
                 }
@@ -236,7 +236,7 @@ export default function Wrapped() {
                     WrappedData.total_shows && WrappedData.total_movies ?
                     <div className="stats">
                         <div className="subtitle">Total</div>
-                        <div className="stat">⏱ {WrappedData.total_time_movies + WrappedData.total_time_shows} min / ~{Math.round((WrappedData.total_time_movies + WrappedData.total_time_shows) / 60)} h</div>
+                        <div className="stat">⏱ {formatNumber(total)} min or {formatToHours(total)} hours</div>
                     </div>
                     : <></>
                 }
@@ -245,7 +245,7 @@ export default function Wrapped() {
         )
     }
 
-    function by_score(from , title) {
+    const by_score = (from , title) => {
         if (from['10']?.length === 0) return noData(title)
         const first_backdrop = cachedData[from['10'][0]]?.backdrop_path ?? randomBackdrop()
 
@@ -304,6 +304,17 @@ export default function Wrapped() {
         () => transition(<>See you in space cowboy! <span className='jigle'>🫡</span></>)
     ]
 
+    const closeWrapped = () => {
+        document.querySelector('.wrapped-container').classList.toggle('active')
+        allRef.grid.current.style.display = 'flex'
+    }
+
+    useEffect(() => {
+        const close = (e) => { if (e.key === 'Escape') closeWrapped() }
+        document.addEventListener('keydown', close)
+        return () => { document.removeEventListener('keydown', close) }
+    }, [])
+
     return (
         <div className="wrapped-container active">
             <div className="body">
@@ -323,9 +334,7 @@ export default function Wrapped() {
                     </div>
                 </div>
             </div>
-            <button className='close' onClick={
-                () => { document.querySelector('.wrapped-container').classList.toggle('active') }
-            }><i className='bx bx-x' ></i></button>
+            <button className='close' onClick={closeWrapped}><i className='bx bx-x' ></i></button>
         </div>
     )
 }

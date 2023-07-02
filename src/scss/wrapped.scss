@@ -61,7 +61,7 @@
             flex: 1;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 6px;
-            transition: 0.5s;
+            transition: background 0.5s;
             &.active {
                 flex: 2;
                 background: rgba(255, 255, 255, 1);
@@ -407,6 +407,7 @@
 
 .fullpage-score {
     .scores {
+        z-index: 100;
         position: absolute;
         max-height: 80%;
         width: calc(100% - 2rem);
@@ -415,6 +416,10 @@
         flex-direction: column;
         gap: 10px;
         padding: 0 1rem 0 1rem;
+        scrollbar-width: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
     .score {
         background: rgba(255, 255, 255, 0.144);

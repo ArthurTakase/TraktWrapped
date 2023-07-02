@@ -5,6 +5,7 @@ import '../scss/app.scss'
 import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { ClearData } from "./Wrapped"
+import { allRef } from '../App'
 
 export let cachedData = {}
 
@@ -177,7 +178,7 @@ export default function Grid() {
     }, []);
 
     return (
-        <div className="main">
+        <div className="main" ref={allRef.grid}>
             {loadInfos}
             <div className="gallerie">
                 {!hideMovies && movies}
