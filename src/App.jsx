@@ -30,6 +30,7 @@ export default function App() {
     allRef.randomYear = useRef(null)
     allRef.randomPoster = useRef(null)
     allRef.region = useRef(null)
+    allRef.grid = useRef(null)
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')
