@@ -151,7 +151,7 @@ export function LoremContent({ data, rating, type, sort, id }) {
     comp.title = data[type].title
     comp.year = data[type].year
     comp.play = data.plays
-    comp.watched_at = data.last_watched_at.split('-')[0]
+    comp.watched_at = data.last_watched_at?.split('-')[0]
     comp.last_air_date = data[type].year
     comp.available = new Date(comp.date) < new Date()
     comp.genres = []

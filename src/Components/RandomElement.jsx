@@ -23,7 +23,7 @@ export function showRandomElement() {
 
     const random = Math.floor(Math.random() * displayedElements.length)
     const randomElement = displayedElements[random]
-    const picture = randomElement.querySelector('img').src
+    const picture = randomElement.querySelector('img')?.src ?? ''
     const year = randomElement.querySelector('.tags').firstChild.innerHTML
     const title = randomElement.querySelector('h1').innerHTML
 

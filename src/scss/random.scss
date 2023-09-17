@@ -2,7 +2,7 @@
     border: solid red;
     position: fixed;
     top: 4.5rem;
-    left: 1rem;
+    left: 3rem;
     z-index: 2;
     background: rgba(0, 0, 0, 0.788);
     backdrop-filter: blur(0.5rem);
@@ -11,6 +11,9 @@
     gap: 0.5rem;
     box-shadow: 1rem 1rem 1rem rgba(0, 0, 0, 0.5);
     padding-top: 2rem;
+    @media (max-width: 500px) {
+        left: 1rem;
+    }
     &.active {
         display: flex;
         flex-direction: column;
