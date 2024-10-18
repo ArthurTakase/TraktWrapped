@@ -94,7 +94,7 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
         }
 
         try {
-            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${tmdbID}?api_key=29e2619a94b2f9dd0ca5609beac3eeda&language=${sort.lang}&append_to_response=credits`)
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${tmdbID}?api_key=758d153839db0de784edeec4ab6a5fb0&language=${sort.lang}&append_to_response=credits`)
             const data = {
                 ...responseTMDB.data,
                 last_updated_at_trakt: shows[show].last_updated_at
