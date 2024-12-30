@@ -1,9 +1,13 @@
 import Checkbox from './Checkbox';
-import { toggleMenu } from './Navbar';
+import { toggleMenu } from '../App';
 import { allRef } from "../App"
 import { TraktDB } from './IndexedDB'
+import { useState } from "react"
+import Wrapped, { WrappedData } from "./Wrapped"
+import { showRandomElement } from "./RandomElement"
 
 export default function Menu({ setSearchParams }) {
+    const [wrapped, setWrapped] = useState(<></>)
 
     function submit() {
         const params = {}
@@ -29,9 +33,50 @@ export default function Menu({ setSearchParams }) {
         window.location.reload()
     }
 
+
+    function launchWrapped() {
+        if (WrappedData.first_movie.data == null && WrappedData.first_show.data == null) return
+        const wrapped = document.querySelector('.wrapped-container')
+        if (wrapped) wrapped.classList.toggle('active')
+        else setWrapped(<Wrapped />)
+        allRef.grid.current.style.display = 'none'
+    }
+
     return (
+        <>
         <div className="menu-zone" ref={allRef.menu}>
             <div className='menu'>
+            <div className='submenu-title'>
+                    Tools
+                </div>
+                
+                <div className="tools">
+                    <button className="border" title="Get random element" onClick={showRandomElement}>
+                        <i className='bx bx-shuffle' ></i>
+                        Pick Random
+                    </button>
+                    <button className="border" title="Hide/Show favorites" onClick={() => {allRef.main.current.classList.toggle('fav')}}>
+                        <i className='bx bx-heart'></i>
+                        Toggle Favorites
+                    </button>
+                    <button className="border" title="Change layout" onClick={() => {
+                        allRef.main.current.classList.toggle('no-title')
+                        allRef.main.current.classList.toggle('no-score')
+                        allRef.main.current.classList.toggle('big-picture')
+                    }}>
+                        <i className='bx bxs-layout'></i>
+                        Change Layout
+                    </button>
+                    <button className="border" onClick={async () => await TraktDB.clearDB()}>
+                        <i className='bx bx-trash-alt'></i>
+                        Clear Cache
+                    </button>
+                    <button title="Launch your Wrapped" onClick={launchWrapped}>
+                        <i className='bx bx-party'></i>
+                        Launch Wrapped
+                    </button>
+                </div>
+                
                 <div className='submenu-title'>
                     New Request
                 </div>
@@ -71,9 +116,10 @@ export default function Menu({ setSearchParams }) {
                 <button onClick={submit}><i className='bx bx-check'></i>Submit</button>
             </div>
             <div className='submit'>
-                <button className="border" onClick={async () => await TraktDB.clearDB()}><i className='bx bx-trash-alt'></i>Clear Cache</button>
                 <button className="border" onClick={toggleMenu}><i className='bx bx-x'></i>Close Menu</button>
             </div>
         </div>
+        {wrapped}
+        </>
     )
 }

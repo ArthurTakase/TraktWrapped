@@ -1,7 +1,6 @@
 import Grid from './Components/Grid'
 import Menu from './Components/Menu'
 import RandomElement from './Components/RandomElement'
-import Navbar, { toggleMenu } from './Components/Navbar'
 import './scss/app.scss'
 import './scss/form.scss'
 import './scss/random.scss'
@@ -10,6 +9,11 @@ import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
 
 export const allRef = {}
+
+export function toggleMenu() {
+    allRef.menu.current.classList.toggle('active')
+    document.querySelector('#random').classList.remove('active')
+}
 
 export default function App() {
     const [searchParams, setSearchParams] = useSearchParams()
@@ -50,7 +54,9 @@ export default function App() {
 
     return (
     <div className="main" ref={allRef.main}>
-        <Navbar allRef={allRef} />
+        <div className="top_btns">
+            <button title="New request" onClick={() => { allRef.menu.current.classList.toggle('active') }}><i className='bx bx-search-alt-2'></i></button>
+        </div>
         <RandomElement />
         <Menu setSearchParams={setSearchParams}/>
         <Grid />

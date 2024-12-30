@@ -209,6 +209,13 @@ export default function Content({ data, type, sort, rating, res, id }) {
 
     exportData(comp, type, data, res, rating, sort, id)
 
+    const hideSelf = () => {
+        card.current.style.animation = "hide 0.5s ease"
+        setTimeout(() => {
+            card.current.style.display = "none"
+        }, 500)
+    }
+
     return (
         <article className="movie" ref={card}>
             {rating != undefined ? <div className="rating">{rating}</div> : <></>}
@@ -218,9 +225,7 @@ export default function Content({ data, type, sort, rating, res, id }) {
                 <div className="tags">
                     <div className="tag" title="Release date">{comp.year}{comp.last_air_date == null || comp.last_air_date == comp.year ? "" : `-${comp.last_air_date}`}</div>
                     {type == "show" ? <div className="tag" title="Status">{comp.up_to_date ? "Up to date" : `Not up to date (${comp.total_seen}/${comp.total_episodes})`}</div> : <></> }
-                    <div className="tag icon" title="Hide show/movie" onClick={() => {
-                        card.current.style.display = "none"
-                    }}><i className='bx bx-trash' ></i></div>
+                    <div className="tag icon" title="Hide show/movie" onClick={hideSelf}><i className='bx bx-trash' ></i></div>
                     <div className="tag icon" title="Add/remove favorite" onClick={() => {
                         if (card.current.classList.contains("favorite")) card.current.classList.remove("favorite")
                         else card.current.classList.add("favorite")
