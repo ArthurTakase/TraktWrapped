@@ -31,6 +31,9 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
         return acc
     }, {})
 
+    var currentIndex = 0
+    const totalIndex = Object.keys(movies).length
+
     setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" />)
     const moviesDatas = {}
     const loremMoviesDatas = {}
@@ -50,7 +53,8 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
             moviesDatas[movie] = data
             cachedData[movie] = data
             await TraktDB.addToDB(movie, data)
-            setLoadInfos(<Load info="(4/7) Loading movies datas from tmdb" moreInfo={responseTMDB.data.title} />)
+            currentIndex++
+            setLoadInfos(<Load info={`(4/7) Loading movies datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.title} />)
         } catch (e) {
             loremMoviesDatas[movie] = movies[movie]
             cachedData[movie] = movies[movie]
@@ -82,6 +86,9 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
         return acc
     }, {})
 
+    var currentIndex = 0
+    const totalIndex = Object.keys(shows).length
+
     setLoadInfos(<Load info="(7/7) Loading shows datas from tmdb" />)
     const showsDatas = {}
     const loremShowsDatas = {}
@@ -102,7 +109,8 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
             showsDatas[show] = data
             cachedData[show] = data
             await TraktDB.addToDB(show, data)
-            setLoadInfos(<Load info="(7/7) Loading shows datas from tmdb" moreInfo={responseTMDB.data.name} />)
+            currentIndex++
+            setLoadInfos(<Load info={`(7/7) Loading shows datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.name} />)
         } catch (e) {
             loremShowsDatas[show] = shows[show]
             cachedData[show] = shows[show]

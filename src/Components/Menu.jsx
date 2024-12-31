@@ -40,6 +40,7 @@ export default function Menu({ setSearchParams }) {
         if (wrapped) wrapped.classList.toggle('active')
         else setWrapped(<Wrapped />)
         allRef.grid.current.style.display = 'none'
+        toggleMenu()
     }
 
     return (
@@ -74,6 +75,13 @@ export default function Menu({ setSearchParams }) {
                     <button title="Launch your Wrapped" onClick={launchWrapped}>
                         <i className='bx bx-party'></i>
                         Launch Wrapped
+                    </button>
+                    <button title="Launch your Wrapped" onClick={() => {
+                        allRef.launchContest()
+                        toggleMenu()
+                    }}>
+                        <i className='bx bx-trophy' ></i>
+                        Launch Contest
                     </button>
                 </div>
                 
@@ -114,8 +122,6 @@ export default function Menu({ setSearchParams }) {
             </div>
             <div className='submit'>
                 <button onClick={submit}><i className='bx bx-check'></i>Submit</button>
-            </div>
-            <div className='submit'>
                 <button className="border" onClick={toggleMenu}><i className='bx bx-x'></i>Close Menu</button>
             </div>
         </div>

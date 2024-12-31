@@ -3,7 +3,7 @@
     transition:
         opacity 0.5s,
         right 0.5s;
-    z-index: 3;
+    z-index: 9999;
     background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(0.5rem);
     padding-top: 1rem;
@@ -76,8 +76,7 @@
     box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
     @media (max-width: 500px) {
         top: 0;
-        right: unset;
-        left: 1rem;
+        right: 1rem;
         border-radius: 0 0 1em 1rem;
         padding-right: 0.3rem;
         padding-left: 0.3rem;
@@ -138,7 +137,7 @@
 .submit {
     display: flex;
     gap: 0.5rem;
-    padding-bottom: 1rem;
+    padding-bottom: 1.5rem;
     padding-top: 0.5rem;
     button {
         flex: 1;

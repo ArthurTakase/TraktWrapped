@@ -7,6 +7,7 @@ import './scss/random.scss'
 import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
+import Contest from './Components/Contest'
 
 export const allRef = {}
 
@@ -35,6 +36,8 @@ export default function App() {
     allRef.randomPoster = useRef(null)
     allRef.region = useRef(null)
     allRef.grid = useRef(null)
+    allRef.contest = useRef(null)
+    allRef.launchContest = null
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')
@@ -57,6 +60,7 @@ export default function App() {
         <div className="top_btns">
             <button title="New request" onClick={() => { allRef.menu.current.classList.toggle('active') }}><i className='bx bx-search-alt-2'></i></button>
         </div>
+        <Contest allRef={allRef}/>
         <RandomElement />
         <Menu setSearchParams={setSearchParams}/>
         <Grid />
