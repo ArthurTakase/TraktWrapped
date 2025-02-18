@@ -1,14 +1,11 @@
 #random {
-    border: solid red;
+    border: solid #9f41c5;
     position: fixed;
-    top: 3.8rem;
-    right: 22rem;
-    @media (max-width: 500px) {
-        left: 1rem;
-        top: 7rem;
-    }
+    bottom: 4rem;
+    right: 50%;
+    transform: translateX(50%);
     background: rgba(0, 0, 0, 0.788);
-    backdrop-filter: blur(0.5rem);
+    backdrop-filter: blur(1rem);
     padding: 1rem;
     border-radius: 0.5rem;
     gap: 0.5rem;
@@ -16,6 +13,15 @@
     padding-top: 2rem;
     z-index: 999;
     width: 15rem;
+    @media (max-width: 500px) {
+        width: 100%;
+        height: 100%;
+        bottom: 0;
+        right: 0;
+        transform: unset;
+        border: none;
+        padding: unset;
+    }
     &.active {
         display: flex;
         flex-direction: column;
@@ -24,29 +30,6 @@
     }
     &:not(.active) {
         display: none;
-    }
-    &:before {
-        content: "";
-        position: absolute;
-        top: -1.2rem;
-        left: 0.3rem;
-        border-left: 1rem solid transparent;
-        border-right: 1rem solid transparent;
-        border-bottom: 1rem solid red;
-    }
-    @media (max-width: 500px) {
-        &:before {
-            top: -1.2rem;
-            left: 0.3rem;
-        }
-    }
-    @media (min-width: 500px) {
-        &:before {
-            top: 0.6rem;
-            right: -1.5rem;
-            left: unset;
-            rotate: 90deg;
-        }
     }
 }
 
@@ -66,7 +49,7 @@
 }
 
 #random-close {
-    color: rgba(255, 0, 0, 0.322);
+    color: rgba(#9f41c5, 0.8);
     background: unset;
     border: none;
     font-weight: bold;

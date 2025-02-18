@@ -32,7 +32,14 @@
             }
         }
         &:checked + label {
-            background: red;
+            background: rgb(148, 74, 190);
+            background: linear-gradient(
+                200deg,
+                rgba(148, 74, 190, 1) 0%,
+                rgba(155, 69, 172, 1) 46%,
+                rgba(189, 53, 99, 1) 76%,
+                rgba(227, 50, 39, 1) 100%
+            );
             &:before {
                 box-shadow: -2px 0px 5px rgba(0, 0, 0, 0.2);
                 left: 1.6em;

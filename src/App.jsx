@@ -8,6 +8,7 @@ import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import Contest from './Components/Contest'
+import Navbar from './Components/Navbar'
 
 export const allRef = {}
 
@@ -38,6 +39,8 @@ export default function App() {
     allRef.grid = useRef(null)
     allRef.contest = useRef(null)
     allRef.launchContest = null
+    allRef.launchWrapped = null
+    allRef.closeWrapped = null
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')
@@ -57,12 +60,10 @@ export default function App() {
 
     return (
     <div className="main" ref={allRef.main}>
-        <div className="top_btns">
-            <button title="New request" onClick={() => { allRef.menu.current.classList.toggle('active') }}><i className='bx bx-search-alt-2'></i></button>
-        </div>
         <Contest allRef={allRef}/>
         <RandomElement />
         <Menu setSearchParams={setSearchParams}/>
+        <Navbar />
         <Grid />
     </div>
     )

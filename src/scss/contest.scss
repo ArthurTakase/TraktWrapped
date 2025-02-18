@@ -16,7 +16,14 @@
     }
     .round {
         text-align: center;
-        background-color: red;
+        background: rgb(148, 74, 190);
+        background: linear-gradient(
+            -10deg,
+            rgba(148, 74, 190, 1) 0%,
+            rgba(155, 69, 172, 1) 46%,
+            rgba(189, 53, 99, 1) 76%,
+            rgba(227, 50, 39, 1) 100%
+        );
         color: white;
         width: fit-content;
         padding: 0.2rem 0.8rem;
@@ -37,7 +44,7 @@
     }
     .close {
         position: fixed;
-        color: rgba(255, 0, 0, 0.5);
+        color: rgba(#9f41c5, 0.5);
         background: unset;
         border: none;
         font-weight: bold;
@@ -52,7 +59,7 @@
 .match {
     flex: 1;
     display: flex;
-    border: solid red;
+    border: solid #9f41c5;
     border-radius: 0.5rem;
     flex-wrap: nowrap;
     justify-content: center;
@@ -218,7 +225,7 @@
             top: 0;
             left: -30px;
             font-size: 2rem;
-            color: red;
+            color: #9f41c5;
             z-index: 999;
         }
         transition: scale 0.2s ease-in-out;
@@ -229,7 +236,7 @@
         }
     }
     .big-winner {
-        filter: drop-shadow(0 0 1rem red);
+        filter: drop-shadow(0 0 1rem #9f41c5);
         padding-bottom: 3rem;
         @media (max-width: 800px) {
             padding-bottom: 1.5rem;

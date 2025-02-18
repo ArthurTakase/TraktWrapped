@@ -9,6 +9,15 @@ import { allRef } from '../App'
 
 export let cachedData = {}
 
+async function checkIfAccountExists(username, headers) {
+    try {
+        const response = await axios.get(`https://api.trakt.tv/users/${username}/watched/movies`, { headers })
+        return response.status === 200
+    } catch (e) {
+        return false
+    }
+}
+
 async function getMovieData(username, type, sort, headers, setLoadInfos, cachedData, start, end) {
     setLoadInfos(<Load info="(2/7) Loading movies ratings" />)
     const response = await axios.get(`https://api.trakt.tv/users/${username}/ratings/movies/`, { headers })
@@ -131,6 +140,18 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows, 
 
     ClearData()
 
+    const exists = await checkIfAccountExists(username, headers)
+    if (!exists) {
+        setLoadInfos(<Load info="Account not found" />)
+        return
+    }
+
+    const bottomNavbar = document.querySelector('#bottom-navbar')
+    const buttons = bottomNavbar?.querySelectorAll('button:not(.keep)')
+    const lastButton = bottomNavbar?.querySelector('button.keep')
+    buttons.forEach(button => button.style.display = 'none')
+    lastButton.classList.add('big')
+
     setLoadInfos(<Load info="(1/7) Loading cached data" />)
     cachedData = await TraktDB.getAllFromDB()
 
@@ -154,6 +175,9 @@ async function getData(setLoadInfos, username, type, sort, setMovies, setShows, 
     await setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) =>
         <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={ratingsShows[id]} />
     ))
+
+    buttons.forEach(button => button.style.display = 'flex')
+    lastButton.classList.remove('big')
 }
 
 export default function Grid() {

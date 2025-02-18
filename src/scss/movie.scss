@@ -22,9 +22,11 @@
         height: 10rem;
     }
     &.favorite {
+        // box-shadow: #9f41c5 0rem 0rem 0rem 0.2rem;
         box-shadow:
-            white 0rem 0rem 0rem 0.1rem,
-            red 0rem 0rem 0rem 0.2rem;
+            0.1rem -0.1rem 0.3rem 0.1rem rgba(148, 74, 190, 1),
+            0 0 0.3rem 0.1rem rgba(189, 53, 99, 1),
+            -0.1rem 0.1rem 0.3rem 0.1rem rgba(227, 50, 39, 1);
         &::after {
             content: "❤️";
             position: absolute;
@@ -37,7 +39,7 @@
                 0rem 0.1rem 0rem white,
                 -0.1rem 0rem 0rem white,
                 0rem -0.1rem 0rem white,
-                0 0 0.6rem red;
+                0 0 0.6rem #9f41c5;
             animation: fadeHeart 0.3s;
             @keyframes fadeHeart {
                 from {
@@ -76,7 +78,14 @@
         position: absolute;
         top: 0;
         left: 1rem;
-        background: red;
+        background: #944abe;
+        background: linear-gradient(
+            200deg,
+            rgba(148, 74, 190, 1) 0%,
+            rgba(155, 69, 172, 1) 46%,
+            rgba(189, 53, 99, 1) 76%,
+            rgba(227, 50, 39, 1) 100%
+        );
         padding: 0.2rem;
         padding-left: 0.4rem;
         padding-right: 0.4rem;
@@ -88,9 +97,13 @@
     transition: scale 0.3s;
     &:hover {
         @media (min-width: 500px) {
-            z-index: 1000;
+            z-index: 999;
             scale: 1.2;
         }
+        box-shadow:
+            0.5rem -0.5rem 3rem rgba(148, 74, 190, 1),
+            0 0 3rem rgba(189, 53, 99, 1),
+            -0.5rem 0.5rem 3rem rgba(227, 50, 39, 1);
         .data {
             align-items: center;
             justify-content: center;
@@ -162,8 +175,8 @@
     margin: 0;
     padding: 0;
     font-size: 0.9rem;
-    color: red;
-    border: solid red 2px;
+    color: #9f41c5;
+    border: solid #9f41c5 2px;
     border-radius: 0.5rem;
     padding-left: 0.2rem;
     padding-right: 0.2rem;

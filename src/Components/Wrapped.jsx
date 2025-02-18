@@ -307,7 +307,12 @@ export default function Wrapped() {
     const closeWrapped = () => {
         document.querySelector('.wrapped-container').classList.toggle('active')
         allRef.grid.current.style.display = 'flex'
+        
+        const bottomNavbar = document.querySelector('#bottom-navbar')
+        if (bottomNavbar) bottomNavbar.style.display = 'flex'
     }
+
+    allRef.closeWrapped = closeWrapped
 
     useEffect(() => {
         const close = (e) => { if (e.key === 'Escape') closeWrapped() }

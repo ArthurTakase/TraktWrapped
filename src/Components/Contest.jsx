@@ -52,9 +52,12 @@ export default function Contest({ allRef }) {
         setPodiumVisible(false)
 
         const menu = document.querySelector('.top_btns')
-        menu.style.display = 'none'
+        if (menu) menu.style.display = 'none'
+        const bottomNavbar = document.querySelector('#bottom-navbar')
+        if (bottomNavbar) bottomNavbar.style.display = 'none'
+        if (allRef.menu.current.classList.contains('active'))
+        toggleMenu()
         const menuZone = document.querySelector('.menu-zone')
-        console.log(menuZone)
         menuZone.classList.remove('.active')
         
         const localAllContents = getAllContents()
@@ -185,7 +188,9 @@ export default function Contest({ allRef }) {
                 allRef.grid.current.style.display = 'block'
                 allRef.contest.current.style.display = 'none'
                 const menu = document.querySelector('.top_btns')
-                menu.style.display = 'flex'
+                if (menu) menu.style.display = 'flex'
+                const bottomNavbar = document.querySelector('#bottom-navbar')
+                if (bottomNavbar) bottomNavbar.style.display = 'flex'
             }}><i className='bx bx-x'></i> </button>
             <div className="contest-grid" style={{ display: contestVisible ? 'flex' : 'none' }}>
                 <div className='round'>Match {index + 1}/{groups.length} (Round {round}/{maxRounds})</div>
