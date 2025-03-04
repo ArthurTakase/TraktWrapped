@@ -62,7 +62,12 @@ function exportData(comp, type, data, res, rating, sort, id) {
             if (sort.seen == comp.year) WrappedData.movies_by_score_this_year[rating].push(id)
         } else {
             WrappedData.shows_by_score[rating].push(id)
-            if (sort.seen == comp.year) WrappedData.shows_by_score_this_year[rating].push(id)
+            const release_dates = res?.seasons?.flatMap(season => season.air_date) || []
+            release_dates.forEach(date => {
+                const year = date.split("-")[0]
+                if (sort.seen == year && WrappedData.shows_by_score_this_year[rating].indexOf(id) == -1)
+                    WrappedData.shows_by_score_this_year[rating].push(id)
+            })
         }
     } catch (e) { console.log(rating) }
 
@@ -114,30 +119,32 @@ function exportData(comp, type, data, res, rating, sort, id) {
     } else {
         if (WrappedData.first_show.data === null) WrappedData.first_show.date = new Date()
         const all_episodes = data?.seasons?.flatMap(season => season.episodes) || []
+        const sortSeen = new Date(sort.seen)
 
         all_episodes.forEach(episode => {
-            const date = episode.last_watched_at
+            const dateString = episode.last_watched_at
+            const date = new Date(dateString)
+            const inMonth = sort.months.includes(date.getMonth() + 1)
 
             // Episodes Data
-            if (new Date(date) > new Date(sort.seen)) {
+            if (date > sortSeen && (sort.months.length === 0 || inMonth)) {
                 WrappedData.total_episodes += 1
                 WrappedData.total_time_shows += res?.last_episode_to_air?.runtime || 0
             }
 
             // First Show
-            if (new Date(date) < new Date(WrappedData.first_show.date) && new Date(date) > new Date(sort.seen)) {
+            if (date < new Date(WrappedData.first_show.date) && date > sortSeen && (sort.months.length === 0 || inMonth)) {
                 WrappedData.first_show.data = {...res, personal_score: rating}
-                WrappedData.first_show.date = date
+                WrappedData.first_show.date = dateString
+            }
+
+            // Last Show
+            if (WrappedData.last_show.data === null || new Date(WrappedData.last_show.date) < date && (sort.months.length === 0 || inMonth))
+            {
+                WrappedData.last_show.data = {...res, personal_score: rating}
+                WrappedData.last_show.date = dateString
             }
         })
-
-        // Last Show
-        if (WrappedData.last_show.data === null ||
-            new Date(WrappedData.last_show.date) < new Date(data.last_watched_at))
-        {
-            WrappedData.last_show.data = {...res, personal_score: rating}
-            WrappedData.last_show.date = data.last_watched_at
-        }
         // total shows
         WrappedData.total_shows += 1
     }

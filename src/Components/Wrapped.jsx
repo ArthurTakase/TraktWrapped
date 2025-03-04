@@ -24,6 +24,7 @@ export const WrappedData = {
     "total_episodes" : 0,
     "total_time_movies" : 0,
     "total_time_shows" : 0,
+    "sort" : {}
 }
 
 export function ClearData() {
@@ -49,6 +50,7 @@ export function ClearData() {
     WrappedData.shows_by_score.undefined = []
     WrappedData.movies_by_score_this_year.undefined = []
     WrappedData.shows_by_score_this_year.undefined = []
+    WrappedData.sort = {}
     for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
     for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
     for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
@@ -76,7 +78,7 @@ export default function Wrapped() {
                 <img src={randomBackdrop()} className="backdrop" />
                 <p className="title">{title}</p>
                 <i className='bx bx-bug'></i>
-                <p>Hum, this is awkward, there is no data for this category yet.</p>
+                <p>Hum, there is no data for this category yet.</p>
             </div>)
     }
 
@@ -89,8 +91,27 @@ export default function Wrapped() {
         )
     }
 
+    const homepage = (sort) => {
+        return (
+            <div className="fullpage-transition fullpage">
+                <img src={randomBackdrop()} className="backdrop" />
+                <p>Welcome to your Trakt Wrapped! <span className='jigle'>👋</span></p>
+                <div className='bottom-text'>
+                    {sort.year ? <p>Released in {sort.year}</p> : <></>}
+                    {sort.seen ? <p>Seen in {sort.seen}</p> : <></>}
+                    {sort.seen && sort.months.length > 0 ? <p>During {sort.months.map((month) => {
+                        const moisNum = parseInt(month, 10);
+                        const name = new Date(2000, moisNum - 1).toLocaleString("en-EN", { month: "long" });
+                        return name.charAt(0).toUpperCase() + name.slice(1)
+                    }).join(',  ')}</p> : <></>}
+                </div>
+            </div>
+        )
+    }
+
     const countries = () => {
         const arr = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
+        if (arr.length === 0) return noData('Countries 🚀')
         return (
             <div className="fullpage-countries fullpage">
                 <img src={space} className="backdrop" />
@@ -274,7 +295,7 @@ export default function Wrapped() {
     }
 
     const pages = [
-        () => transition(<>Welcome to your Trakt Wrapped! <span className='jigle'>👋</span></>),
+        () => homepage(WrappedData.sort),
         () => transition(<>Let's start with the <span className='stabilo red'>basics.</span></>),
         () => transition(<>You started your <span className='jigle red'>journey</span> with...</>),
         () => borne_content(WrappedData.first_movie, 'Your first movie'),

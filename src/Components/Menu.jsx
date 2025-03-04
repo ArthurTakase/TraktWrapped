@@ -3,6 +3,9 @@ import { toggleMenu } from '../App';
 import { allRef } from "../App"
 import { useState } from "react"
 import Wrapped, { WrappedData } from "./Wrapped"
+import { useRef } from "react"
+import { useEffect } from "react"
+import Select from 'react-select'
 
 export default function Menu({ setSearchParams }) {
     const [wrapped, setWrapped] = useState(<></>)
@@ -21,6 +24,7 @@ export default function Menu({ setSearchParams }) {
         params.hideMovies = allRef.hideMovies.current.checked
         params.hideShows = allRef.hideShows.current.checked
         params.region = allRef.region.current.value || 'FR'
+        params.months = allRef.months.current.getValue().map(obj => obj.value).join(',')
 
         // remove empty params or false params
         Object.keys(params).forEach(key => {
@@ -55,6 +59,31 @@ export default function Menu({ setSearchParams }) {
 
     allRef.launchWrapped = launchWrapped
 
+    function monthOptions() {
+    }
+
+    useEffect(() => {
+        allRef.seen.current.addEventListener('input', () => {
+            if (allRef.seen.current.value != '') allRef.monthZoneRef.current.style.display = 'block'
+            else allRef.monthZoneRef.current.style.display = 'none'
+        })
+    }, [])
+
+    const options = [
+        { value: '01', label: 'January' },
+        { value: '02', label: 'February' },
+        { value: '03', label: 'March' },
+        { value: '04', label: 'April' },
+        { value: '05', label: 'May' },
+        { value: '06', label: 'June' },
+        { value: '07', label: 'July' },
+        { value: '08', label: 'August' },
+        { value: '09', label: 'September' },
+        { value: '10', label: 'October' },
+        { value: '11', label: 'November' },
+        { value: '12', label: 'December' }
+    ]      
+
     return (
         <>
         <div className="menu-zone" ref={allRef.menu}>
@@ -81,6 +110,16 @@ export default function Menu({ setSearchParams }) {
                 <div className='inputgroup'>
                     <label htmlFor="seen">Viewed in</label>
                     <input type="text" placeholder="yyyy" ref={allRef.seen} />
+                </div>
+                <div className='inputgroup' ref={allRef.monthZoneRef} style={{display: 'none', width: '102%'}}>
+                    <Select
+                        isMulti
+                        unstyled
+                        options={options}
+                        classNamePrefix="react-select"
+                        placeholder="Select months (none = all)"
+                        closeMenuOnSelect={false}
+                        ref={allRef.months} />
                 </div>
                 <div className='inputgroup'>
                     <label htmlFor="last_air_date">Last air date</label>

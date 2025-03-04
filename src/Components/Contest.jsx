@@ -38,7 +38,6 @@ export default function Contest({ allRef }) {
 
     function calculateRounds(participants) {
         if (participants < 2) return 0;
-        console.log(Math.ceil(Math.log2(participants)))
         return Math.ceil(Math.log2(participants));
     }
 
@@ -103,7 +102,6 @@ export default function Contest({ allRef }) {
             const winner = losers[i].winner
             const loser = losers[i].loser
             const className = winner == undefined ? 'big-winner' : 'loser'
-            console.log(i, losers.length - 1)
             localPodium.push(
                 <div key={i} className="podium-item">
                     {i < losers.length - 1 ? <div className='count'>{losers.length - i}</div> : <></>}

@@ -36,11 +36,14 @@ export default function App() {
     allRef.randomYear = useRef(null)
     allRef.randomPoster = useRef(null)
     allRef.region = useRef(null)
+    allRef.months = useRef(null)
     allRef.grid = useRef(null)
     allRef.contest = useRef(null)
     allRef.launchContest = null
     allRef.launchWrapped = null
     allRef.closeWrapped = null
+    allRef.monthZoneRef = useRef(null)
+    allRef.monthOptions = null
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')
@@ -54,6 +57,17 @@ export default function App() {
         allRef.hideMovies.current.checked = searchParams.get('hideMovies') == 'true'
         allRef.hideShows.current.checked = searchParams.get('hideShows') == 'true'
         allRef.region.current.value = searchParams.get('region')
+        allRef.months.current.value = searchParams.get('months')?.split(',')
+
+        const getMois = (num) => {
+            const moisNum = parseInt(num, 10);
+            const name = new Date(2000, moisNum - 1).toLocaleString("en-EN", { month: "long" });
+            return name.charAt(0).toUpperCase() + name.slice(1);
+        };
+
+        allRef.months.current.setValue(allRef.months.current.value?.map(month => ({value: month, label: getMois(month)})))
+
+        if (allRef.seen.current.value != '') allRef.monthZoneRef.current.style.display = 'block'
 
         if (allRef.username.current.value == '') toggleMenu()
     }, [])

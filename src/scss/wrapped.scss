@@ -177,6 +177,24 @@
     align-items: center;
 }
 
+.bottom-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    bottom: 2rem;
+    position: absolute;
+    margin: 0 !important;
+    opacity: 0.5;
+    p {
+        position: unset !important;
+        display: flex !important;
+        display: flex;
+        font-size: 0.8rem !important;
+    }
+}
+
 @keyframes fade-bottom {
     0% {
         opacity: 0;

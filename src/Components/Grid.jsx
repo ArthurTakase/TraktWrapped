@@ -6,6 +6,7 @@ import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { ClearData } from "./Wrapped"
 import { allRef } from '../App'
+import { WrappedData } from "./Wrapped"
 
 export let cachedData = {}
 
@@ -33,6 +34,12 @@ async function getMovieData(username, type, sort, headers, setLoadInfos, cachedD
     const movies = responseInfos.data.reduce((acc, movie) => {
         if (new Date(movie.last_watched_at) < date_start) return acc
         if (new Date(movie.last_watched_at) > date_end) return acc
+
+        if (sort.months.length > 0) {
+            const month = new Date(movie.last_watched_at).getMonth()
+            if (!sort.months.includes((month + 1))) return acc
+        }
+
         acc[movie.movie.ids.trakt] = {
             tmdb: movie.movie.ids.tmdb,
             ...movie,
@@ -85,12 +92,24 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
     const responseInfos = await axios.get(`https://api.trakt.tv/users/${username}/${type}/shows`, { headers })
     const date_start = new Date(start)
     const date_end = new Date(end)
+    const isShowWatchedInPeriod = (show, date_start, date_end, sort) => {
+        for (const season of show.seasons) {
+            for (const episode of season.episodes) {
+                const last_watched = new Date(episode.last_watched_at)
+                if (last_watched >= date_start
+                    && last_watched <= date_end
+                    && (sort.months.length === 0 || sort.months.includes(last_watched.getMonth() + 1))) {
+                    return true
+                }
+            }
+        }
+    }
     const shows = responseInfos.data.reduce((acc, show) => {
-        if (new Date(show.last_watched_at) < date_start) return acc
-        if (new Date(show.last_watched_at) > date_end) return acc
-        acc[show.show.ids.trakt] = {
-            tmdb: show.show.ids.tmdb,
-            ...show,
+        if (isShowWatchedInPeriod(show, date_start, date_end, sort)) {
+            acc[show.show.ids.trakt] = {
+                tmdb: show.show.ids.tmdb,
+                ...show,
+            }
         }
         return acc
     }, {})
@@ -200,9 +219,13 @@ export default function Grid() {
         watchlist: urlParams.get('watchlist') == "true",
         up_to_date: urlParams.get('up_to_date') == "true",
         hideMovies,
-        hideShows
+        hideShows,
+        months: urlParams.get('months')?.split(',') || []
     }
     const type = sort.watchlist == true ? 'watchlist' : 'watched'
+    sort.months = sort.months.map(month => parseInt(month, 10))
+    WrappedData.sort = sort
+
 
     useEffect(() => {
         if (username == null || username === "") return
