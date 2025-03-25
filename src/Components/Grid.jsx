@@ -220,16 +220,30 @@ export default function Grid() {
         up_to_date: urlParams.get('up_to_date') == "true",
         hideMovies,
         hideShows,
-        months: urlParams.get('months')?.split(',') || []
+        months: urlParams.get('months')?.split(',') || [],
+        fromShowly: urlParams.get('fromShowly') == "true"
     }
     const type = sort.watchlist == true ? 'watchlist' : 'watched'
     sort.months = sort.months.map(month => parseInt(month, 10))
     WrappedData.sort = sort
 
+    allRef.updateGrid = (showlyData = null) => {
+        console.log("useEffect Grid")
+
+        if (sort.fromShowly) {
+            if (showlyData == null) {
+                setLoadInfos(<Load info="No data from Showly, please make a new request." />)
+                return
+            }
+            setLoadInfos(<Load info="Loading data from Showly..." />)
+            console.log(showlyData)
+            return
+        } else if (username !== null && username !== "")
+            getData(setLoadInfos, username, type, sort, setMovies, setShows, setLoremMovies, setLoremShows)
+    }
 
     useEffect(() => {
-        if (username == null || username === "") return
-        getData(setLoadInfos, username, type, sort, setMovies, setShows, setLoremMovies, setLoremShows)
+        allRef.updateGrid()
     }, []);
 
     return (
