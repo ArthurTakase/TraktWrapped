@@ -31,7 +31,11 @@ function getShowData(comp, res, type, data, sort) {
 }
 
 function getGeneralData(comp, res, type, data, sort) {
-    if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) return null
+    if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) {
+        console.log("Exit at sort.seen")
+        return null
+    }
+
     comp.title = type == "movie" ? res.title : res.name
     comp.date = type == "movie" ? res.release_date : res.first_air_date
     comp.year = (type == "movie" ? res.release_date : res.first_air_date).split("-")[0];
@@ -39,9 +43,17 @@ function getGeneralData(comp, res, type, data, sort) {
         const releaseCountry = res?.releases.countries.find(country => country.iso_3166_1 === sort.region);
         if (releaseCountry) comp.year = releaseCountry.release_date.split("-")[0];
     }
-    if (sort.year && sort.year != comp.year) return null
+    if (sort.year && sort.year != comp.year) {
+        console.log("Exit at sort.year")
+        return null
+    }
+
     comp.available = new Date(comp.date) < new Date()
-    if (sort.available && sort.available != comp.available) return null
+    if (sort.available && sort.available != comp.available) {
+        console.log("Exit at sort.available")
+        return null
+    }
+    
     if (comp.year == "") comp.year = "N.C."
     comp.poster = res.poster_path
     comp.up_to_date = true
@@ -152,6 +164,7 @@ function exportData(comp, type, data, res, rating, sort, id) {
 
 
 export function LoremContent({ data, rating, type, sort, id }) {
+    console.log("New LoremContent")
     const card = useRef(null)
     const comp = {}
 
@@ -203,16 +216,26 @@ export function LoremContent({ data, rating, type, sort, id }) {
 }
 
 export default function Content({ data, type, sort, rating, res, id }) {
+    console.log("New Content")
     const card = useRef(null)
     let comp = {}
 
-    if (res == undefined) return <></>
+    if (res == undefined) {
+        console.log("res undefined")
+        return <></>
+    }
 
     comp = getGeneralData(comp, res, type, data, sort)
-    if (comp == null) return <></>
+    if (comp == null) {
+        console.log("comp null after getGeneralData")
+        return <></>
+    }
 
     comp = getShowData(comp, res, type, data, sort)
-    if (comp == null) return <></>
+    if (comp == null) {
+        console.log("comp null after getShowData")
+        return <></>
+    }
 
     exportData(comp, type, data, res, rating, sort, id)
 
