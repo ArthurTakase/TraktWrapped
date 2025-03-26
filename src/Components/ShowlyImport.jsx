@@ -14,7 +14,7 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
         return
     }
 
-    setLoadInfos(<Load info="(2/8) Loading movies list" />)
+    setLoadInfos(<Load info="(2/10) Loading movies list" />)
     const targetList = type == "watched" ? showlyData.movies.cH : showlyData.movies.cW
     for (const movie of targetList) {
         showlyMovies[movie.id] = {
@@ -23,11 +23,11 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
             title: movie.t,
             watchedAt: movie.a,
             last_watched_at: movie.a,
-            rating: -1
+            rating: undefined
         }
     }
 
-    setLoadInfos(<Load info="(3/8) Loading movies rating" />)
+    setLoadInfos(<Load info="(3/10) Loading movies rating" />)
     if (type == "watched") {
         for (const rating of showlyData.movies.rM) {
             if (showlyMovies[rating.id])
@@ -35,7 +35,7 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
         }
     }
 
-    setLoadInfos(<Load info="(4/8) Keep only movies watched in the period" />)
+    setLoadInfos(<Load info="(4/10) Keep only movies watched in the period" />)
     const date_start = new Date(start)
     const date_end = new Date(end)
 
@@ -58,7 +58,7 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
         }
     }
     
-    setLoadInfos(<Load info="(5/8) Request movies datas from tmdb" />)
+    setLoadInfos(<Load info="(5/10) Request movies datas from tmdb" />)
     var currentIndex = 0
     const totalIndex = Object.keys(showlyMovies).length
     const moviesDatas = {}
@@ -81,7 +81,7 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
             cachedData[movie] = data
             await TraktDB.addToDB(movie, data)
             currentIndex++
-            setLoadInfos(<Load info={`(4/8) Request movies datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.title} />)
+            setLoadInfos(<Load info={`(5/10) Request movies datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.title} />)
         } catch (e) {
             loremMoviesDatas[movie] = showlyMovies[movie]
             cachedData[movie] = showlyMovies[movie]
@@ -91,72 +91,132 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
     return { showlyMovies, moviesDatas, loremMoviesDatas }
 }
 
-async function getShowData(username, type, sort, headers, setLoadInfos, cachedData, start, end) {
-    // setLoadInfos(<Load info="(5/7) Loading shows ratings" />)
-    // const responseRating = await axios.get(`https://api.trakt.tv/users/${username}/ratings/shows/`, { headers })
-    // const ratingsShows = responseRating.data.reduce((acc, show) => {
-    //     acc[show.show.ids.trakt] = show.rating
-    //     return acc
-    // }, {})
+async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, start, end) {
+    setLoadInfos(<Load info="(6/10) Loading shows ratings" />)
+    let showlyShows = {}
 
-    // setLoadInfos(<Load info="(6/7) Loading shows data from trakt" />)
-    // const responseInfos = await axios.get(`https://api.trakt.tv/users/${username}/${type}/shows`, { headers })
-    // const date_start = new Date(start)
-    // const date_end = new Date(end)
-    // const isShowWatchedInPeriod = (show, date_start, date_end, sort) => {
-    //     for (const season of show.seasons) {
-    //         for (const episode of season.episodes) {
-    //             const last_watched = new Date(episode.last_watched_at)
-    //             if (last_watched >= date_start
-    //                 && last_watched <= date_end
-    //                 && (sort.months.length === 0 || sort.months.includes(last_watched.getMonth() + 1))) {
-    //                 return true
-    //             }
-    //         }
-    //     }
-    // }
-    // const shows = responseInfos.data.reduce((acc, show) => {
-    //     if (isShowWatchedInPeriod(show, date_start, date_end, sort)) {
-    //         acc[show.show.ids.trakt] = {
-    //             tmdb: show.show.ids.tmdb,
-    //             ...show,
-    //         }
-    //     }
-    //     return acc
-    // }, {})
+    if (!showlyData || !showlyData.shows || !showlyData.shows.cH) {
+        setLoadInfos(<Load info="(Error) Format of Showly data is not correct" />)
+        return
+    }
 
-    // var currentIndex = 0
-    // const totalIndex = Object.keys(shows).length
+    setLoadInfos(<Load info="(7/10) Loading shows list" />)
+    const targetList = type == "watched" ? showlyData.shows.cH : showlyData.shows.cW
+    for (const show of targetList) {
+        showlyShows[show.id] = {
+            id: show.id,
+            tmId: show.tmId,
+            title: show.t,
+            watchedAt: show.a,
+            last_watched_at: show.a,
+            rating: undefined,
+            seasons: []
+        }
+    }
 
-    // setLoadInfos(<Load info="(7/7) Loading shows datas from tmdb" />)
-    // const showsDatas = {}
-    // const loremShowsDatas = {}
-    // for (const show in shows) {
-    //     const tmdbID = shows[show].tmdb
-    //     if (cachedData[show] && cachedData[show].last_updated_at_trakt === shows[show].last_updated_at) { 
-    //         showsDatas[show] = cachedData[show]
-    //         cachedData[show] = showsDatas[show]
-    //         continue
-    //     }
+    if (type == "watched") {
+        for (const show of showlyData.shows.cHid) {
+            showlyShows[show.id] = {
+                id: show.id,
+                tmId: show.tmId,
+                title: show.t,
+                watchedAt: show.a,
+                last_watched_at: show.a,
+                rating: undefined,
+                seasons: []
+            }
+        }
 
-    //     try {
-    //         const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${tmdbID}?api_key=758d153839db0de784edeec4ab6a5fb0&language=${sort.lang}&append_to_response=credits`)
-    //         const data = {
-    //             ...responseTMDB.data,
-    //             last_updated_at_trakt: shows[show].last_updated_at
-    //         }
-    //         showsDatas[show] = data
-    //         cachedData[show] = data
-    //         await TraktDB.addToDB(show, data)
-    //         currentIndex++
-    //         setLoadInfos(<Load info={`(7/7) Loading shows datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.name} />)
-    //     } catch (e) {
-    //         loremShowsDatas[show] = shows[show]
-    //         cachedData[show] = shows[show]
-    //     }
-    // }
+        for (const season of showlyData.shows.pSe) {
+            if (!showlyShows[season.sId]) continue
+            showlyShows[season.sId].seasons.push({
+                episodes: [],
+                number: season.sN
+            })
+        }
 
-    // return { ratingsShows, shows, showsDatas, loremShowsDatas }
+        for (const episode of showlyData.shows.pEp) {
+            if (!showlyShows[episode.sId]) continue
+            var season = showlyShows[episode.sId].seasons.find(s => s.number == episode.sN)
+            if (!season) {
+                showlyShows[episode.sId].seasons.push({
+                    episodes: [],
+                    number: episode.sN
+                })
+                season = showlyShows[episode.sId].seasons.find(s => s.number == episode.sN)
+            }
+            season.episodes.push({
+                id: episode.id,
+                number: episode.eN,
+                last_watched_at: episode.a,
+            })
+        }
+    }
+
+    setLoadInfos(<Load info="(8/10) Keep only shows watched in the period" />)
+
+    const isShowWatchedInPeriod = (show, date_start, date_end, sort) => {
+        for (const season of show.seasons) {
+            for (const episode of season.episodes) {
+                const last_watched = new Date(episode.last_watched_at)
+                if (last_watched >= date_start
+                    && last_watched <= date_end
+                    && (sort.months.length === 0 || sort.months.includes(last_watched.getMonth() + 1))) {
+                    return true
+                }
+            }
+        }
+    }
+
+    const date_start = new Date(start)
+    const date_end = new Date(end)
+
+    for (const show in showlyShows) {
+        if (!isShowWatchedInPeriod(showlyShows[show], date_start, date_end, sort)) {
+            delete showlyShows[show]
+        }
+    }
+
+    setLoadInfos(<Load info="(9/10) Loading shows rating" />)
+    if (type == "watched") {
+        for (const rating of showlyData.shows.rS) {
+            if (showlyShows[rating.id])
+                showlyShows[rating.id].rating = rating.r
+        }
+    }
+
+    setLoadInfos(<Load info="(10/10) Loading shows data from tmdb" />)
+    var currentIndex = 0
+    const totalIndex = Object.keys(showlyShows).length
+    const showsDatas = {}
+    const loremShowsDatas = {}
+
+    for (const show in showlyShows) {
+        const tmdbID = showlyShows[show].tmId
+        if (cachedData[show] && cachedData[show].last_updated_at_trakt === showlyShows[show].last_updated_at) { 
+            showsDatas[show] = cachedData[show]
+            cachedData[show] = showsDatas[show]
+            continue
+        }
+
+        try {
+            const responseTMDB = await axios.get(`https://api.themoviedb.org/3/tv/${tmdbID}?api_key=758d153839db0de784edeec4ab6a5fb0&language=${sort.lang}&append_to_response=credits`)
+            const data = {
+                ...responseTMDB.data,
+                last_updated: showlyShows[show].last_updated_at
+            }
+            showsDatas[show] = data
+            cachedData[show] = data
+            await TraktDB.addToDB(show, data)
+            currentIndex++
+            setLoadInfos(<Load info={`(10/10) Loading shows datas from tmdb (${(currentIndex / totalIndex * 100).toFixed(2)}%)`} moreInfo={responseTMDB.data.name} />)
+        } catch (e) {
+            loremShowsDatas[show] = showlyShows[show]
+            cachedData[show] = showlyShows[show]
+        }
+    }
+
+    return { showlyShows, showsDatas, loremShowsDatas }
 }
 
 export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShows, setLoremMovies, setLoremShows, showlyData) {
@@ -171,16 +231,12 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
     buttons.forEach(button => button.style.display = 'none')
     lastButton.classList.add('big')
 
-    setLoadInfos(<Load info="(1/8) Reading Showly json" />)
+    setLoadInfos(<Load info="(1/10) Reading Showly json" />)
 
-    const {showlyMovies, moviesDatas, loremMoviesDatas} = await getMovieData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
-    // const { ratingsShows, shows, showsDatas, loremShowsDatas } = sort.hideShows ? {} : await getShowData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
+    const { showlyMovies, moviesDatas, loremMoviesDatas } = await getMovieData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
+    const { showlyShows, showsDatas, loremShowsDatas } = sort.hideShows ? {} : await getShowData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
 
     setLoadInfos(<></>)
-
-    console.log("showlyMovies", showlyMovies)
-    console.log("moviesDatas", moviesDatas)
-    console.log("loremMoviesDatas", loremMoviesDatas)
     
     setMovies(sort.hideMovies ? <></> : Object.entries(showlyMovies).map(([id, data]) => {
         return <Content key={id} id={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={data.rating} />
@@ -190,13 +246,17 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
         return <LoremContent key={id} id={id} data={data} type="movie" sort={sort} rating={data.rating} />
     }))
 
-    // await setShows(sort.hideShows ? <></> : Object.entries(shows).map(([id, data]) =>
-    //     <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={ratingsShows[id]} />
-    // ))
+    console.log("showlyShows", showlyShows)
+    console.log("showsDatas", showsDatas)
+    console.log("loremShowsDatas", loremShowsDatas)
+
+    setShows(sort.hideShows ? <></> : Object.entries(showlyShows).map(([id, data]) => {
+        return <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={data.rating} />
+    }))
     
-    // await setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) =>
-    //     <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={ratingsShows[id]} />
-    // ))
+    setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) => {
+        return <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={data.rating} />
+    }))
 
     buttons.forEach(button => button.style.display = 'flex')
     lastButton.classList.remove('big')

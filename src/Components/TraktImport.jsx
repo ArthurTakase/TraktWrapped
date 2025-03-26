@@ -176,19 +176,19 @@ export async function getTraktData(setLoadInfos, username, type, sort, setMovies
 
     setLoadInfos(<></>)
 
-    await setMovies(sort.hideMovies ? <></> : Object.entries(movies).map(([id, data]) =>
+    setMovies(sort.hideMovies ? <></> : Object.entries(movies).map(([id, data]) =>
         <Content key={id} id={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={ratingsMovies[id]} />
     ))
 
-    await setLoremMovies(sort.hideMovies ? <></> : Object.entries(loremMoviesDatas).map(([id, data]) =>
+    setLoremMovies(sort.hideMovies ? <></> : Object.entries(loremMoviesDatas).map(([id, data]) =>
         <LoremContent key={id} id={id} data={data} type="movie" sort={sort} rating={ratingsMovies[id]} />
     ))
 
-    await setShows(sort.hideShows ? <></> : Object.entries(shows).map(([id, data]) =>
+    setShows(sort.hideShows ? <></> : Object.entries(shows).map(([id, data]) =>
         <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={ratingsShows[id]} />
     ))
     
-    await setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) =>
+    setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) =>
         <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={ratingsShows[id]} />
     ))
 
