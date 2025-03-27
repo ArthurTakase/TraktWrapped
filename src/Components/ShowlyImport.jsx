@@ -41,7 +41,7 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
 
     const isMovieWatchedInPeriod = (movie, date_start, date_end, sort) => {
         const watchedAt = new Date(movie.watchedAt)
-        if (watchedAt < date_start) return false
+        if (date_start !== undefined && watchedAt < date_start) return false
         if (watchedAt > date_end) return false
 
         if (sort.months.length > 0) {
@@ -159,7 +159,7 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
         for (const season of show.seasons) {
             for (const episode of season.episodes) {
                 const last_watched = new Date(episode.last_watched_at)
-                if (last_watched >= date_start
+                if ((date_start !== undefined || last_watched >= date_start)
                     && last_watched <= date_end
                     && (sort.months.length === 0 || sort.months.includes(last_watched.getMonth() + 1))) {
                     return true
@@ -220,7 +220,7 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
 }
 
 export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShows, setLoremMovies, setLoremShows, showlyData) {
-    const date_start = sort.seen ? new Date(sort.seen).toISOString() : "1900-06-01T00%3A00%3A00.000Z"
+    const date_start = sort.seen ? new Date(sort.seen).toISOString() : undefined
     const date_end = sort.seen ? new Date(`${parseInt(sort.seen) + 1}`).toISOString() : new Date().toISOString()
 
     ClearData()
@@ -233,28 +233,26 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
 
     setLoadInfos(<Load info="(1/10) Reading Showly json" />)
 
-    const { showlyMovies, moviesDatas, loremMoviesDatas } = await getMovieData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
-    const { showlyShows, showsDatas, loremShowsDatas } = sort.hideShows ? {} : await getShowData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
+    const loaded_data = { movies: null, shows: null }
 
-    setLoadInfos(<></>)
-    
-    setMovies(sort.hideMovies ? <></> : Object.entries(showlyMovies).map(([id, data]) => {
-        return <Content key={id} id={id} data={data} res={moviesDatas[id]} type="movie" sort={sort} rating={data.rating} />
+    if (!sort.hideMovies) loaded_data.movies = await getMovieData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
+    if (!sort.hideShows) loaded_data.shows = await getShowData(showlyData, type, sort, setLoadInfos, cachedData, date_start, date_end)
+
+    setMovies(sort.hideMovies ? <></> : Object.entries(loaded_data.movies.showlyMovies).map(([id, data]) => {
+        return <Content key={id} id={id} data={data} res={loaded_data.movies.moviesDatas[id]} type="movie" sort={sort} rating={data.rating} />
     }))
 
-    setLoremMovies(sort.hideMovies ? <></> : Object.entries(loremMoviesDatas).map(([id, data]) => {
+    setLoremMovies(sort.hideMovies ? <></> : Object.entries(loaded_data.movies.loremMoviesDatas).map(([id, data]) => {
         return <LoremContent key={id} id={id} data={data} type="movie" sort={sort} rating={data.rating} />
     }))
 
-    console.log("showlyShows", showlyShows)
-    console.log("showsDatas", showsDatas)
-    console.log("loremShowsDatas", loremShowsDatas)
+    setLoadInfos(<></>)
 
-    setShows(sort.hideShows ? <></> : Object.entries(showlyShows).map(([id, data]) => {
-        return <Content key={id} id={id} data={data} res={showsDatas[id]} type="show" sort={sort} rating={data.rating} />
+    setShows(sort.hideShows ? <></> : Object.entries(loaded_data.shows.showlyShows).map(([id, data]) => {
+        return <Content key={id} id={id} data={data} res={loaded_data.shows.showsDatas[id]} type="show" sort={sort} rating={data.rating} />
     }))
     
-    setLoremShows(sort.hideShows ? <></> : Object.entries(loremShowsDatas).map(([id, data]) => {
+    setLoremShows(sort.hideShows ? <></> : Object.entries(loaded_data.shows.loremShowsDatas).map(([id, data]) => {
         return <LoremContent key={id} id={id} data={data} type="show" sort={sort} rating={data.rating} />
     }))
 

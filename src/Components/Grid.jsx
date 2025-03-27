@@ -41,7 +41,6 @@ export default function Grid() {
         setLoremMovies(<></>)
         setLoremShows(<></>)
         setLoadInfos(<></>)
-        console.log("useEffect Grid")
 
         if (sort.fromShowly) {
             if (showlyData == null) {
