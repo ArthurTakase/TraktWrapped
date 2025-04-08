@@ -5,6 +5,7 @@ import notFound from '../assets/notFound.jpg'
 
 function getShowData(comp, res, type, data, sort) {
     if (type != "show") return comp
+    if (res.seasons == undefined) return comp
 
     if (sort.watchlist) {
         comp.up_to_date = false
@@ -31,28 +32,36 @@ function getShowData(comp, res, type, data, sort) {
 }
 
 function getGeneralData(comp, res, type, data, sort) {
-    if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) return null
+    if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) {
+        console.log("Exit at sort.seen")
+        return null
+    }
+
     comp.title = type == "movie" ? res.title : res.name
     comp.date = type == "movie" ? res.release_date : res.first_air_date
-    comp.year = (type == "movie" ? res.release_date : res.first_air_date).split("-")[0];
+    comp.year = (type == "movie" ? res.release_date : res.first_air_date)?.split("-")[0];
     if (res.releases) {
         const releaseCountry = res?.releases.countries.find(country => country.iso_3166_1 === sort.region);
         if (releaseCountry) comp.year = releaseCountry.release_date.split("-")[0];
     }
-    if (sort.year && sort.year != comp.year) return null
+    if (sort.year && sort.year != comp.year)
+        return null
+
     comp.available = new Date(comp.date) < new Date()
-    if (sort.available && sort.available != comp.available) return null
+    if (sort.available && sort.available != comp.available)
+        return null
+    
     if (comp.year == "") comp.year = "N.C."
     comp.poster = res.poster_path
     comp.up_to_date = true
     comp.last_air_date = comp.year
-    comp.genres = res.genres.map(genre => genre.name)
+    comp.genres = res.genres?.map(genre => genre.name)
 
     return comp
 }
 
 function exportData(comp, type, data, res, rating, sort, id) {
-    comp.genres.forEach(genre => {
+    comp.genres?.forEach(genre => {
         WrappedData.genres[genre] = (WrappedData.genres[genre] || 0) + 1
     })
 
@@ -63,21 +72,28 @@ function exportData(comp, type, data, res, rating, sort, id) {
         } else {
             WrappedData.shows_by_score[rating].push(id)
             const release_dates = res?.seasons?.flatMap(season => season.air_date) || []
-            release_dates.forEach(date => {
-                const year = date.split("-")[0]
+            release_dates?.forEach(date => {
+                const year = date?.split("-")[0]
                 if (sort.seen == year && WrappedData.shows_by_score_this_year[rating].indexOf(id) == -1)
                     WrappedData.shows_by_score_this_year[rating].push(id)
             })
         }
-    } catch (e) { console.log(rating) }
+    } catch (e) {
+        console.log("Error in exportData", e)
+    }
 
-    res.credits.cast.forEach(actor => {
+    res.credits?.cast?.forEach(actor => {
         const database = actor.gender == 1 ? WrappedData.actresses : WrappedData.actors
         if (database[actor.id] == undefined) database[actor.id] = { count: 1, data: actor }
         else database[actor.id].count += 1
     })
 
-    res.credits.crew.forEach(crew => {
+    if (res.credits == undefined) {
+        window.location.reload()
+        return
+    }
+
+    res.credits?.crew?.forEach(crew => {
         if (crew.job != "Director") return
         if (WrappedData.directors[crew.id] == undefined)
             WrappedData.directors[crew.id] = {
@@ -155,13 +171,23 @@ export function LoremContent({ data, rating, type, sort, id }) {
     const card = useRef(null)
     const comp = {}
 
-    comp.title = data[type].title
-    comp.year = data[type].year
-    comp.play = data.plays
-    comp.watched_at = data.last_watched_at?.split('-')[0]
-    comp.last_air_date = data[type].year
-    comp.available = new Date(comp.date) < new Date()
-    comp.genres = []
+    try {
+        comp.title = data[type].title
+        comp.year = data[type].year
+        comp.play = data.plays
+        comp.watched_at = data.last_watched_at?.split('-')[0]
+        comp.last_air_date = data[type].year
+        comp.available = new Date(comp.date) < new Date()
+        comp.genres = []
+    } catch (e) {
+        comp.title = data.title
+        comp.year = undefined
+        comp.play = 0
+        comp.watched_at = data.watchedAt?.split('-')[0]
+        comp.last_air_date = undefined
+        comp.available = new Date(comp.watched_at) < new Date()
+        comp.genres = []
+    }
 
     const res = {
         credits: {

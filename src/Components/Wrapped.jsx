@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { cachedData } from './Grid'
+import { cachedData } from './TraktImport'
 import earth from '../assets/earth.png'
 import space from '../assets/space.jpg'
 import notFound from '../assets/notFound.jpg'

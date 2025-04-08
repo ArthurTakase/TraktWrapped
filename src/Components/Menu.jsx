@@ -10,7 +10,8 @@ import Select from 'react-select'
 export default function Menu({ setSearchParams }) {
     const [wrapped, setWrapped] = useState(<></>)
 
-    function submit() {
+    function setParams(fromShowly = false)
+    {
         const params = {}
 
         params.username = allRef.username.current.value
@@ -25,6 +26,7 @@ export default function Menu({ setSearchParams }) {
         params.hideShows = allRef.hideShows.current.checked
         params.region = allRef.region.current.value || 'FR'
         params.months = allRef.months.current.getValue().map(obj => obj.value).join(',')
+        params.fromShowly = fromShowly
 
         // remove empty params or false params
         Object.keys(params).forEach(key => {
@@ -32,7 +34,33 @@ export default function Menu({ setSearchParams }) {
         })
 
         setSearchParams(params)
+    }
+
+    function submit() {
+        setParams()
         window.location.reload()
+    }
+
+    function submitShowly() {
+        setParams(true)
+
+        const fileInput = document.createElement('input')
+        fileInput.type = 'file'
+        fileInput.accept = '.json'
+        fileInput.click()
+
+        fileInput.addEventListener('change', () => {
+            const file = fileInput.files[0]
+            const reader = new FileReader()
+
+            reader.onload = () => {
+                const data = JSON.parse(reader.result)
+                allRef.updateGrid(data)
+                toggleMenu()
+            }
+
+            reader.readAsText(file)
+        })
     }
 
     function launchWrapped() {
@@ -58,9 +86,6 @@ export default function Menu({ setSearchParams }) {
     }
 
     allRef.launchWrapped = launchWrapped
-
-    function monthOptions() {
-    }
 
     useEffect(() => {
         allRef.seen.current.addEventListener('input', () => {
@@ -90,10 +115,6 @@ export default function Menu({ setSearchParams }) {
             <div className='menu'>
                 <div className='submenu-title'>
                     New Request
-                </div>
-                <div className='inputgroup'>
-                    <label htmlFor="username">Username</label>
-                    <input type="text" placeholder="Trakt username" ref={allRef.username} />
                 </div>
                 <div className='inputgroup'>
                     <label htmlFor="lang">Language</label>
@@ -126,16 +147,22 @@ export default function Menu({ setSearchParams }) {
                     <input type="text" placeholder="yyyy" ref={allRef.last_air_date} />
                 </div>
                 <div className='checkZone'>
-                    <Checkbox label="Only Available Content" r={allRef.available} id="available" onChange={() => {}} />
-                    <Checkbox label="Only Up to date Content" r={allRef.up_to_date} id="up_to_date" onChange={() => {}} />
-                    <Checkbox label="From Watchlist" r={allRef.watchlist} id="watchlist" onChange={() => {}} />
                     <Checkbox label="Hide Movies Results" r={allRef.hideMovies} id="hideMovies" onChange={() => {}} />
                     <Checkbox label="Hide Shows Results" r={allRef.hideShows} id="hideShows" onChange={() => {}} />
+                    <Checkbox label="From Watchlist" r={allRef.watchlist} id="watchlist" onChange={() => {}} />
+                    <Checkbox label="Only Up to date Content" r={allRef.up_to_date} id="up_to_date" onChange={() => {}} />
+                    <Checkbox label="Only Available Content" r={allRef.available} id="available" onChange={() => {}} />
                 </div>
             </div>
             <div className='submit'>
-                <button onClick={submit}><i className='bx bx-check'></i>Submit</button>
-                <button className="border" onClick={toggleMenu}><i className='bx bx-x'></i>Close Menu</button>
+                <button onClick={submitShowly} className='showly'><i className='bx bxs-file-json'></i>Read from <b>Showly</b> Export</button>
+                <div className='center-text'>Or</div>
+                <div className='inputgroup'>
+                    <label htmlFor="username">Username</label>
+                    <input type="text" placeholder="Trakt username" ref={allRef.username} />
+                </div>
+                <button onClick={submit}><i className='bx bx-cloud'></i>Search on <b>Trakt.tv</b></button>
+                <button className="border" onClick={toggleMenu}><i className='bx bx-x'></i>Close</button>
             </div>
         </div>
         {wrapped}
