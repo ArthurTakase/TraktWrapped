@@ -39,8 +39,8 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
     const date_start = new Date(start)
     const date_end = new Date(end)
 
-    const isMovieWatchedInPeriod = (movie, date_start, date_end, sort) => {
-        const watchedAt = new Date(movie.watchedAt)
+    const isMovieWatchedInPeriod = (date, date_start, date_end, sort) => {
+        const watchedAt = new Date(date)
         if (date_start !== undefined && watchedAt < date_start) return false
         if (watchedAt > date_end) return false
 
@@ -51,10 +51,11 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
 
         return true
     }
-
-    for (const movie in showlyMovies) {
-        if (!isMovieWatchedInPeriod(showlyMovies[movie], date_start, date_end, sort)) {
-            delete showlyMovies[movie]
+    
+    if (!sort.watchlist) {
+        for (const movie in showlyMovies) {
+            if (!isMovieWatchedInPeriod(showlyMovies[movie], date_start, date_end, sort))
+                delete showlyMovies[movie]
         }
     }
     
@@ -85,6 +86,17 @@ async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, st
         } catch (e) {
             loremMoviesDatas[movie] = showlyMovies[movie]
             cachedData[movie] = showlyMovies[movie]
+        }
+    }
+
+    if (sort.year) {
+        const release_date_start = new Date(sort.year)
+        const release_date_end = new Date(sort.year)
+        release_date_end.setFullYear(release_date_end.getFullYear() + 1)
+
+        for (const movie in showlyMovies) {
+            if (!isMovieWatchedInPeriod(cachedData[movie].release_date, release_date_start, release_date_end, sort))
+                delete showlyMovies[movie]
         }
     }
 
@@ -168,12 +180,21 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
         }
     }
 
+    const isShowReleasedInPeriod = (show, date_start, date_end) => {
+        for (const season of show.seasons) {
+            const last_watched = new Date(season.air_date)
+            if ((date_start !== undefined || last_watched >= date_start) && last_watched <= date_end)
+                return true
+        }
+    }
+
     const date_start = new Date(start)
     const date_end = new Date(end)
 
-    for (const show in showlyShows) {
-        if (!isShowWatchedInPeriod(showlyShows[show], date_start, date_end, sort)) {
-            delete showlyShows[show]
+    if (!sort.watchlist) {
+        for (const show in showlyShows) {
+            if (!isShowWatchedInPeriod(showlyShows[show], date_start, date_end, sort))
+                delete showlyShows[show]
         }
     }
 
@@ -213,6 +234,17 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
         } catch (e) {
             loremShowsDatas[show] = showlyShows[show]
             cachedData[show] = showlyShows[show]
+        }
+    }
+    
+    if (sort.year) {
+        const release_date_start = new Date(sort.year)
+        const release_date_end = new Date(sort.year)
+        release_date_end.setFullYear(release_date_end.getFullYear() + 1)
+
+        for (const show in showlyShows) {
+            if (!isShowReleasedInPeriod(cachedData[show], release_date_start, release_date_end))
+                delete showlyShows[show]
         }
     }
 

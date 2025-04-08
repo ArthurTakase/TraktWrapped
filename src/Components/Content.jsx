@@ -182,7 +182,7 @@ export function LoremContent({ data, rating, type, sort, id }) {
     } catch (e) {
         comp.title = data.title
         comp.year = undefined
-        comp.play = 1
+        comp.play = 0
         comp.watched_at = data.watchedAt?.split('-')[0]
         comp.last_air_date = undefined
         comp.available = new Date(comp.watched_at) < new Date()
