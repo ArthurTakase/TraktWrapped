@@ -22,14 +22,19 @@ export default function Navbar() {
                     allRef.main.current.classList.toggle('no-score')
                     allRef.main.current.classList.toggle('big-picture')
                 }}>
-                    <i className='bx bxs-layout'></i>
+                    <i className='bx  bx-expand-left'></i> 
                 </button>
                 <button className="red" style={{display: 'none'}} title="Launch your Wrapped" onClick={() => {
                     allRef.launchWrapped()
                 }}>
                     <i className='bx bx-party'></i>
                 </button>
-                <button className="red" style={{display: 'none'}} title="Launch your Wrapped" onClick={() => {
+                <button className="red" style={{display: 'none'}} title="Launch Recap" onClick={() => {
+                    // allRef.launchContest()
+                }}>
+                    <i className='bx bx-bar-chart-big'></i> 
+                </button>
+                <button className="red" style={{display: 'none'}} title="Launch Contest" onClick={() => {
                     allRef.launchContest()
                 }}>
                     <i className='bx bx-trophy' ></i>

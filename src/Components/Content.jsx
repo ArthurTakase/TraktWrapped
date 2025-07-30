@@ -131,6 +131,14 @@ function exportData(comp, type, data, res, rating, sort, id) {
         borneMovie(WrappedData.last_movie, data?.last_watched_at, WrappedData.last_movie.date)
         WrappedData.total_movies += 1
         WrappedData.total_time_movies += res.runtime
+
+        const date = new Date(data?.last_watched_at)
+        const weekDay = date.toLocaleString('en-US', { weekday: 'long' })
+        WrappedData.by_week[weekDay] += 1
+        WrappedData.view_dates.push(date)
+        if (WrappedData.airing_dates[comp.year] === undefined) WrappedData.airing_dates[comp.year] = 1
+        else WrappedData.airing_dates[comp.year] += 1
+
     } else {
         if (WrappedData.first_show.data === null) WrappedData.first_show.date = new Date()
         const all_episodes = data?.seasons?.flatMap(season => season.episodes) || []

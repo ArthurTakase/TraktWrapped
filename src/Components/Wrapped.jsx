@@ -24,7 +24,18 @@ export const WrappedData = {
     "total_episodes" : 0,
     "total_time_movies" : 0,
     "total_time_shows" : 0,
-    "sort" : {}
+    "sort" : {},
+    "airing_dates" : {},
+    "view_dates" : [],
+    "by_week" : {
+        "Monday" : 0,
+        "Tuesday" : 0,
+        "Wednesday" : 0,
+        "Thursday" : 0,
+        "Friday" : 0,
+        "Saturday" : 0,
+        "Sunday" : 0
+    }
 }
 
 export function ClearData() {
@@ -51,6 +62,17 @@ export function ClearData() {
     WrappedData.movies_by_score_this_year.undefined = []
     WrappedData.shows_by_score_this_year.undefined = []
     WrappedData.sort = {}
+    WrappedData.airing_dates = {}
+    WrappedData.view_dates = []
+    WrappedData.by_week = {
+        "Monday" : 0,
+        "Tuesday" : 0,
+        "Wednesday" : 0,
+        "Thursday" : 0,
+        "Friday" : 0,
+        "Saturday" : 0,
+        "Sunday" : 0
+    }
     for (let i = 0; i <= 10; i++) WrappedData.movies_by_score[i.toString()] = []
     for (let i = 0; i <= 10; i++) WrappedData.shows_by_score[i.toString()] = []
     for (let i = 0; i <= 10; i++) WrappedData.movies_by_score_this_year[i.toString()] = []
