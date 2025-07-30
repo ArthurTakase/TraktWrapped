@@ -4,6 +4,7 @@ import earth from '../assets/earth.png'
 import space from '../assets/space.jpg'
 import notFound from '../assets/notFound.jpg'
 import { allRef } from '../App'
+import '../scss/wrapped.scss'
 
 export const WrappedData = {
     "genres" : {},
@@ -26,7 +27,7 @@ export const WrappedData = {
     "total_time_shows" : 0,
     "sort" : {},
     "airing_dates" : {},
-    "view_dates" : [],
+    "view_dates" : {},
     "by_week" : {
         "Monday" : 0,
         "Tuesday" : 0,
@@ -63,7 +64,7 @@ export function ClearData() {
     WrappedData.shows_by_score_this_year.undefined = []
     WrappedData.sort = {}
     WrappedData.airing_dates = {}
-    WrappedData.view_dates = []
+    WrappedData.view_dates = {}
     WrappedData.by_week = {
         "Monday" : 0,
         "Tuesday" : 0,

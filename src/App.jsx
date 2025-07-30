@@ -4,7 +4,6 @@ import RandomElement from './Components/RandomElement'
 import './scss/app.scss'
 import './scss/form.scss'
 import './scss/random.scss'
-import './scss/wrapped.scss'
 import { useEffect, useRef } from 'react'
 import { useSearchParams } from 'react-router-dom';
 import Contest from './Components/Contest'
@@ -44,6 +43,7 @@ export default function App() {
     allRef.closeWrapped = null
     allRef.monthZoneRef = useRef(null)
     allRef.monthOptions = null
+    allRef.closeCharts = null
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')

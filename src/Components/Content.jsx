@@ -135,7 +135,11 @@ function exportData(comp, type, data, res, rating, sort, id) {
         const date = new Date(data?.last_watched_at)
         const weekDay = date.toLocaleString('en-US', { weekday: 'long' })
         WrappedData.by_week[weekDay] += 1
-        WrappedData.view_dates.push(date)
+
+        var dateString = date.toISOString().split('T')[0]
+        if (WrappedData.view_dates[dateString] === undefined) WrappedData.view_dates[dateString] = 1
+        else WrappedData.view_dates[dateString] += 1
+
         if (WrappedData.airing_dates[comp.year] === undefined) WrappedData.airing_dates[comp.year] = 1
         else WrappedData.airing_dates[comp.year] += 1
 

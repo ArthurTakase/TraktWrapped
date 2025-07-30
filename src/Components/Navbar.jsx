@@ -30,7 +30,7 @@ export default function Navbar() {
                     <i className='bx bx-party'></i>
                 </button>
                 <button className="red" style={{display: 'none'}} title="Launch Recap" onClick={() => {
-                    // allRef.launchContest()
+                    allRef.launchCharts()
                 }}>
                     <i className='bx bx-bar-chart-big'></i> 
                 </button>

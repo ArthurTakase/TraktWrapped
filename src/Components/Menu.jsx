@@ -6,9 +6,11 @@ import Wrapped, { WrappedData } from "./Wrapped"
 import { useRef } from "react"
 import { useEffect } from "react"
 import Select from 'react-select'
+import Charts from "./Charts"
 
 export default function Menu({ setSearchParams }) {
     const [wrapped, setWrapped] = useState(<></>)
+    const [charts, setCharts] = useState(<></>)
 
     function setParams(fromShowly = false)
     {
@@ -85,7 +87,29 @@ export default function Menu({ setSearchParams }) {
         if (bottomNavbar) bottomNavbar.style.display = 'none'
     }
 
+    function launchCharts() {
+        if (WrappedData.first_movie.data == null && WrappedData.first_show.data == null) return
+
+        const charts = document.querySelector('.charts-container')
+        if (charts && charts.classList.contains('active')) {
+            allRef.closeCharts()
+            return
+        }
+
+        if (charts) charts.classList.toggle('active')
+        else setCharts(<Charts />)
+
+        allRef.grid.current.style.display = 'none'
+
+        if (allRef.menu.current.classList.contains('active'))
+            toggleMenu()
+
+        const bottomNavbar = document.querySelector('#bottom-navbar')
+        if (bottomNavbar) bottomNavbar.style.display = 'none'
+    }
+
     allRef.launchWrapped = launchWrapped
+    allRef.launchCharts = launchCharts
 
     useEffect(() => {
         allRef.seen.current.addEventListener('input', () => {
@@ -166,6 +190,7 @@ export default function Menu({ setSearchParams }) {
             </div>
         </div>
         {wrapped}
+        {charts}
         </>
     )
 }
