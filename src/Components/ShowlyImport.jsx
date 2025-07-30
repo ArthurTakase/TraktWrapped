@@ -3,7 +3,7 @@ import { ClearData } from "./Wrapped"
 import axios from 'axios'
 import Load from './Load'
 import '../scss/app.scss'
-import { cachedData } from './TraktImport'
+import { cachedData, setCachedData } from './TraktImport'
 import { TraktDB } from './IndexedDB'
 
 async function getMovieData(showlyData, type, sort, setLoadInfos, cachedData, start, end) {
@@ -256,6 +256,8 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
     const date_end = sort.seen ? new Date(`${parseInt(sort.seen) + 1}`).toISOString() : new Date().toISOString()
 
     ClearData()
+    const tempCachedData = await TraktDB.getAllFromDB()
+    setCachedData(tempCachedData)
 
     const bottomNavbar = document.querySelector('#bottom-navbar')
     const buttons = bottomNavbar?.querySelectorAll('button:not(.keep)')

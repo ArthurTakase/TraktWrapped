@@ -33,7 +33,6 @@ function getShowData(comp, res, type, data, sort) {
 
 function getGeneralData(comp, res, type, data, sort) {
     if (sort.seen && data?.last_watched_at?.split("-")[0] != sort.seen) {
-        console.log("Exit at sort.seen")
         return null
     }
 

@@ -7,6 +7,10 @@ import '../scss/app.scss'
 
 export let cachedData = {}
 
+export function setCachedData(data) {
+    Object.assign(cachedData, data)
+}
+
 async function checkIfAccountExists(username, headers) {
     try {
         const response = await axios.get(`https://api.trakt.tv/users/${username}/watched/movies`, { headers })
