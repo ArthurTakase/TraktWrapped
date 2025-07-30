@@ -95,6 +95,7 @@
     padding-right: 0.3rem;
     padding-left: 0.3rem;
     box-shadow: 0 0.5rem 0.5rem rgba(0, 0, 0, 0.5);
+    transition: padding-right 0.2s;
     @media (max-width: 500px) {
         top: 0;
         right: 1rem;
@@ -102,7 +103,6 @@
         padding-right: 0.3rem;
         padding-left: 0.3rem;
     }
-    transition: padding-right 0.2s;
     &:hover {
         padding-right: 1rem;
     }

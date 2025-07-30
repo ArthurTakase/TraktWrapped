@@ -15,7 +15,8 @@
         transform 0.3s,
         box-shadow 0.5s,
         border 0.3s,
-        box-sizing 0.3s;
+        box-sizing 0.3s,
+        scale 0.3s;
     @media screen and (max-width: 768px) {
         min-width: 40%;
         max-width: 100%;
@@ -94,7 +95,6 @@
         box-shadow: 0rem 0.4rem 0.5rem rgba(0, 0, 0, 0.5);
         font-weight: bold;
     }
-    transition: scale 0.3s;
     &:hover {
         @media (min-width: 500px) {
             z-index: 999;
