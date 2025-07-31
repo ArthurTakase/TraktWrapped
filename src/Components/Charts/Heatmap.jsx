@@ -21,7 +21,7 @@ export default function Heatmap() {
             },
             date: { start: new Date(WrappedData.first_movie.date) },
             considerMissingDataAsZero: true,
-            cellSize: 20,
+            // cellSize: 20,
             range: 12,
             domain: { type: 'month' },
             subDomain: { type: 'day' },
@@ -49,6 +49,7 @@ export default function Heatmap() {
     }
 
     useEffect(() => {
+        if (document.querySelector('#cal-heatmap').children.length > 0) return;
         updateHeatmap();
     }, [])
 

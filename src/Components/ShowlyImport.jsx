@@ -261,6 +261,7 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
 
     const bottomNavbar = document.querySelector('#bottom-navbar')
     const buttons = bottomNavbar?.querySelectorAll('button:not(.keep)')
+    const buttonCharts = bottomNavbar?.querySelector('button:not(.keep).charts')
     const lastButton = bottomNavbar?.querySelector('button.keep')
     buttons.forEach(button => button.style.display = 'none')
     lastButton.classList.add('big')
@@ -291,5 +292,6 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
     }))
 
     buttons.forEach(button => button.style.display = 'flex')
+    buttonCharts.style.display = sort.hideShows && !sort.hideMovies && sort.seen ? 'flex' : 'none'
     lastButton.classList.remove('big')
 }

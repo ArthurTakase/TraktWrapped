@@ -75,8 +75,8 @@ export default function Menu({ setSearchParams }) {
             return
         }
 
-        if (wrapped) wrapped.classList.toggle('active')
-        else setWrapped(<Wrapped />)
+        setWrapped(<></>)
+        setTimeout(() => { setWrapped(<Wrapped />) }, 1)
 
         allRef.grid.current.style.display = 'none'
 
@@ -96,8 +96,8 @@ export default function Menu({ setSearchParams }) {
             return
         }
 
-        if (charts) charts.classList.toggle('active')
-        else setCharts(<Charts />)
+        setCharts(<></>)
+        setTimeout(() => { setCharts(<Charts />) }, 1)
 
         allRef.grid.current.style.display = 'none'
 

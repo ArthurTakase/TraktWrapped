@@ -44,6 +44,7 @@ export default function App() {
     allRef.monthZoneRef = useRef(null)
     allRef.monthOptions = null
     allRef.closeCharts = null
+    allRef.updateCharts = null
 
     useEffect(() => {        
         allRef.username.current.value = searchParams.get('username')

@@ -41,7 +41,7 @@ export const WrappedData = {
 
 export function ClearData() {
     WrappedData.genres = {}
-    WrappedData.actrors = {}
+    WrappedData.actors = {}
     WrappedData.actresses = {}
     WrappedData.directors = {}
     WrappedData.countries = {}
