@@ -71,7 +71,7 @@
     .charts-body {
         display: grid;
         grid-template-columns: repeat(20, 1fr);
-        grid-template-rows: repeat(20, 1fr);
+        grid-template-rows: repeat(20, 50px);
         grid-column-gap: 10px;
         grid-row-gap: 10px;
         max-height: 80vh;
@@ -144,6 +144,7 @@
         .charts-header {
             grid-column: span 20;
             grid-row: span 1;
+            min-height: 50px !important;
         }
         .charts-movies {
             grid-column: span 3;
@@ -225,6 +226,7 @@
         .charts-genres {
             grid-column: span 8;
             grid-row: span 5;
+            min-height: 270px;
             .recharts-responsive-container {
                 translate: 0 4px;
                 scale: 1.005;
@@ -252,9 +254,17 @@
                 height: 100%;
                 overflow-x: hidden;
                 padding: 0.5rem;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                translate: 0 -15px;
             }
             .top-movie {
                 flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
                 max-width: calc(100% / 5);
                 height: 100%;
                 img {
@@ -277,6 +287,7 @@
         .charts-heatmap {
             grid-column: span 20;
             grid-row: span 4;
+            min-height: 200px;
             .title {
                 translate: 0 8px;
             }
@@ -308,6 +319,7 @@
         .charts-releases {
             grid-column: span 12;
             grid-row: span 5;
+            min-height: 200px;
             .recharts-responsive-container {
                 translate: -20px 0;
             }
