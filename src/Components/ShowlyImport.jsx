@@ -292,6 +292,6 @@ export async function getDataShowly(setLoadInfos, type, sort, setMovies, setShow
     }))
 
     buttons.forEach(button => button.style.display = 'flex')
-    buttonCharts.style.display = sort.hideShows && !sort.hideMovies && sort.seen ? 'flex' : 'none'
+    buttonCharts.style.display = sort.seen ? 'flex' : 'none'
     lastButton.classList.remove('big')
 }

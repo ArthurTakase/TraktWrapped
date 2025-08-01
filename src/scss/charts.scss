@@ -84,7 +84,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            animation: charts-fade-in 0.3s ease-in-out;
+            animation: charts-fade-in 0.5s ease-in-out;
             @keyframes charts-fade-in {
                 0% {
                     transform: scale(0.9);
@@ -163,6 +163,10 @@
             grid-column: span 3;
             grid-row: span 3;
         }
+        .charts-episodes {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
         .charts-first {
             grid-column: span 5;
             grid-row: span 3;
@@ -232,8 +236,16 @@
             grid-column: span 5;
             grid-row: span 2;
         }
+        .charts-hours-shows {
+            grid-column: span 3;
+            grid-row: span 2;
+        }
         .charts-day {
             grid-column: span 8;
+            grid-row: span 2;
+        }
+        .charts-day-shows {
+            grid-column: span 7;
             grid-row: span 2;
         }
         .charts-genres {
@@ -358,4 +370,41 @@
 
 #ch-tooltip {
     z-index: 3;
+}
+
+.charts-tabs {
+    position: fixed;
+    top: 0;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    padding-top: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 0 0 0.5rem 0.5rem;
+    button {
+        width: 7rem;
+        height: 2.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // border-radius: 0.5rem;
+        border-radius: 0 0 0.5rem 0.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+        border: none;
+        background: rgb(148, 74, 190);
+        background: linear-gradient(
+            200deg,
+            rgba(148, 74, 190, 1) 0%,
+            rgba(155, 69, 172, 1) 46%,
+            rgba(189, 53, 99, 1) 76%,
+            rgba(227, 50, 39, 1) 100%
+        );
+        color: white;
+        transition: height 0.2s;
+        &:hover {
+            height: 3rem;
+        }
+    }
 }

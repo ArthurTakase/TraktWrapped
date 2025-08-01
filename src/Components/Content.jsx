@@ -216,6 +216,13 @@ export function LoremContent({ data, rating, type, sort, id }) {
 
     exportData(comp, type, data, res, rating, sort, id)
 
+    const hideSelf = () => {
+        card.current.style.animation = "hide 0.5s ease"
+        setTimeout(() => {
+            card.current.style.display = "none"
+        }, 500)
+    }
+
     return (
         <article className="movie" ref={card}>
             {rating != undefined ? <div className="rating">{rating}</div> : <></>}
@@ -226,9 +233,7 @@ export function LoremContent({ data, rating, type, sort, id }) {
                     <div className="tag" title="Release date">{comp.year}</div>
                     <div className="tag" title="Status">{comp.play} play(s)</div>
                     <div className="tag" title="Status">Not in TMDB</div>
-                    <div className="tag icon" title="Hide show/movie" onClick={() => {
-                        card.current.style.display = "none"
-                    }}><i className='bx bx-trash' ></i></div>
+                    <div className="tag icon" title="Hide show/movie" onClick={hideSelf}><i className='bx bx-trash' ></i></div>
                     <div className="tag icon" title="Add/remove favorite" onClick={() => {
                         if (card.current.classList.contains("favorite")) card.current.classList.remove("favorite")
                         else card.current.classList.add("favorite")
