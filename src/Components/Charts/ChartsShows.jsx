@@ -33,27 +33,27 @@ export default function ChartsShows() {
         //     .sort((a, b) => a.value - b.value)
         // setGenresData(genres)
 
-        // const years = Object.entries(WrappedData.airing_dates)
-        //     .map(([name, value]) => ({ name, value }))
-        //     .sort((a, b) => b.value - a.value)
-        //     .slice(0, 10)
-        //     .sort((a, b) => a.name - b.name)
-        // // add all yers in between the first and last year
-        // if (years.length === 0) return;
-        // const firstYear = parseInt(years[0].name)
-        // const lastYear = parseInt(years[years.length - 1].name)
-        // for (let i = firstYear; i <= lastYear; i++)
-        //     if (!years.some(year => year.name === i.toString()))
-        //         years.push({ name: i.toString(), value: 0 });
-        // years.sort((a, b) => a.name - b.name);
-        // setYearsData(years)
+        const years = Object.entries(WrappedData.airing_dates_shows)
+            .map(([name, value]) => ({ name, value }))
+            .sort((a, b) => b.value - a.value)
+            .slice(0, 10)
+            .sort((a, b) => a.name - b.name)
+        // add all yers in between the first and last year
+        if (years.length === 0) return;
+        const firstYear = parseInt(years[0].name)
+        const lastYear = parseInt(years[years.length - 1].name)
+        for (let i = firstYear; i <= lastYear; i++)
+            if (!years.some(year => year.name === i.toString()))
+                years.push({ name: i.toString(), value: 0 });
+        years.sort((a, b) => a.name - b.name);
+        setYearsData(years)
 
-        // const ratings = Object.entries(WrappedData.shows_by_score)
-        //     .map(([name, value]) => ({ name, value: value.length }))
-        //     .sort((a, b) => b.value - a.value)
-        //     .filter(rating => rating.name !== 'undefined')
-        // ratings.sort((a, b) => { return a.name - b.name; });
-        // setRatingsData(ratings)
+        const ratings = Object.entries(WrappedData.shows_by_score)
+            .map(([name, value]) => ({ name, value: value.length }))
+            .map(rating => ({ name: rating.name === 'undefined' ? '' : rating.name, value: rating.value }))
+            .sort((a, b) => b.value - a.value)
+        ratings.sort((a, b) => { return a.name - b.name; });
+        setRatingsData(ratings)
 
         setYear(WrappedData.sort.seen)
         setShows(WrappedData.total_shows)
@@ -103,8 +103,6 @@ export default function ChartsShows() {
         setFirstShow(WrappedData.first_show?.data?.backdrop_path ? `https://image.tmdb.org/t/p/w500${WrappedData.first_show?.data?.backdrop_path}` : notFound)
         setLastShow(WrappedData.last_show?.data?.backdrop_path ? `https://image.tmdb.org/t/p/w500${WrappedData.last_show?.data?.backdrop_path}` : notFound)
         setEpisodes(WrappedData.total_episodes)
-
-        console.log(WrappedData.view_dates_shows)
     }
 
     useEffect(() => {

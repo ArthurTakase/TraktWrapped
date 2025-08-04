@@ -148,6 +148,9 @@ function exportData(comp, type, data, res, rating, sort, id) {
         const all_episodes = data?.seasons?.flatMap(season => season.episodes) || []
         const sortSeen = new Date(sort.seen)
 
+        if (WrappedData.airing_dates_shows[comp.year] === undefined) WrappedData.airing_dates_shows[comp.year] = 1
+        else WrappedData.airing_dates_shows[comp.year] += 1
+
         all_episodes.forEach(episode => {
             const dateString = episode.last_watched_at
             const date = new Date(dateString)

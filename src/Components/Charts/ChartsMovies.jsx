@@ -49,8 +49,9 @@ export default function ChartsMovies() {
 
         const ratings = Object.entries(WrappedData.movies_by_score)
             .map(([name, value]) => ({ name, value: value.length }))
+            // rename 'undefined' to ''
+            .map(rating => ({ name: rating.name === 'undefined' ? '' : rating.name, value: rating.value }))
             .sort((a, b) => b.value - a.value)
-            .filter(rating => rating.name !== 'undefined')
         ratings.sort((a, b) => { return a.name - b.name; });
         setRatingsData(ratings)
 
