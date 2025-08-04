@@ -4,6 +4,7 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
+    animation: fade-bottom 0.5s ease-in-out;
     @media (max-width: 800px) {
         overflow: scroll;
         height: 100vh;
@@ -43,16 +44,34 @@
         flex-direction: column;
     }
     .close {
-        position: fixed;
-        color: rgba(#9f41c5, 0.5);
-        background: unset;
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        background: none;
         border: none;
-        font-weight: bold;
-        font-size: 2.5rem;
-        top: -0.2rem;
-        right: -0.3rem;
+        color: white;
+        font-size: 1.5rem;
         cursor: pointer;
         z-index: 999;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 0.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 2rem;
+        height: 2rem;
+        animation: delay 1s ease-in-out;
+        @keyframes delay {
+            0% {
+                opacity: 0;
+            }
+            50% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     }
 }
 
@@ -109,6 +128,21 @@
                 border-radius: 0;
                 height: auto;
                 width: 100%;
+            }
+            &.animation-img {
+                animation: contest-fade-in 0.3s ease-in-out;
+                @keyframes contest-fade-in {
+                    0% {
+                        transform: rotate(2deg);
+                        opacity: 0.7;
+                        filter: blur(2px);
+                    }
+                    100% {
+                        transform: rotate(0);
+                        opacity: 1;
+                        filter: blur(0);
+                    }
+                }
             }
         }
         p {
@@ -211,8 +245,7 @@
         }
     }
     .loser {
-        scale: 0.9;
-        rotate: 5deg;
+        scale: 0.7;
         object-fit: contain;
         img {
             filter: grayscale(100%);
@@ -231,7 +264,7 @@
         transition: scale 0.2s ease-in-out;
         &:hover {
             cursor: pointer;
-            scale: 0.92;
+            scale: 0.72;
             z-index: 999;
         }
     }

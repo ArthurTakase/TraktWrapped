@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import "../scss/contest.scss"
 import { toggleMenu } from '../App'
+import blank from '../assets/blank.jpg'
 
 export default function Contest({ allRef }) {
     const [allContents, setAllContents] = useState([])
@@ -16,6 +17,7 @@ export default function Contest({ allRef }) {
     const [contestVisible, setContestVisible] = useState(true)
     const [podiumVisible, setPodiumVisible] = useState(false)
     const [maxRounds, setMaxRounds] = useState(0)
+    const [animationImg, setAnimationImg] = useState('')
 
     const getAllContents = () => {
         function isDisplayed(el) { return el.offsetParent !== null }
@@ -91,8 +93,12 @@ export default function Contest({ allRef }) {
         setIndex(localIndex)
         const group = localGroups[localIndex]
 
-        setMatch1(group[0] ?? { picture: '', year: '', title: 'Please vote for the other one' })
-        setMatch2(group[1] ?? { picture: '', year: '', title: 'Please vote for the other one' })
+        setMatch1(group[0] ?? { picture: {blank}, year: '', title: 'Please vote for the other one' })
+        setMatch2(group[1] ?? { picture: {blank}, year: '', title: 'Please vote for the other one' })
+
+        if (animationImg !== '') setAnimationImg('')
+        setAnimationImg('animation-img')
+        setTimeout(() => { setAnimationImg('') }, 300)
     }
 
     const showPodium = () => {
@@ -106,8 +112,17 @@ export default function Contest({ allRef }) {
                 <div key={i} className="podium-item">
                     {i < losers.length - 1 ? <div className='count'>{losers.length - i}</div> : <></>}
                     <div className={className}>
-                        <img src={loser.picture} alt={loser.title} />
-                        <p>{loser.title} ({loser.year})</p>
+                        {
+                            loser.title != 'Please vote for the other one'
+                            ? <>
+                                <img src={loser.picture} alt={loser.title} />
+                                <p>{loser.title} ({loser.year})</p>
+                            </>
+                            : <>
+                                <img src={blank} alt={loser.title} />
+                                <p>{loser.title} ({loser.year})</p>
+                            </>
+                        }
                     </div>
                     {winner
                     ? <div className='winner'>
@@ -194,13 +209,18 @@ export default function Contest({ allRef }) {
                 <div className='round'>Match {index + 1}/{groups.length} (Round {round}/{maxRounds})</div>
                 <div className="match">
                     <button onClick={() => voteFor(match1, match2)}>
-                        <img src={match1.picture} alt={match1.title} />
+                        <img className={animationImg} src={match1.picture} alt={match1.title} />
                         <p>{match1.title}</p>
                     </button>
-                    <button onClick={() => {if (match2.title != 'Please vote for the other one') voteFor(match2, match1)}}>
-                        <img src={match2.picture} alt={match2.title} />
-                        <p>{match2.title}</p>
-                    </button>
+                    {
+                        match2.title != 'Please vote for the other one'
+                        ? 
+                        <button onClick={() => {if (match2.title != 'Please vote for the other one') voteFor(match2, match1)}}>
+                            <img className={animationImg} src={match2.picture} alt={match2.title} />
+                            <p>{match2.title}</p>
+                        </button>
+                        : <></>
+                    }
                 </div>
             </div>
             <div className="podium" style={{ display: podiumVisible ? 'flex' : 'none' }}>
