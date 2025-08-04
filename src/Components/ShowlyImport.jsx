@@ -176,10 +176,10 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
         for (const season of show.seasons) {
             for (const episode of season.episodes) {
                 const last_watched = new Date(episode.last_watched_at)
-                if ((date_start !== undefined || last_watched >= date_start)
-                    && last_watched <= date_end
+                if ((date_start === undefined || last_watched >= date_start)
+                    && (date_end === undefined || last_watched <= date_end)
                     && (sort.months.length === 0 || sort.months.includes(last_watched.getMonth() + 1))) {
-                    return true
+                        return true
                 }
             }
         }

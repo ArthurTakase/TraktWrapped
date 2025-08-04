@@ -61,6 +61,8 @@ function getGeneralData(comp, res, type, data, sort) {
 
 function exportData(comp, type, data, res, rating, sort, id) {
     comp.genres?.forEach(genre => {
+        if (type == "movie") WrappedData.genres_movies[genre] = (WrappedData.genres_movies[genre] || 0) + 1
+        else WrappedData.genres_shows[genre] = (WrappedData.genres_shows[genre] || 0) + 1
         WrappedData.genres[genre] = (WrappedData.genres[genre] || 0) + 1
     })
 
@@ -115,6 +117,13 @@ function exportData(comp, type, data, res, rating, sort, id) {
     })
 
     res.production_countries.forEach(country => {
+        if (type == "movie") {
+            if (WrappedData.countries_movies[country.iso_3166_1] == undefined) WrappedData.countries_movies[country.iso_3166_1] = { count: 1, data: country }
+            else WrappedData.countries_movies[country.iso_3166_1].count += 1
+        } else {
+            if (WrappedData.countries_shows[country.iso_3166_1] == undefined) WrappedData.countries_shows[country.iso_3166_1] = { count: 1, data: country }
+            else WrappedData.countries_shows[country.iso_3166_1].count += 1
+        }
         if (WrappedData.countries[country.iso_3166_1] == undefined) WrappedData.countries[country.iso_3166_1] = { count: 1, data: country }
         else WrappedData.countries[country.iso_3166_1].count += 1
     })

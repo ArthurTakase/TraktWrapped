@@ -8,10 +8,14 @@ import '../scss/wrapped.scss'
 
 export const WrappedData = {
     "genres" : {},
+    "genres_movies" : {},
+    "genres_shows" : {},
     "actors" : {},
     "actresses" : {},
     "directors" : {},
     "countries" : {},
+    "countries_movies" : {},
+    "countries_shows" : {},
     "movies_by_score" : {},
     "shows_by_score" : {},
     "movies_by_score_this_year" : {},
@@ -43,10 +47,14 @@ export const WrappedData = {
 
 export function ClearData() {
     WrappedData.genres = {}
+    WrappedData.genres_movies = {}
+    WrappedData.genres_shows = {}
     WrappedData.actors = {}
     WrappedData.actresses = {}
     WrappedData.directors = {}
     WrappedData.countries = {}
+    WrappedData.countries_movies = {}
+    WrappedData.countries_shows = {}
     WrappedData.first_movie.data = null
     WrappedData.first_movie.date = null
     WrappedData.last_movie.data = null

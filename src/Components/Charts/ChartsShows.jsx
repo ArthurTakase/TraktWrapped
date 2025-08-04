@@ -26,12 +26,12 @@ export default function ChartsShows() {
     const processData = () => {
         if (!WrappedData.first_show || !WrappedData.last_show) return;
 
-        // const genres = Object.entries(WrappedData.genres)
-        //     .map(([name, value]) => ({ name, value }))
-        //     .sort((a, b) => b.value - a.value)
-        //     .filter(genre => genre.value > 2)
-        //     .sort((a, b) => a.value - b.value)
-        // setGenresData(genres)
+        const genres = Object.entries(WrappedData.genres_shows)
+            .map(([name, value]) => ({ name, value }))
+            .sort((a, b) => b.value - a.value)
+            .filter(genre => genre.value > 2)
+            .sort((a, b) => a.value - b.value)
+        setGenresData(genres)
 
         const years = Object.entries(WrappedData.airing_dates_shows)
             .map(([name, value]) => ({ name, value }))
@@ -79,10 +79,10 @@ export default function ChartsShows() {
         });
         setDay(mostActivity[0])
 
-        // const countries = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
-        // setFirstCountry(countries[0][0])
-        // setSecondCountry(countries[1][0])
-        // setThirdCountry(countries[2][0])
+        const countries = Object.entries(WrappedData.countries_shows).sort((a, b) => a[1].count - b[1].count).reverse()
+        setFirstCountry(countries[0][0])
+        setSecondCountry(countries[1][0])
+        setThirdCountry(countries[2][0])
 
         const top5 = Object.entries(WrappedData.shows_by_score)
             .flatMap(([rating, shows]) =>
@@ -136,17 +136,17 @@ export default function ChartsShows() {
                 <div className='podium-second'>
                     <img src={`https://flagcdn.com/48x36/${secondCountry.toLowerCase()}.png`} />
                     <p>2</p>
-                    <span>{WrappedData.countries[secondCountry]?.count}</span>
+                    <span>{WrappedData.countries_shows[secondCountry]?.count}</span>
                 </div>
                 <div className='podium-first'>
                     <img src={`https://flagcdn.com/48x36/${firstCountry.toLowerCase()}.png`} />
                     <p>1</p>
-                    <span>{WrappedData.countries[firstCountry]?.count}</span>
+                    <span>{WrappedData.countries_shows[firstCountry]?.count}</span>
                 </div>
                 <div className='podium-third'>
                     <img src={`https://flagcdn.com/48x36/${thirdCountry.toLowerCase()}.png`} />
                     <p>3</p>
-                    <span>{WrappedData.countries[thirdCountry]?.count}</span>
+                    <span>{WrappedData.countries_shows[thirdCountry]?.count}</span>
                 </div>
             </div>
         </div>
