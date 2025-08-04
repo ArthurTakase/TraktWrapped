@@ -3,12 +3,11 @@ import '../../scss/charts.scss'
 import CalHeatmap from 'cal-heatmap';
 import Tooltip from 'cal-heatmap/plugins/Tooltip';
 import 'cal-heatmap/cal-heatmap.css';
-import { WrappedData } from '../Wrapped'
 
-export default function Heatmap() {
+export default function Heatmap({dates, first_date, type}) {
     const updateHeatmap = () => {
-        const convertedData = Object.keys(WrappedData.view_dates).map(date => {
-            return { date: date, value: WrappedData.view_dates[date] };
+        const convertedData = Object.keys(dates).map(date => {
+            return { date: date, value: dates[date] };
         });
 
         const cal = new CalHeatmap();
@@ -19,9 +18,8 @@ export default function Heatmap() {
                 y: 'value',
                 groupY: 'sum',
             },
-            date: { start: new Date(WrappedData.first_movie.date) },
+            date: { start: new Date(first_date) },
             considerMissingDataAsZero: true,
-            // cellSize: 20,
             range: 12,
             domain: { type: 'month' },
             subDomain: { type: 'day' },
@@ -33,7 +31,7 @@ export default function Heatmap() {
                     type: 'linear',
                     domain: [0, 5],
                 },
-            },
+            }
         },
         [[
             Tooltip, {
@@ -42,7 +40,7 @@ export default function Heatmap() {
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
                     const formattedDate = date.toLocaleDateString('en-US', options);
                     if (value === 0 || value == "null" || value == null) return `${formattedDate} - no data`;
-                    return `${formattedDate} - ${value} movie${value > 1 ? 's' : ''}`;
+                    return `${formattedDate} - ${value} ${type}${value > 1 ? 's' : ''}`;
                 }
             }
         ]]);

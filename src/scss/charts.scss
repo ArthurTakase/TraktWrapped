@@ -84,6 +84,9 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
+            transition:
+                scale 0.15s ease-in-out,
+                box-shadow 0.15s ease-in-out;
             animation: charts-fade-in 0.5s ease-in-out;
             @keyframes charts-fade-in {
                 0% {
@@ -97,9 +100,6 @@
                     filter: blur(0);
                 }
             }
-            transition:
-                scale 0.15s ease-in-out,
-                box-shadow 0.15s ease-in-out;
             &:hover {
                 box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.3);
                 scale: 1.01;
@@ -379,9 +379,10 @@
     gap: 0.5rem;
     padding: 0.5rem;
     padding-top: 0;
-    background-color: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 0 0 0.5rem 0.5rem;
+    // background-color: rgba(0, 0, 0, 0.7);
+    // backdrop-filter: blur(10px);
+    // border-radius: 0 0 0.5rem 0.5rem;
+    z-index: 5;
     button {
         width: 7rem;
         height: 2.5rem;
@@ -403,6 +404,7 @@
         );
         color: white;
         transition: height 0.2s;
+        box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.3);
         &:hover {
             height: 3rem;
         }

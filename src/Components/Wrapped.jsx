@@ -28,6 +28,7 @@ export const WrappedData = {
     "sort" : {},
     "airing_dates" : {},
     "view_dates" : {},
+    "view_dates_shows" : {},
     "by_week" : {
         "Monday" : 0,
         "Tuesday" : 0,
@@ -65,6 +66,7 @@ export function ClearData() {
     WrappedData.sort = {}
     WrappedData.airing_dates = {}
     WrappedData.view_dates = {}
+    WrappedData.view_dates_shows = {}
     WrappedData.by_week = {
         "Monday" : 0,
         "Tuesday" : 0,

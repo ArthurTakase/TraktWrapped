@@ -163,7 +163,7 @@ export default function ChartsMovies() {
         </div>
         <div className='charts-heatmap charts-child'>
             <div className='small-text title'>Activities</div>
-            <Heatmap />
+            <Heatmap type="movie" dates={WrappedData.view_dates} first_date={WrappedData.first_movie?.date} />
         </div>
         <div className='charts-credits charts-child child-gradient'>
             <div className='small-text'><i className='bx bx-link'></i> arthurtakase.github.io</div>

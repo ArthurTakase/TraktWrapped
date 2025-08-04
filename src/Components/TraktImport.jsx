@@ -4,6 +4,7 @@ import { ClearData } from "./Wrapped"
 import axios from 'axios'
 import Load from './Load'
 import '../scss/app.scss'
+import { WrappedData } from './Wrapped'
 
 export let cachedData = {}
 
@@ -105,7 +106,19 @@ async function getShowData(username, type, sort, headers, setLoadInfos, cachedDa
             }
         }
     }
+    const ExtractWatchedDates = (show) => {
+        for (const season of show.seasons) {
+            for (const episode of season.episodes) {
+                const last_watched = new Date(episode.last_watched_at)
+                var dateString = last_watched.toISOString().split('T')[0]
+                if (WrappedData.view_dates_shows[dateString] === undefined) WrappedData.view_dates_shows[dateString] = 1
+                else WrappedData.view_dates_shows[dateString] += 1
+            }
+        }
+    }
+
     const shows = responseInfos.data.reduce((acc, show) => {
+        ExtractWatchedDates(show)
         if (isShowWatchedInPeriod(show, date_start, date_end, sort)) {
             acc[show.show.ids.trakt] = {
                 tmdb: show.show.ids.tmdb,

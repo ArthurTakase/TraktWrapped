@@ -1,5 +1,5 @@
 import Content, { LoremContent } from './Content'
-import { ClearData } from "./Wrapped"
+import { ClearData, WrappedData } from "./Wrapped"
 import axios from 'axios'
 import Load from './Load'
 import '../scss/app.scss'
@@ -149,6 +149,11 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
 
         for (const episode of showlyData.shows.pEp) {
             if (!showlyShows[episode.sId]) continue
+
+            var dateString = new Date(episode.a).toISOString().split('T')[0]
+            if (WrappedData.view_dates_shows[dateString] === undefined) WrappedData.view_dates_shows[dateString] = 1
+            else WrappedData.view_dates_shows[dateString] += 1
+            
             var season = showlyShows[episode.sId].seasons.find(s => s.number == episode.sN)
             if (!season) {
                 showlyShows[episode.sId].seasons.push({
@@ -178,6 +183,7 @@ async function getShowData(showlyData, type, sort, setLoadInfos, cachedData, sta
                 }
             }
         }
+        return false
     }
 
     const isShowReleasedInPeriod = (show, date_start, date_end) => {

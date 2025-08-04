@@ -26,48 +26,63 @@ export default function ChartsShows() {
     const processData = () => {
         if (!WrappedData.first_show || !WrappedData.last_show) return;
 
-        const genres = Object.entries(WrappedData.genres)
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value)
-            .filter(genre => genre.value > 2)
-            .sort((a, b) => a.value - b.value)
-        setGenresData(genres)
+        // const genres = Object.entries(WrappedData.genres)
+        //     .map(([name, value]) => ({ name, value }))
+        //     .sort((a, b) => b.value - a.value)
+        //     .filter(genre => genre.value > 2)
+        //     .sort((a, b) => a.value - b.value)
+        // setGenresData(genres)
 
-        const years = Object.entries(WrappedData.airing_dates)
-            .map(([name, value]) => ({ name, value }))
-            .sort((a, b) => b.value - a.value)
-            .slice(0, 10)
-            .sort((a, b) => a.name - b.name)
-        // add all yers in between the first and last year
-        if (years.length === 0) return;
-        const firstYear = parseInt(years[0].name)
-        const lastYear = parseInt(years[years.length - 1].name)
-        for (let i = firstYear; i <= lastYear; i++)
-            if (!years.some(year => year.name === i.toString()))
-                years.push({ name: i.toString(), value: 0 });
-        years.sort((a, b) => a.name - b.name);
-        setYearsData(years)
+        // const years = Object.entries(WrappedData.airing_dates)
+        //     .map(([name, value]) => ({ name, value }))
+        //     .sort((a, b) => b.value - a.value)
+        //     .slice(0, 10)
+        //     .sort((a, b) => a.name - b.name)
+        // // add all yers in between the first and last year
+        // if (years.length === 0) return;
+        // const firstYear = parseInt(years[0].name)
+        // const lastYear = parseInt(years[years.length - 1].name)
+        // for (let i = firstYear; i <= lastYear; i++)
+        //     if (!years.some(year => year.name === i.toString()))
+        //         years.push({ name: i.toString(), value: 0 });
+        // years.sort((a, b) => a.name - b.name);
+        // setYearsData(years)
 
-        const ratings = Object.entries(WrappedData.shows_by_score)
-            .map(([name, value]) => ({ name, value: value.length }))
-            .sort((a, b) => b.value - a.value)
-            .filter(rating => rating.name !== 'undefined')
-        ratings.sort((a, b) => { return a.name - b.name; });
-        setRatingsData(ratings)
+        // const ratings = Object.entries(WrappedData.shows_by_score)
+        //     .map(([name, value]) => ({ name, value: value.length }))
+        //     .sort((a, b) => b.value - a.value)
+        //     .filter(rating => rating.name !== 'undefined')
+        // ratings.sort((a, b) => { return a.name - b.name; });
+        // setRatingsData(ratings)
 
         setYear(WrappedData.sort.seen)
         setShows(WrappedData.total_shows)
         setHours(Math.round(WrappedData.total_time_shows / 60))
 
-        const mostActivity = Object.entries(WrappedData.by_week).reduce((max, current) => {
+
+        const byWeeks = {
+            "Monday" : 0,
+            "Tuesday" : 0,
+            "Wednesday" : 0,
+            "Thursday" : 0,
+            "Friday" : 0,
+            "Saturday" : 0,
+            "Sunday" : 0
+        }
+        Object.entries(WrappedData.view_dates_shows).forEach(([date, value]) =>
+            new Date(date).getFullYear() === year && (
+                byWeeks[new Date(date).toLocaleString('en-US', { weekday: 'long' })] += value
+            )
+        );
+        const mostActivity = Object.entries(byWeeks).reduce((max, current) => {
             return current[1] > max[1] ? current : max;
         });
         setDay(mostActivity[0])
 
-        const countries = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
-        setFirstCountry(countries[0][0])
-        setSecondCountry(countries[1][0])
-        setThirdCountry(countries[2][0])
+        // const countries = Object.entries(WrappedData.countries).sort((a, b) => a[1].count - b[1].count).reverse()
+        // setFirstCountry(countries[0][0])
+        // setSecondCountry(countries[1][0])
+        // setThirdCountry(countries[2][0])
 
         const top5 = Object.entries(WrappedData.shows_by_score)
             .flatMap(([rating, shows]) =>
@@ -88,6 +103,8 @@ export default function ChartsShows() {
         setFirstShow(WrappedData.first_show?.data?.backdrop_path ? `https://image.tmdb.org/t/p/w500${WrappedData.first_show?.data?.backdrop_path}` : notFound)
         setLastShow(WrappedData.last_show?.data?.backdrop_path ? `https://image.tmdb.org/t/p/w500${WrappedData.last_show?.data?.backdrop_path}` : notFound)
         setEpisodes(WrappedData.total_episodes)
+
+        console.log(WrappedData.view_dates_shows)
     }
 
     useEffect(() => {
@@ -169,7 +186,7 @@ export default function ChartsShows() {
         </div>
         <div className='charts-heatmap charts-child'>
             <div className='small-text title'>Activities</div>
-            <Heatmap />
+            <Heatmap type="episode" dates={WrappedData.view_dates_shows} first_date={WrappedData.first_show?.date} />
         </div>
         <div className='charts-credits charts-child child-gradient'>
             <div className='small-text'><i className='bx bx-link'></i> arthurtakase.github.io</div>
