@@ -26,16 +26,6 @@
     }
 }
 
-.warning {
-    display: none;
-    text-align: center;
-    padding-left: 10px;
-    padding-right: 10px;
-    @media (max-width: 850px) {
-        display: flex;
-    }
-}
-
 .body {
     border-radius: 6px;
     width: 100%;
@@ -51,11 +41,13 @@
         border-radius: 0;
     }
     @media (max-width: 850px) {
-        display: none;
+        padding: 1rem;
+        padding-top: 0;
     }
     .charts-body-container {
         max-width: 900px;
         min-height: 80vh;
+        margin-top: -25px;
     }
     .child-gradient {
         border: none !important;
@@ -71,11 +63,15 @@
     .charts-body {
         display: grid;
         grid-template-columns: repeat(20, 1fr);
-        grid-template-rows: repeat(20, 50px);
+        grid-template-rows: repeat(20, 1fr);
         grid-column-gap: 10px;
         grid-row-gap: 10px;
         max-height: 80vh;
         max-width: 900px;
+        @media (max-width: 850px) {
+            grid-template-columns: repeat(20, 1fr);
+            grid-template-rows: repeat(40, 1fr);
+        }
         .charts-child {
             border: solid rgb(148, 74, 190) 2px;
             overflow: hidden;
@@ -158,26 +154,56 @@
             grid-column: span 20;
             grid-row: span 1;
             min-height: 50px !important;
+            @media (max-width: 850px) {
+                font-size: 0.8rem;
+            }
         }
         .charts-movies {
             grid-column: span 3;
             grid-row: span 3;
+            min-height: 100px !important;
+            @media (max-width: 850px) {
+                grid-column: span 6;
+                grid-row: span 3;
+                min-height: 100px !important;
+            }
         }
         .charts-episodes {
             grid-column: span 3;
             grid-row: span 2;
+            min-height: 100px !important;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 2;
+                min-height: 100px !important;
+            }
         }
         .charts-first {
             grid-column: span 5;
             grid-row: span 3;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 3;
+                min-height: 100px !important;
+            }
         }
         .charts-last {
             grid-column: span 5;
             grid-row: span 3;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 3;
+                min-height: 100px !important;
+            }
         }
         .charts-countries {
             grid-column: span 7;
             grid-row: span 5;
+            @media (max-width: 850px) {
+                grid-column: span 13;
+                grid-row: span 5;
+                min-height: 200px;
+            }
             .podium {
                 position: relative;
                 display: flex;
@@ -205,6 +231,9 @@
                     font-size: 1.2rem;
                     margin: 0;
                     padding: 0;
+                    @media (max-width: 850px) {
+                        top: 0.1rem;
+                    }
                 }
                 span {
                     position: absolute;
@@ -235,23 +264,57 @@
         .charts-hours {
             grid-column: span 5;
             grid-row: span 2;
+            min-height: 100px !important;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 2;
+                min-height: 80px !important;
+            }
         }
         .charts-hours-shows {
             grid-column: span 3;
             grid-row: span 2;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 3;
+                min-height: 100px !important;
+            }
         }
         .charts-day {
             grid-column: span 8;
             grid-row: span 2;
+            @media (max-width: 850px) {
+                grid-column: span 7;
+                grid-row: span 3;
+                min-height: 200px !important;
+                .big-text {
+                    rotate: -90deg;
+                    font-size: 1.9rem;
+                    translate: -10px 5px;
+                }
+                .small-text {
+                    rotate: -90deg;
+                    translate: 1rem -12.5px;
+                }
+            }
         }
         .charts-day-shows {
             grid-column: span 7;
             grid-row: span 2;
+            @media (max-width: 850px) {
+                grid-column: span 20;
+                grid-row: span 10;
+            }
         }
         .charts-genres {
             grid-column: span 8;
             grid-row: span 5;
             min-height: 270px;
+            @media (max-width: 850px) {
+                grid-column: span 20;
+                grid-row: span 2;
+                min-height: 200px !important;
+            }
             .recharts-responsive-container {
                 translate: 0 4px;
                 scale: 1.005;
@@ -271,6 +334,23 @@
         .charts-top {
             grid-column: span 12;
             grid-row: span 5;
+            @media (max-width: 850px) {
+                grid-column: span 20;
+                grid-row: span 10;
+                min-height: 340px !important;
+            }
+            @media (max-width: 750px) {
+                min-height: 300px !important;
+            }
+            @media (max-width: 650px) {
+                min-height: 250px !important;
+            }
+            @media (max-width: 550px) {
+                min-height: 220px !important;
+            }
+            @media (max-width: 450px) {
+                min-height: 180px !important;
+            }
             .top-movies {
                 display: flex;
                 flex-direction: row;
@@ -283,6 +363,10 @@
                 justify-content: center;
                 overflow: hidden;
                 translate: 0 -15px;
+                @media (max-width: 850px) {
+                    padding: 0.5rem 0;
+                    gap: 5px;
+                }
             }
             .top-movie {
                 flex: 1;
@@ -292,12 +376,18 @@
                 flex-direction: column;
                 max-width: calc(100% / 5);
                 height: 100%;
+                @media (max-width: 850px) {
+                    max-width: calc(100% / 5);
+                }
                 img {
                     border-radius: 10px;
                     width: 100%;
                     height: 100%;
                     object-fit: cover;
                     box-shadow: 0rem 1rem 1rem rgba(0, 0, 0, 0.3);
+                    @media (max-width: 850px) {
+                        border-radius: 5px;
+                    }
                 }
                 .top-movie-rating {
                     translate: 0 1rem;
@@ -306,6 +396,9 @@
                         translate: 3px 1px;
                         padding-right: 0.2rem;
                     }
+                    @media (max-width: 850px) {
+                        translate: 2px 10px;
+                    }
                 }
             }
         }
@@ -313,6 +406,9 @@
             grid-column: span 20;
             grid-row: span 4;
             min-height: 200px;
+            @media (max-width: 850px) {
+                min-height: 180px !important;
+            }
             .title {
                 translate: 0 8px;
             }
@@ -322,15 +418,35 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                @media (max-width: 850px) {
+                    justify-content: unset;
+                    padding-left: 1rem;
+                    padding-right: 1rem;
+                    width: calc(100% - 2rem);
+                    overflow: scroll;
+                    -ms-overflow-style: none; /* IE and Edge */
+                    scrollbar-width: none; /* Firefox */
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
                 .ch-container {
                     scale: 1.1;
                     translate: 0 -10px;
+                    @media (max-width: 850px) {
+                        scale: 1;
+                        translate: 0 -5px;
+                    }
                 }
             }
         }
         .charts-credits {
             grid-column: span 1;
             grid-row: span 5;
+            @media (max-width: 850px) {
+                grid-column: span 2;
+                grid-row: span 5;
+            }
             .small-text {
                 rotate: -90deg;
                 font-size: 0.8rem;
@@ -345,6 +461,10 @@
             grid-column: span 12;
             grid-row: span 5;
             min-height: 200px;
+            @media (max-width: 850px) {
+                grid-column: span 18;
+                grid-row: span 5;
+            }
             .recharts-responsive-container {
                 translate: -20px 0;
             }
@@ -352,9 +472,19 @@
         .charts-ratings {
             grid-column: span 7;
             grid-row: span 5;
+            @media (max-width: 850px) {
+                grid-column: span 20;
+                grid-row: span 5;
+                min-height: 200px !important;
+            }
             .recharts-responsive-container {
                 translate: -20px 0;
             }
+        }
+        .charts-padding {
+            grid-column: span 20;
+            grid-row: span 1;
+            min-height: 50px !important;
         }
     }
 }

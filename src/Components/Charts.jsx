@@ -11,11 +11,7 @@ import ChartsMovies from './Charts/ChartsMovies'
 import ChartsShows from './Charts/ChartsShows'
 
 export default function Charts() {
-    const [tab, setTab] = useState(<ChartsMovies />)
-
-    const switchTab = (newTab) => {
-        setTab(newTab)
-    }
+    const [tab, setTab] = useState(<></>)
 
     const closeCharts = () => {
         document.querySelector('.charts-container').classList.toggle('active')
@@ -27,6 +23,10 @@ export default function Charts() {
     allRef.closeCharts = closeCharts
 
     useEffect(() => {
+        if (WrappedData.sort.hideMovies && !WrappedData.sort.hideShows) setTab(<ChartsShows />)
+        else if (WrappedData.sort.hideShows && !WrappedData.sort.hideMovies) setTab(<ChartsMovies />)
+        else setTab(<ChartsMovies />)
+
         const close = (e) => { if (e.key === 'Escape') closeCharts() }
         document.addEventListener('keydown', close)
         return () => { document.removeEventListener('keydown', close) }
@@ -34,21 +34,24 @@ export default function Charts() {
 
     return (
         <div className="charts-container active">
-            <div className="warning">
-                <p>Please use a larger screen to view the charts.</p>
-            </div>
             <div className="body">
-                <div className='charts-tabs'>
-                    <button className='tab movies' onClick={() => setTab(<ChartsMovies />)}>
-                        <span>🎥 Movies</span>
-                    </button>
-                    <button className='tab shows' onClick={() => setTab(<ChartsShows />)}>
-                        <span>📺 Shows</span>
-                    </button>
-                </div>
+                {
+                    !WrappedData.sort.hideMovies && !WrappedData.sort.hideShows
+                    ?
+                    <div className='charts-tabs'>
+                        <button className='tab movies' onClick={() => setTab(<ChartsMovies />)}>
+                            <span>🎥 Movies</span>
+                        </button>
+                        <button className='tab shows' onClick={() => setTab(<ChartsShows />)}>
+                            <span>📺 Shows</span>
+                        </button>
+                    </div>
+                    : <></>
+                }
                 <div className='charts-body-container'>
                     <div className='charts-body'>
                         {tab}
+                        <div className='charts-padding'></div>
                     </div>
                 </div>
             </div>
