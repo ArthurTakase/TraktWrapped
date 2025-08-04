@@ -370,12 +370,6 @@ export default function Wrapped() {
 
     allRef.closeWrapped = closeWrapped
 
-    useEffect(() => {
-        const close = (e) => { if (e.key === 'Escape') closeWrapped() }
-        document.addEventListener('keydown', close)
-        return () => { document.removeEventListener('keydown', close) }
-    }, [])
-
     return (
         <div className="wrapped-container active">
             <div className="body">

@@ -26,10 +26,6 @@ export default function Charts() {
         if (WrappedData.sort.hideMovies && !WrappedData.sort.hideShows) setTab(<ChartsShows />)
         else if (WrappedData.sort.hideShows && !WrappedData.sort.hideMovies) setTab(<ChartsMovies />)
         else setTab(<ChartsMovies />)
-
-        const close = (e) => { if (e.key === 'Escape') closeCharts() }
-        document.addEventListener('keydown', close)
-        return () => { document.removeEventListener('keydown', close) }
     }, [])
 
     return (
