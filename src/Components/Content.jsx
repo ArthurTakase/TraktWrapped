@@ -96,7 +96,7 @@ function exportData(comp, type, data, res, rating, sort, id) {
 
     res.credits?.crew?.forEach(crew => {
         if (crew.job != "Director") return
-        if (WrappedData.directors[crew.id] == undefined)
+        if (WrappedData.directors[crew.id] == undefined) {
             WrappedData.directors[crew.id] = {
                 count: 1,
                 data: crew,
@@ -105,6 +105,8 @@ function exportData(comp, type, data, res, rating, sort, id) {
                 average_rating: rating || 0,
                 grade: rating || 0 * (rating ? 1 : 0) / 1,
             }
+            console.log(`Director ${crew.name} has grade ${WrappedData.directors[crew.id].grade} (average: ${WrappedData.directors[crew.id].average_rating}, total_rating: ${WrappedData.directors[crew.id].total_rating}, count: ${WrappedData.directors[crew.id].count})`)
+        }
         else {
             const director = WrappedData.directors[crew.id]
             director.count += 1
@@ -112,7 +114,9 @@ function exportData(comp, type, data, res, rating, sort, id) {
             director.total_rating += rating ? 1 : 0
             director.average_rating = director.total_rating == 0 ? 0 : director.score / director.total_rating
             const not_rating = director.count - director.total_rating || 1
-            director.grade = director.average_rating * (director.total_rating / not_rating)
+            // director.grade = director.average_rating * (director.total_rating / not_rating)
+            director.grade = director.average_rating * (1 + Math.log10(director.count));
+            console.log(`Director ${crew.name} has grade ${director.grade} (average: ${director.average_rating}, total_rating: ${director.total_rating}, count: ${director.count})`)
         }
     })
 

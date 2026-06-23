@@ -210,7 +210,7 @@ export default function Wrapped() {
                     {
                         category !== 'count'
                         ? <div className='people-data infos'>
-                            score = average rating * (number of rating / number of not rating)
+                            score = average rating * (1 + log10(number of works))
                         </div>
                         : <></>
                     }
